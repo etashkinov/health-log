@@ -1,0 +1,30 @@
+mood: 0..100
+energy: 0..100
+heartBeat: 20..300
+temperature: 34..43
+
+eyeSight:
+  left:
+    sphere: -20..20
+    cylinder: -20..20
+  right:
+    sphere: -20..20
+    cylinder: -20..20
+
+sweat: 0..100
+
+pain:
+  strength: 0..100
+  nature:
+    - aching
+    - tender
+    - sharp
+    - shooting
+    - hot
+    - burning
+    - nagging
+    - intense
+    - stabbing
+    - tingling
+    - dull
+    - throbbing

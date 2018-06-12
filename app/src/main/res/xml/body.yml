@@ -1,0 +1,94 @@
+events:
+  - mood
+  - energy
+  - pain
+  - sweat
+  - tremor
+  - heartBeat
+  - bloodPressure
+  - temperature
+parts:
+  head:
+    parts:
+      hindhead:
+      hair:
+      face:
+        parts:
+          forehead:
+          eyes:
+            parts:
+              leftEye,rightEye:
+                events:
+                  - eyeSight
+                  - eyePressure
+                parts:
+                  eyebrow:
+                  eyelid:
+                  eyelash:
+                  temple:
+                  pupil:
+          nose:
+          cheeks:
+            parts:
+              leftCheek,rightCheek:
+          mouth:
+            parts:
+              lips:
+              teeth:
+              tongue:
+              palate:
+                parts:
+                  hardPalate:
+                  softPalate:
+              throat:
+          chin:
+      ears:
+      neck:
+  arms:
+    parts:
+      leftArm,rightArm:
+        events:
+        parts:
+         hand:
+          parts:
+            wrist:
+            palm:
+            fingers:
+              parts:
+                thumb,indexFinger,middleFinger,ringFinger,pinkyFinger:
+                  parts:
+                    phalanges:
+                      parts:
+                        bottom:
+                        middle:
+                        tip:
+                    nail:
+         shoulder:
+         forearm:
+         upperArm:
+         elbow:
+  chest:
+    events:
+    parts:
+  stomack:
+    events:
+    parts:
+  hip:
+    events:
+    parts:
+  legs:
+    parts:
+      leftLeg,rightLeg:
+        parts:
+          knee:
+          thigh:
+          shin:
+          calf:
+          ankle:
+          foot:
+            parts:
+              heel:
+              toe:
+  back:
+  waist:
+  buttocks:
