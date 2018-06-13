@@ -41,6 +41,7 @@ parts:
               throat:
           chin:
       ears:
+        dual: ear
       neck:
   arms:
     dual: arm
