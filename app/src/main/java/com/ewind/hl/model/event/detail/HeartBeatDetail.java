@@ -2,7 +2,6 @@ package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
 
-@EventType("heartBeat")
 public class HeartBeatDetail implements EventDetail {
 
     public enum HeartBeatState {
@@ -25,5 +24,10 @@ public class HeartBeatDetail implements EventDetail {
 
     public HeartBeatState getState() {
         return state;
+    }
+
+    @Override
+    public EventType getType() {
+        return EventType.HEART_BEAT;
     }
 }

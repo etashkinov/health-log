@@ -1,13 +1,30 @@
 package com.ewind.hl.model.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.ewind.hl.model.event.detail.MoodDetail;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface EventType {
-    String value();
-    boolean propagateDown() default false;
+public enum EventType {
+    MOOD(MoodDetail.),
+    ENERGY,
+    HEART_BEAT,
+    BLOOD_PRESSURE,
+    PAIN(true),
+    SWEAT,
+    TREMOR,
+    TEMPERATURE,
+    EYE_SIGHT,
+    EYE_PRESSURE;
+
+    private final boolean propagateDown;
+
+    EventType() {
+        propagateDown = false;
+    }
+
+    EventType(boolean propagateDown) {
+        this.propagateDown = propagateDown;
+    }
+
+    public boolean isPropagateDown() {
+        return propagateDown;
+    }
 }

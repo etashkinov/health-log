@@ -1,12 +1,12 @@
 events:
-  - mood
-  - energy
-  - pain
-  - sweat
-  - tremor
-  - heartBeat
-  - bloodPressure
-  - temperature
+  - MOOD
+  - ENERGY
+  - PAIN
+  - SWEAT
+  - TREMOR
+  - HEART_BEAT
+  - BLOOD_PRESSURE
+  - TEMPERATURE
 parts:
   head:
     parts:
@@ -19,8 +19,8 @@ parts:
             parts:
               leftEye,rightEye:
                 events:
-                  - eyeSight
-                  - eyePressure
+                  - EYE_SIGHT
+                  - EYE_PRESSURE
                 parts:
                   eyebrow:
                   eyelid:
