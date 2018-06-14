@@ -117,7 +117,7 @@ public class AreaViewController {
 
     private void addEventButton(ViewGroup parent, EventType type, EventDetail eventDetail) {
         Button button = (Button) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.area_item_view, parent, false);
+                .inflate(R.layout.event_button, parent, false);
 
         String text = type.name();
 
