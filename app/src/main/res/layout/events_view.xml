@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".EventActivity"
+    tools:showIn="@layout/activity_event">
+
+    <RelativeLayout
+        android:id="@+id/eventDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/eventDateBackButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/eventDatePickerButton"
+            android:text="@string/event_date_back_text" />
+
+        <Button
+            android:id="@+id/eventDatePickerButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/event_date_today" />
+
+        <Button
+            android:id="@+id/eventDateForwardButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/eventDatePickerButton"
+            android:text="@string/event_date_forward_text" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/area_view"
+        android:id="@+id/areaView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/eventDatePicker"
+        app:layout_constraintTop_toBottomOf="@+id/eventDatePicker" />
+
+</RelativeLayout>

@@ -45,7 +45,6 @@ parts:
       neck:
   arms:
     dual: arm
-    events:
     parts:
       hand:
         parts:
@@ -70,14 +69,8 @@ parts:
       upperArm:
       elbow:
   chest:
-    events:
-    parts:
   stomack:
-    events:
-    parts:
   hip:
-    events:
-    parts:
   legs:
     dual: leg
     parts:

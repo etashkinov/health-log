@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
-import java.util.Calendar;
+import com.ewind.hl.model.event.EventDate;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -14,13 +14,13 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         EventActivity activity = getEventActivity();
         // Use the current date as the default date in the picker
-        final Calendar c = activity.getEventDay();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        final EventDate date = activity.getEventDay();
 
         // Create a new instance of DatePickerDialog and return it
-        DatePickerDialog dialog = new DatePickerDialog(activity, this, year, month, day);
+        DatePickerDialog dialog = new DatePickerDialog(activity, this,
+                date.getYear(),
+                date.getMonth(),
+                date.getDay());
         dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         return dialog;
     }
@@ -30,10 +30,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        getEventActivity().onDateChanged(calendar);
+        getEventActivity().onDateChanged(new EventDate(year, month, day));
     }
 }

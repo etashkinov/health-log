@@ -10,46 +10,28 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class AreaFactory {
 
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
 
     public static class AreaConfig {
-        private List<String> events;
-        private Map<String, AreaConfig> parts;
+        private List<String> events = new LinkedList<>();
+        private Map<String, AreaConfig> parts = Collections.emptyMap();
         private String dual;
-        private List<String> multiple;
-
-        public AreaConfig() {
-        }
-
-        public List<String> getEvents() {
-            return events;
-        }
+        private List<String> multiple = Collections.emptyList();
 
         public void setEvents(List<String> events) {
             this.events = events;
-        }
-
-        public Map<String, AreaConfig> getParts() {
-            return parts;
         }
 
         public void setParts(Map<String, AreaConfig> parts) {
             this.parts = parts;
         }
 
-        public String getDual() {
-            return dual;
-        }
-
         public void setDual(String dual) {
             this.dual = dual;
-        }
-
-        public List<String> getMultiple() {
-            return multiple;
         }
 
         public void setMultiple(List<String> multiple) {
@@ -58,8 +40,8 @@ public class AreaFactory {
     }
 
 
-    public static Area getBody() {
-        try(InputStream stream = AreaFactory.class.getClassLoader().getResourceAsStream("body.yml")) {
+    public static Area getBody(InputStream stream) {
+        try {
             AreaConfig config = MAPPER.readValue(stream, AreaConfig.class);
             return createArea("body", config);
         } catch (Exception e) {
@@ -85,23 +67,18 @@ public class AreaFactory {
             config.dual = null;
             children.add(createArea("left_" + dual, config));
             children.add(createArea("right_" + dual, config));
-        } else if (config.multiple != null) {
+        } else if (!config.multiple.isEmpty()) {
             List<String> multiple = config.multiple;
-            config.multiple = null;
+            config.multiple = Collections.emptyList();
             for (String mult : multiple) {
                 children.add(createArea(mult, config));
             }
-        } else if (config.parts != null) {
-            for (Map.Entry<String, AreaConfig> part : config.parts.entrySet()) {
+        } else if (!config.parts.isEmpty()) {
+            for (Entry<String, AreaConfig> part : config.parts.entrySet()) {
                 AreaConfig partConfig = part.getValue();
 
                 if (partConfig == null) {
                     partConfig = new AreaConfig();
-                    partConfig.parts = Collections.emptyMap();
-                }
-
-                if (partConfig.events == null) {
-                    partConfig.events = new LinkedList<>();
                 }
 
                 partConfig.events.addAll(eventsToPropagateDown);
