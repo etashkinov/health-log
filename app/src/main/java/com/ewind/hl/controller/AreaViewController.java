@@ -1,9 +1,8 @@
 package com.ewind.hl.controller;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
@@ -30,31 +31,40 @@ import java.util.Map;
 public class AreaViewController {
 
     private static final String TAG = "AreaViewController";
+    private static final int MAX_EVENTS_NUMBER = 2;
 
-    private final FloatingActionButton backButton;
+    private final ImageButton backButton;
     private final Toolbar eventsBar;
+    private final RecyclerView partsList;
+    private final TextView currentAreaHeaderText;
 
     private List<Event> events;
     private Area area;
-    private final RecyclerView partsList;
 
     public AreaViewController(RelativeLayout areaView) {
-        Context context = areaView.getContext();
-
         this.eventsBar = areaView.findViewById(R.id.eventsBar);
-
-        this.partsList = areaView.findViewById(R.id.partsList);
-        this.partsList.setLayoutManager(new LinearLayoutManager(context));
-
+        this.partsList = initPartsList(areaView);
         this.backButton = areaView.findViewById(R.id.areaBackButton);
+        this.currentAreaHeaderText = areaView.findViewById(R.id.currentAreaHeaderText);
 
         this.events = Collections.emptyList();
 
-        initArea(context);
+        initArea(areaView);
     }
 
-    private void initArea(Context context) {
-        try (InputStream stream = context.getResources().openRawResource(R.raw.body)) {
+    private static RecyclerView initPartsList(RelativeLayout areaView) {
+        RecyclerView result = areaView.findViewById(R.id.partsList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(areaView.getContext());
+        result.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                result.getContext(),
+                layoutManager.getOrientation());
+        result.addItemDecoration(dividerItemDecoration);
+        return result;
+    }
+
+    private void initArea(RelativeLayout areaView) {
+        try (InputStream stream = areaView.getContext().getResources().openRawResource(R.raw.body)) {
             setArea(AreaFactory.getBody(stream));
         } catch (Exception e) {
             Log.e(TAG, "Failed to load body configuration", e);
@@ -65,6 +75,8 @@ public class AreaViewController {
         Log.i(TAG, "Set area: " + area);
 
         this.area = area;
+
+        this.currentAreaHeaderText.setText(area.getName());
 
         setParts(area);
         setEventButtons(area);
@@ -98,9 +110,15 @@ public class AreaViewController {
         Map<EventType, EventDetail> eventDetails = getAreaEventDetails(area);
 
         eventsBar.removeAllViews();
-        for (EventType type : eventTypes) {
+        for (int i = 0; i < Math.min(MAX_EVENTS_NUMBER, eventTypes.size()); i++) {
+            EventType type = eventTypes.get(i);
             addEventButton(eventsBar, type, eventDetails.get(type));
         }
+
+        Button moreButton = (Button) LayoutInflater.from(eventsBar.getContext())
+                .inflate(R.layout.event_button, eventsBar, false);
+        moreButton.setText("+");
+        eventsBar.addView(moreButton);
     }
 
     @NonNull
