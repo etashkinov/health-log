@@ -32,4 +32,9 @@ public class EyeSightDetail implements EventDetail {
     public EventType getType() {
         return EventType.EYE_SIGHT;
     }
+
+    @Override
+    public String toString() {
+        return sphere + (cylinder == null ? "" : ", CYL " + cylinder + ", AX " + axis + "°");
+    }
 }

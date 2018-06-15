@@ -10,4 +10,6 @@
     <string name="event_date_forward_text"><![CDATA[>]]></string>
     <string name="event_date_back_text"><![CDATA[<]]></string>
     <string name="areaViewBackButton">Back</string>
+
+    <string name="empty">Empty placeholder</string>
 </resources>

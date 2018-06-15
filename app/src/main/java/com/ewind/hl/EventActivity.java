@@ -7,7 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ewind.hl.controller.EventsViewController;
+import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
+import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.persist.EventsDao;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -20,7 +24,7 @@ public class EventActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        eventsViewController = new EventsViewController(findViewById(R.id.eventsView));
+        eventsViewController = new EventsViewController(this);
     }
 
     @Override
@@ -51,5 +55,12 @@ public class EventActivity extends AppCompatActivity {
 
     public void onDateChanged(EventDate eventDate) {
         eventsViewController.onDateChanged(eventDate);
+    }
+
+    public void onEventSubmit(Area area, EventDetail detail) {
+        EventDate date = eventsViewController.getDate();
+        Event<?> event = new Event<>(detail, date, area, null);
+        EventsDao.store(event);
+        eventsViewController.refreshEvents();
     }
 }

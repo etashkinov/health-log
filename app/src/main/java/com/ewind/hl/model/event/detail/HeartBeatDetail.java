@@ -22,4 +22,9 @@ public class HeartBeatDetail extends ValueDetail {
     public HeartBeatState getState() {
         return state;
     }
+
+    @Override
+    public String toString() {
+        return getValue() + " at " + state + " state";
+    }
 }

@@ -34,4 +34,9 @@ public class PainDetail extends ValueDetail {
     public PainType getPainType() {
         return painType;
     }
+
+    @Override
+    public String toString() {
+        return painType + ", severity " + getValue() + "%";
+    }
 }

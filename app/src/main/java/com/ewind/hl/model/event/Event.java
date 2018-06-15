@@ -3,10 +3,14 @@ package com.ewind.hl.model.event;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.detail.EventDetail;
 
-public abstract class Event<T extends EventDetail> {
-    private final T value;
-    private final EventDate date;
+public class Event<T extends EventDetail> {
+
+
     private final Area area;
+
+    private final EventDate date;
+
+    private final T value;
     private final String note;
 
     public Event(T value, EventDate date, Area area, String note) {

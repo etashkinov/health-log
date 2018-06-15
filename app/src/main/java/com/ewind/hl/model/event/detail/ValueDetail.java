@@ -25,4 +25,9 @@ public class ValueDetail implements EventDetail {
     public EventType getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

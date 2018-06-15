@@ -4,10 +4,30 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class EventsDao {
-     List<Event> getEvents(EventDate date) {
-         return Collections.emptyList();
+
+    private final static Map<EventDate, List<Event>> events = new HashMap<>();
+
+    public static List<Event> doGetEvents(EventDate date) {
+        List<Event> result = events.get(date);
+        if (result == null) {
+            result = new LinkedList<>();
+            events.put(date, result);
+        }
+        return result;
+    }
+
+    public static List<Event> getEvents(EventDate date) {
+        return Collections.unmodifiableList(doGetEvents(date));
      }
+
+    public static void store(Event<?> event) {
+        List<Event> events = doGetEvents(event.getDate());
+        events.add(event);
+    }
 }

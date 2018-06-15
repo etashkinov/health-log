@@ -24,4 +24,9 @@ public class BloodPressureDetail implements EventDetail {
     public EventType getType() {
         return EventType.BLOOD_PRESSURE;
     }
+
+    @Override
+    public String toString() {
+        return lowPressure + "x" + highPressure;
+    }
 }
