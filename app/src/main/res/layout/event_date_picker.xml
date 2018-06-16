@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/eventDateBackButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/eventDatePickerButton"
+        android:text="@string/event_date_back_text" />
+
+    <Button
+        android:id="@+id/eventDatePickerButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toStartOf="@id/eventDateForwardButton"
+        android:text="@string/event_date_today" />
+
+    <Button
+        android:id="@+id/eventDateForwardButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/event_date_forward_text" />
+
+</merge>

@@ -1,11 +1,10 @@
-package com.ewind.hl.controller;
+package com.ewind.hl;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class PartsAdapter extends RecyclerView.Adapter<PartsAdapter.ViewHolder> 
 
         void setPart(Area part) {
             this.part = part;
-            ((TextView)itemView).setText(part.getName());
+            ((TextView)itemView).setText(part.getDescription());
         }
     }
 

@@ -2,9 +2,9 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:theme="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
     tools:context=".EventActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
                 android:id="@+id/eventTitleText"
@@ -30,6 +30,80 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/events_view" android:id="@+id/eventsView" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".EventActivity"
+        tools:showIn="@layout/activity_event">
+
+        <RelativeLayout
+            android:id="@+id/eventHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/areaBackButton"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/areaViewBackButton"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:tint="@color/colorAccent"
+                app:srcCompat="?attr/actionModeCloseDrawable" />
+
+            <TextView
+                android:id="@+id/currentAreaHeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/areaBackButton"
+                android:layout_centerInParent="true"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/app_name"
+                android:textAppearance="@android:style/TextAppearance.Material.Large"
+                android:textColor="@color/colorAccent" />
+
+            <com.ewind.hl.view.EventDatePicker
+                android:id="@+id/eventDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/bodyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/human_body_image"
+            app:srcCompat="@drawable/body" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/partsList"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/eventsBar"
+            android:layout_below="@+id/eventHeader"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="30dp"
+            android:scrollbars="vertical" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/eventsBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

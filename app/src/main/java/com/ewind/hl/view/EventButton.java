@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import com.ewind.hl.model.event.detail.EventDetail;
 public class EventButton extends LinearLayout {
 
     public interface OnEventClickListener {
-        void onClick(View v, EventType type, EventDetail detail);
+        void onClick(EventType type, EventDetail detail);
     }
 
     private EventType type;
@@ -40,7 +39,7 @@ public class EventButton extends LinearLayout {
     }
 
     public void setOnEventClickListener(OnEventClickListener listener) {
-        setOnClickListener(v -> listener.onClick(v, type, detail));
+        setOnClickListener(v -> listener.onClick(type, detail));
     }
 
     private Drawable getEventDrawable() {

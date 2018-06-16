@@ -1,5 +1,6 @@
 package com.ewind.hl.persist;
 
+import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 
@@ -22,8 +23,16 @@ public class EventsDao {
         return result;
     }
 
-    public static List<Event> getEvents(EventDate date) {
-        return Collections.unmodifiableList(doGetEvents(date));
+    public static List<Event> getEvents(Area area, EventDate date) {
+        List<Event> dateEvents = doGetEvents(date);
+        List<Event> result = new LinkedList<>();
+        for (Event event : dateEvents) {
+            if (event.getArea().equals(area)) {
+                result.add(event);
+            }
+        }
+
+        return Collections.unmodifiableList(result);
      }
 
     public static void store(Event<?> event) {
