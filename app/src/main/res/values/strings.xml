@@ -2,7 +2,7 @@
     <string name="app_name">Health Log</string>
     <string name="action_settings">Settings</string>
 
-    <string name="eventTitleText">Health Log</string>
+    <string name="eventTitleText">How is it going?</string>
     <string name="human_body_image">Human body image</string>
 
     <string name="event_date_today">Today</string>

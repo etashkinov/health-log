@@ -3,6 +3,7 @@ package com.ewind.hl;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,7 @@ import com.ewind.hl.ui.view.EventButton;
 import com.ewind.hl.ui.view.EventDatePicker;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         refreshArea();
         refreshDate();
         refreshContent();
-        refreshEvents();
+        new RefreshEntitiesTask(this).execute();
     }
 
     private void refreshDate() {
@@ -145,12 +147,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshEvents() {
+    private void refreshEvents(List<Event> events) {
         Area area = state.getArea();
         List<EventType> eventTypes = area.getEvents();
         Log.i(TAG, "Set event buttons: " + eventTypes);
 
-        List<Event> events = EventsDao.getEvents(area, eventDatePicker.getDate());
         Map<EventType, EventDetail> eventDetails = new HashMap<>();
         for (Event event : events) {
             EventDetail eventDetail = event.getValue();
@@ -195,15 +196,57 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEventUpdated(EventDetail detail) {
-        if (detail != null) {
-            EventsDao.store(new Event<>(detail, state.getDate(), state.getArea(), null));
-            refreshEvents();
-        }
-
-        refresh(null, state.area, state.date);
+        new UpdateEventTask(this, detail).execute();
     }
 
     public State getState() {
         return state;
+    }
+
+    private static class RefreshEntitiesTask extends AsyncTask<Void, Void, List<Event>> {
+        //Prevent leak
+        private final WeakReference<MainActivity> weakActivity;
+
+        private RefreshEntitiesTask(MainActivity weakActivity) {
+            this.weakActivity = new WeakReference<>(weakActivity);
+        }
+
+        @Override
+        protected List<Event> doInBackground(Void... voids) {
+            MainActivity activity = this.weakActivity.get();
+            return new EventsDao(activity).getEvents(activity.state.area, activity.state.date);
+        }
+
+        @Override
+        protected void onPostExecute(List<Event> events) {
+            this.weakActivity.get().refreshEvents(events);
+        }
+    }
+
+    private static class UpdateEventTask extends AsyncTask<Void, Void, Void> {
+        //Prevent leak
+        private final WeakReference<MainActivity> weakActivity;
+        private final EventDetail detail;
+
+        private UpdateEventTask(MainActivity weakActivity, EventDetail detail) {
+            this.weakActivity = new WeakReference<>(weakActivity);
+            this.detail = detail;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (detail != null) {
+                MainActivity activity = weakActivity.get();
+                new EventsDao(activity).store(new Event<>(detail, activity.state.getDate(), activity.state.getArea(), null));
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void voids) {
+            MainActivity activity = weakActivity.get();
+            activity.refresh(null, activity.state.area, activity.state.date);
+        }
     }
 }

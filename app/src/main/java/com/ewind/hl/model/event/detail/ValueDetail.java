@@ -1,6 +1,8 @@
 package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
@@ -12,7 +14,10 @@ public class ValueDetail implements EventDetail {
     private final EventType type;
     private final BigDecimal value;
 
-    public ValueDetail(EventType type, BigDecimal value) {
+    @JsonCreator
+    public ValueDetail(
+            @JsonProperty("type") EventType type,
+            @JsonProperty("value") BigDecimal value) {
         this.type = type;
         this.value = value;
     }

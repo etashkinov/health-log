@@ -15,6 +15,11 @@ import java.util.Map.Entry;
 public class AreaFactory {
 
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
+    private static Area body;
+
+    public static Area get(int area) {
+        return null;
+    }
 
     public static class AreaConfig {
         private List<String> events = new LinkedList<>();
@@ -41,12 +46,14 @@ public class AreaFactory {
 
 
     public static Area getBody(InputStream stream) {
-        try {
+        if (body == null) try {
             AreaConfig config = MAPPER.readValue(stream, AreaConfig.class);
-            return createArea("body", config);
+            body = createArea("body", config);
         } catch (Exception e) {
             throw new IllegalStateException("Unable to parse the body config", e);
         }
+
+        return body;
     }
 
     private static Area createArea(String name, AreaConfig config) {

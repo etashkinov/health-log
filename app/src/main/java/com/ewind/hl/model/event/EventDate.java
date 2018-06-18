@@ -20,6 +20,14 @@ public class EventDate implements Serializable {
         );
     }
 
+    public static EventDate of(String date) {
+        String[] split = date.split("/");
+        return new EventDate(Integer.parseInt(split[2]),
+                Integer.parseInt(split[1]),
+                Integer.parseInt(split[0])
+        );
+    }
+
     public EventDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
@@ -84,4 +92,5 @@ public class EventDate implements Serializable {
     public String toString() {
         return day + "/" + (month + 1) + "/" + year;
     }
+
 }

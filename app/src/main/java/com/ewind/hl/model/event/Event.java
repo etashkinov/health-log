@@ -34,4 +34,14 @@ public class Event<T extends EventDetail> {
     public T getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                ", area=" + area +
+                ", date=" + date +
+                ", value=" + value +
+                ", note='" + note + '\'' +
+                '}';
+    }
 }
