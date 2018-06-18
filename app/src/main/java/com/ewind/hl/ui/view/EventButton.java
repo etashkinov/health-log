@@ -1,4 +1,4 @@
-package com.ewind.hl.view;
+package com.ewind.hl.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -15,11 +15,10 @@ import com.ewind.hl.model.event.detail.EventDetail;
 public class EventButton extends LinearLayout {
 
     public interface OnEventClickListener {
-        void onClick(EventType type, EventDetail detail);
+        void onClick(EventType type);
     }
 
     private EventType type;
-    private EventDetail detail;
 
     public EventButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -27,10 +26,8 @@ public class EventButton extends LinearLayout {
 
     public void setEvent(EventType type, EventDetail detail) {
         this.type = type;
-        this.detail = detail;
 
-
-        String text = getEventName();
+        String text = getEventName(type, detail);
         TextView eventText = findViewById(R.id.eventText);
         eventText.setText(text);
 
@@ -39,14 +36,14 @@ public class EventButton extends LinearLayout {
     }
 
     public void setOnEventClickListener(OnEventClickListener listener) {
-        setOnClickListener(v -> listener.onClick(type, detail));
+        setOnClickListener(v -> listener.onClick(type));
     }
 
     private Drawable getEventDrawable() {
         return getContext().getDrawable(android.R.drawable.ic_menu_mylocation);
     }
 
-    private String getEventName() {
+    private String getEventName(EventType type, EventDetail detail) {
         return type + (detail == null ? "" : "+");
     }
 }

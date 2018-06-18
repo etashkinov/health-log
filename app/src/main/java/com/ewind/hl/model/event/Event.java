@@ -5,7 +5,6 @@ import com.ewind.hl.model.event.detail.EventDetail;
 
 public class Event<T extends EventDetail> {
 
-
     private final Area area;
 
     private final EventDate date;

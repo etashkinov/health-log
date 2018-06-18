@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme"
-    tools:context=".EventActivity">
+    tools:context=".MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,17 +30,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".EventActivity"
-        tools:showIn="@layout/activity_event">
+        tools:context=".MainActivity"
+        tools:showIn="@layout/main_activity">
 
         <RelativeLayout
             android:id="@+id/eventHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
             android:orientation="horizontal">
 
             <ImageButton
@@ -66,44 +67,28 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Large"
                 android:textColor="@color/colorAccent" />
 
-            <com.ewind.hl.view.EventDatePicker
+            <com.ewind.hl.ui.view.EventDatePicker
                 android:id="@+id/eventDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"/>
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/bodyImageView"
+        <FrameLayout
+            android:id="@+id/mainContentContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/human_body_image"
-            app:srcCompat="@drawable/body" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/partsList"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/eventsBar"
-            android:layout_below="@+id/eventHeader"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="30dp"
-            android:scrollbars="vertical" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/eventsBar"
+            app:layout_constraintTop_toBottomOf="@+id/eventHeader" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/eventsBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:elevation="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

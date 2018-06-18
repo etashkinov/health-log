@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ewind.hl.view.detail.MoodDetailForm xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ewind.hl.ui.view.detail.MoodDetailForm xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -19,4 +19,4 @@
         android:layout_height="wrap_content"
         style="@style/TextAppearance.AppCompat.Large"
         android:text="@string/empty" />
-</com.ewind.hl.view.detail.MoodDetailForm>
+</com.ewind.hl.ui.view.detail.MoodDetailForm>

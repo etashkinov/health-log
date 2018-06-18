@@ -1,4 +1,4 @@
-package com.ewind.hl.view;
+package com.ewind.hl.ui.view;
 
 import com.ewind.hl.model.event.detail.EventDetail;
 

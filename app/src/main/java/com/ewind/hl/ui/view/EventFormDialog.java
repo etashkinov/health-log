@@ -1,4 +1,4 @@
-package com.ewind.hl.view;
+package com.ewind.hl.ui.view;
 
 import android.app.AlertDialog;
 import android.content.Context;

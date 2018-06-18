@@ -51,6 +51,7 @@ public class EventDate implements Serializable {
     public EventDate yesterday() {
         return plusDays(-1);
     }
+
     @NonNull
     public EventDate tomorrow() {
         return plusDays(1);
@@ -81,6 +82,6 @@ public class EventDate implements Serializable {
 
     @Override
     public String toString() {
-        return day + "/" + month + "/" + year;
+        return day + "/" + (month + 1) + "/" + year;
     }
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ewind.hl.view.EventForm xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
     >
 
     <LinearLayout
@@ -29,6 +31,43 @@
             android:textColor="@android:color/white"
             style="@style/TextAppearance.AppCompat.Large"
             android:text="@string/empty" />
+
     </LinearLayout>
 
-</com.ewind.hl.view.EventForm>
+    <FrameLayout
+        android:id="@+id/eventDetailContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/eventHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/eventFooter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/colorAccent"
+            android:text="@android:string/cancel"/>
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@android:string/ok"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.ewind.hl.view.detail;
+package com.ewind.hl.ui.view.detail;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.detail.MoodDetail;
-import com.ewind.hl.view.EventDetailForm;
+import com.ewind.hl.ui.view.EventDetailForm;
 
 public class MoodDetailForm extends LinearLayout implements EventDetailForm<MoodDetail>, SeekBar.OnSeekBarChangeListener {
 

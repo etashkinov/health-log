@@ -1,4 +1,4 @@
-package com.ewind.hl.view;
+package com.ewind.hl.ui.view;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -68,9 +68,14 @@ public class EventDatePicker extends LinearLayout {
         onDateChanged(date.tomorrow());
     }
 
-    public void onDateChanged(EventDate date) {
+    public void setDate(EventDate date) {
         this.date = date;
         refreshDate();
+    }
+
+    public void onDateChanged(EventDate date) {
+        setDate(date);
+
         listener.onDateChanged(date);
     }
 

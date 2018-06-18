@@ -1,4 +1,4 @@
-package com.ewind.hl.view;
+package com.ewind.hl.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
