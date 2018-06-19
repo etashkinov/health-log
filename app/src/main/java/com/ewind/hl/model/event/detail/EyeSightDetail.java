@@ -1,22 +1,31 @@
 package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EyeSightDetail implements EventDetail {
 
     private final BigDecimal sphere;
     private final BigDecimal cylinder;
-    private final int axis;
+    private final Integer axis;
 
-    public EyeSightDetail(BigDecimal sphere, BigDecimal cylinder, int axis) {
+    @JsonCreator
+    public EyeSightDetail(
+            @JsonProperty("sphere") BigDecimal sphere,
+            @JsonProperty("cylinder") BigDecimal cylinder,
+            @JsonProperty("axis") Integer axis) {
         this.sphere = sphere;
         this.cylinder = cylinder;
         this.axis = axis;
     }
 
-    public BigDecimal getShepre() {
+    public BigDecimal getSphere() {
         return sphere;
     }
 
@@ -24,10 +33,11 @@ public class EyeSightDetail implements EventDetail {
         return cylinder;
     }
 
-    public int getAxis() {
+    public Integer getAxis() {
         return axis;
     }
 
+    @JsonIgnore
     @Override
     public EventType getType() {
         return EventType.EYE_SIGHT;

@@ -60,9 +60,9 @@ parts:
             parts:
               phalanges:
                 parts:
-                  bottom:
-                  middle:
-                  tip:
+                  bottom_phalange:
+                  middle_phalange:
+                  tip_phalange:
               nail:
       shoulder:
       forearm:

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.ui.LocalizationService;
 
 public class EventButton extends LinearLayout {
 
@@ -44,6 +45,6 @@ public class EventButton extends LinearLayout {
     }
 
     private String getEventName(EventType type, EventDetail detail) {
-        return type + (detail == null ? "" : "+");
+        return LocalizationService.getEventTypeName(type) + (detail == null ? "" : "!");
     }
 }

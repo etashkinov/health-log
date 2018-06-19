@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class AreaFactoryTest {
     @Test
     public void shouldParseBody() throws IOException {
-        try (InputStream stream = AreaFactory.class.getResourceAsStream("body.yml")) {
+        try (InputStream stream = AreaFactory.class.getClassLoader().getResourceAsStream("body.yml")) {
             Area body = AreaFactory.getBody(stream);
             assertNotNull(body);
 

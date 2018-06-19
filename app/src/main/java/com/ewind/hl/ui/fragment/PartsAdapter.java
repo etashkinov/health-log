@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
+import com.ewind.hl.ui.LocalizationService;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class PartsAdapter extends RecyclerView.Adapter<PartsAdapter.ViewHolder> 
 
         void setPart(Area part) {
             this.part = part;
-            ((TextView)itemView).setText(part.getDescription());
+            ((TextView)itemView).setText(LocalizationService.getAreaName(part));
         }
     }
 

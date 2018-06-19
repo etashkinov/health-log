@@ -1,7 +1,5 @@
 package com.ewind.hl.model.area;
 
-import android.support.annotation.NonNull;
-
 import com.ewind.hl.model.event.EventType;
 
 import java.util.List;
@@ -53,11 +51,5 @@ public class Area {
 
     public int getId() {
         return id;
-    }
-
-    @NonNull
-    public String getDescription() {
-        String title = getName().replaceAll("_"," ");
-        return Character.toUpperCase(title.charAt(0)) + title.substring(1);
     }
 }

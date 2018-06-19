@@ -23,6 +23,7 @@ import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.fragment.BodyFragment;
 import com.ewind.hl.ui.fragment.EventFragment;
 import com.ewind.hl.ui.view.EventButton;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Set back button visible for parent " + area);
             backButton.setVisibility(View.VISIBLE);
             backButton.setOnClickListener(v -> onAreaChanged(parent));
-            currentAreaHeaderText.setText(area.getDescription());
+            currentAreaHeaderText.setText(LocalizationService.getAreaName(area));
         } else {
             Log.i(TAG, "Set back button invisible for null parent");
             backButton.setVisibility(View.INVISIBLE);
