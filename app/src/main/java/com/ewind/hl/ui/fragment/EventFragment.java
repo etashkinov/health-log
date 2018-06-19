@@ -19,6 +19,7 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.detail.ValueDetailForm;
 
@@ -56,7 +57,7 @@ public class EventFragment extends Fragment {
         eventImage.setImageDrawable(getEventDrawable(type));
 
         TextView eventText = view.findViewById(R.id.eventText);
-        eventText.setText(type.name());
+        eventText.setText(LocalizationService.getEventTypeName(type));
     }
 
     private Drawable getEventDrawable(EventType type) {

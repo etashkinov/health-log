@@ -2,6 +2,7 @@ package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ public class ValueDetail implements EventDetail {
         return value;
     }
 
+    @JsonIgnore
     @Override
     public EventType getType() {
         return type;

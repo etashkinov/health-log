@@ -12,4 +12,5 @@
     <string name="areaViewBackButton">Back</string>
 
     <string name="empty">Empty placeholder</string>
+    <string name="pain_type_hint">Type of pain</string>
 </resources>

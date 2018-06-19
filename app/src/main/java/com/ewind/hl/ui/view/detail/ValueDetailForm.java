@@ -15,7 +15,7 @@ import com.ewind.hl.ui.view.EventDetailForm;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 
-public class ValueDetailForm extends LinearLayout implements EventDetailForm<ValueDetail>, SeekBar.OnSeekBarChangeListener {
+public class ValueDetailForm<T extends ValueDetail> extends LinearLayout implements EventDetailForm<T>, SeekBar.OnSeekBarChangeListener {
 
     private SeekBar seekBar;
     private TextView textView;
@@ -43,18 +43,22 @@ public class ValueDetailForm extends LinearLayout implements EventDetailForm<Val
     }
 
     @Override
-    public void setDetail(ValueDetail detail) {
+    public void setDetail(T detail) {
         seekBar.setProgress(detail.getValue().intValue());
     }
 
     @Override
-    public ValueDetail getDetail() {
+    public T getDetail() {
         try {
             Constructor<? extends EventDetail> constructor = eventType.getDetailClass().getConstructor(EventType.class, BigDecimal.class);
-            return (ValueDetail) constructor.newInstance(eventType, BigDecimal.valueOf(seekBar.getProgress()));
+            return (T) constructor.newInstance(eventType, getValue());
         } catch (Exception e) {
             throw new IllegalStateException("Failed to create value details for " + eventType, e);
         }
+    }
+
+    protected BigDecimal getValue() {
+        return BigDecimal.valueOf(seekBar.getProgress());
     }
 
     @Override

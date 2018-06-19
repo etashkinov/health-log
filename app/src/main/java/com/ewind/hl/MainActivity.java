@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refresh(EventType type, Area area, EventDate date) {
+        if (!area.getEvents().contains(type)) {
+            type = null;
+        }
+
         state = new State(type, area, date);
         refreshArea();
         refreshDate();

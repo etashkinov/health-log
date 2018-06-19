@@ -1,12 +1,16 @@
 package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 public class PainDetail extends ValueDetail {
 
-    private final PainType painType;
+    private final List<PainType> painTypes;
 
     public enum PainType {
         ACHING,
@@ -26,17 +30,20 @@ public class PainDetail extends ValueDetail {
         EXHAUSTING,
     }
 
-    public PainDetail(BigDecimal value, PainType painType) {
+    @JsonCreator
+    public PainDetail(
+            @JsonProperty("value") BigDecimal value,
+            @JsonProperty("painTypes") List<PainType> painTypes) {
         super(EventType.PAIN, value);
-        this.painType = painType;
+        this.painTypes = Collections.unmodifiableList(painTypes);
     }
 
-    public PainType getPainType() {
-        return painType;
+    public List<PainType> getPainTypes() {
+        return painTypes;
     }
 
     @Override
     public String toString() {
-        return painType + ", severity " + getValue() + "%";
+        return painTypes + ", severity " + getValue() + "%";
     }
 }
