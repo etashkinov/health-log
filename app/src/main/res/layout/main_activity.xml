@@ -41,8 +41,8 @@
             android:id="@+id/eventHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/areaBackButton"
@@ -50,8 +50,8 @@
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/areaViewBackButton"
-                android:paddingStart="15dp"
                 android:paddingEnd="15dp"
+                android:paddingStart="15dp"
                 android:tint="@color/colorAccent"
                 app:srcCompat="?attr/actionModeCloseDrawable" />
 
@@ -59,10 +59,10 @@
                 android:id="@+id/currentAreaHeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/areaBackButton"
                 android:layout_centerInParent="true"
-                android:paddingStart="5dp"
+                android:layout_toEndOf="@id/areaBackButton"
                 android:paddingEnd="5dp"
+                android:paddingStart="5dp"
                 android:text="@string/eventTitleText"
                 android:textAppearance="@android:style/TextAppearance.Material.Large"
                 android:textColor="@color/colorAccent" />
@@ -71,23 +71,42 @@
                 android:id="@+id/eventDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/mainContentContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/eventsBar"
+            app:layout_constraintBottom_toTopOf="@+id/mainToolbar"
             app:layout_constraintTop_toBottomOf="@+id/eventHeader" />
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/eventsBar"
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" >
+
+            <LinearLayout
+                android:id="@+id/eventsBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:tint="@color/colorAccent"
+                android:onClick="onEventSearch"
+                android:src="@android:drawable/ic_menu_search"/>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.constraint.ConstraintLayout>
 

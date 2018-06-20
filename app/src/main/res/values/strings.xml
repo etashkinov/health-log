@@ -13,4 +13,5 @@
 
     <string name="empty">Empty placeholder</string>
     <string name="pain_type_hint">Type of pain</string>
+    <string name="search">Search</string>
 </resources>

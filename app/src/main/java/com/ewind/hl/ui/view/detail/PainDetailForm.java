@@ -36,7 +36,7 @@ public class PainDetailForm extends ValueDetailForm<PainDetail> {
     @Override
     public void setDetail(PainDetail detail) {
         super.setDetail(detail);
-        painType.setText(TextUtils.join(",", detail.getPainTypes()));
+        painType.setText(TextUtils.join(", ", detail.getPainTypes()));
     }
 
     @Override
