@@ -101,8 +101,7 @@
                 android:layout_gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:tint="@color/colorAccent"
+                style="@style/Widget.AppCompat.Button.Borderless"∂
                 android:onClick="onEventSearch"
                 android:src="@android:drawable/ic_menu_search"/>
 
