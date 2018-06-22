@@ -20,7 +20,7 @@ public class EventTypesAdapter extends RecyclerView.Adapter<EventTypesAdapter.Vi
             v.setOnClickListener(view -> listener.onClick(type));
         }
 
-        void setPart(EventType type) {
+        void setEvent(EventType type) {
             this.type = type;
             EventButton button = (EventButton) this.itemView;
             button.setEvent(type, null);
@@ -46,7 +46,7 @@ public class EventTypesAdapter extends RecyclerView.Adapter<EventTypesAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setPart(types.get(position));
+        holder.setEvent(types.get(position));
     }
 
     @Override

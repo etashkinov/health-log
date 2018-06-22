@@ -23,4 +23,26 @@
         android:gravity="center"
         android:scrollbars="vertical" />
 
+    <!--<LinearLayout-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
+        <!--<View-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_weight="82"-->
+            <!--/>-->
+        <!--<View-->
+            <!--android:background="@android:color/holo_green_light"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_weight="18"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
 </android.support.constraint.ConstraintLayout>

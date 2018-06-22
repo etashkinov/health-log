@@ -13,9 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ewind.hl.model.area.Area;
@@ -30,6 +28,7 @@ import com.ewind.hl.ui.fragment.BodyFragment;
 import com.ewind.hl.ui.fragment.EventFragment;
 import com.ewind.hl.ui.view.EventButton;
 import com.ewind.hl.ui.view.EventDatePicker;
+import com.ewind.hl.ui.view.EventSearchView;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -41,7 +40,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getName();
-    private static final int MAX_EVENTS_NUMBER = 4;
+    private static final int MAX_EVENTS_NUMBER = 5;
 
     public class State {
         private final EventType type;
@@ -207,16 +206,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEventSearch(View view) {
-        final AlertDialog dialog = new AlertDialog.Builder(this).setView(R.layout.event_search).create();
-        dialog.show();
-
-        ListView listView = dialog.findViewById(R.id.eventsList);
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, EventType.values()));
-        listView.setOnItemClickListener((parent,v,position,id) -> {
+        final EventSearchView eventSearchView = (EventSearchView) LayoutInflater.from(this).inflate(R.layout.event_search, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(eventSearchView).create();
+        eventSearchView.setOnEventClickListener(e -> {
             dialog.cancel();
-            onEventTypeChanged(EventType.values()[position]);
+            onEventTypeChanged(e);
         });
 
+        dialog.show();
     }
 
     public State getState() {
