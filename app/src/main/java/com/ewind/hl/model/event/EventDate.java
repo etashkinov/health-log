@@ -21,10 +21,10 @@ public class EventDate implements Serializable {
     }
 
     public static EventDate of(String date) {
-        String[] split = date.split("/");
-        return new EventDate(Integer.parseInt(split[2]),
+        String[] split = date.split("-");
+        return new EventDate(Integer.parseInt(split[0]),
                 Integer.parseInt(split[1]),
-                Integer.parseInt(split[0])
+                Integer.parseInt(split[2])
         );
     }
 
@@ -84,13 +84,11 @@ public class EventDate implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(year, month, day);
     }
 
     @Override
     public String toString() {
-        return day + "/" + (month + 1) + "/" + year;
+        return year + "-" + (month + 1) + "-" + day;
     }
-
 }

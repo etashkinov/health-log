@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,12 +25,12 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.fragment.BodyFragment;
 import com.ewind.hl.ui.fragment.EventFragment;
+import com.ewind.hl.ui.fragment.HistoryFragment;
 import com.ewind.hl.ui.view.EventButton;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventSearchView;
 
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -41,16 +40,25 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getName();
     private static final int MAX_EVENTS_NUMBER = 5;
+    private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
+
+    public enum ViewMode {
+        FORM,
+        HISTORY,
+        LIST
+    }
 
     public class State {
         private final EventType type;
         private final Area area;
         private final EventDate date;
+        private final ViewMode mode;
 
-        private State(EventType type, Area area, EventDate date) {
+        private State(EventType type, Area area, EventDate date, ViewMode mode) {
             this.type = type;
             this.area = area;
             this.date = date;
+            this.mode = mode;
         }
 
         public EventType getType() {
@@ -89,31 +97,40 @@ public class MainActivity extends AppCompatActivity {
         Area area = loadBodyConfiguration();
         EventDate date = EventDate.of(Calendar.getInstance());
 
-        refresh(null, area, date);
+        refresh(null, area, date, ViewMode.FORM);
     }
 
     public void onAreaChanged(Area area) {
-        refresh(state.type, area, state.date);
+        refresh(state.type, area, state.date, state.mode);
     }
 
     private void onDateChanged(EventDate date) {
-        refresh(state.type, state.area, date);
+        refresh(state.type, state.area, date, state.mode);
     }
 
     private void onEventTypeChanged(EventType type) {
-        refresh(type == state.type ? null : type, state.area, state.date);
+        refresh(type == state.type ? null : type, state.area, state.date, state.mode);
     }
 
-    private void refresh(EventType type, Area area, EventDate date) {
+    public void onModeChanged(ViewMode mode) {
+        refresh(state.type, state.area, state.date, mode);
+    }
+
+    private void refresh(EventType type, Area area, EventDate date, ViewMode mode) {
         if (!area.getEvents().contains(type)) {
             type = null;
         }
 
-        state = new State(type, area, date);
+        state = new State(type, area, date, mode);
+
+        refresh();
+    }
+
+    private void refresh() {
         refreshArea();
         refreshDate();
         refreshContent();
-        new RefreshEntitiesTask(this).execute();
+        refreshEvents();
     }
 
     private void refreshDate() {
@@ -122,7 +139,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshContent() {
         if (state.getType() != null) {
-            setContent(new EventFragment());
+            switch (state.mode) {
+                case LIST:
+                case FORM:
+                    setContent(new EventFragment());
+                    break;
+                case HISTORY:
+                    setContent(new HistoryFragment());
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown view mode: " + state.mode);
+            }
         } else {
             setContent(new BodyFragment());
         }
@@ -153,9 +180,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshEvents(List<Event> events) {
-        Area area = state.getArea();
-        List<EventType> eventTypes = area.getEvents();
+    private void refreshEvents() {
+        List<Event> events = new EventsDao(this).getEvents(state.area, state.date);
+        List<EventType> eventTypes = state.area.getEvents();
         Log.i(TAG, "Set event buttons: " + eventTypes);
 
         Map<EventType, EventDetail> eventDetails = new HashMap<>();
@@ -185,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragMan = getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
 
-        fragTransaction.replace(R.id.mainContentContainer, fragment, fragment.getClass().getSimpleName());
+        fragTransaction.replace(R.id.mainContentContainer, fragment, CONTENT_FRAGMENT_TAG);
         fragTransaction.commit();
     }
 
@@ -202,7 +229,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEventUpdated(EventDetail detail) {
-        new UpdateEventTask(this, detail).execute();
+        if (detail != null) {
+            new EventsDao(this).store(new Event<>(detail, state.date, state.area, null));
+        }
+
+        onEventTypeChanged(null);
     }
 
     public void onEventSearch(View view) {
@@ -218,52 +249,5 @@ public class MainActivity extends AppCompatActivity {
 
     public State getState() {
         return state;
-    }
-
-    private static class RefreshEntitiesTask extends AsyncTask<Void, Void, List<Event>> {
-        //Prevent leak
-        private final WeakReference<MainActivity> weakActivity;
-
-        private RefreshEntitiesTask(MainActivity weakActivity) {
-            this.weakActivity = new WeakReference<>(weakActivity);
-        }
-
-        @Override
-        protected List<Event> doInBackground(Void... voids) {
-            MainActivity activity = this.weakActivity.get();
-            return new EventsDao(activity).getEvents(activity.state.area, activity.state.date);
-        }
-
-        @Override
-        protected void onPostExecute(List<Event> events) {
-            this.weakActivity.get().refreshEvents(events);
-        }
-    }
-
-    private static class UpdateEventTask extends AsyncTask<Void, Void, Void> {
-        //Prevent leak
-        private final WeakReference<MainActivity> weakActivity;
-        private final EventDetail detail;
-
-        private UpdateEventTask(MainActivity weakActivity, EventDetail detail) {
-            this.weakActivity = new WeakReference<>(weakActivity);
-            this.detail = detail;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if (detail != null) {
-                MainActivity activity = weakActivity.get();
-                new EventsDao(activity).store(new Event<>(detail, activity.state.getDate(), activity.state.getArea(), null));
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void voids) {
-            MainActivity activity = weakActivity.get();
-            activity.refresh(null, activity.state.area, activity.state.date);
-        }
     }
 }

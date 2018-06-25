@@ -12,6 +12,7 @@ public class EventEntity {
     private String note;
     private String value;
     private String type;
+    private double score;
     private int area;
 
     public int getId() {
@@ -62,6 +63,14 @@ public class EventEntity {
         this.area = area;
     }
 
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "EventEntity{" +
@@ -70,6 +79,7 @@ public class EventEntity {
                 ", note='" + note + '\'' +
                 ", value='" + value + '\'' +
                 ", type='" + type + '\'' +
+                ", score='" + score + '\'' +
                 ", area=" + area +
                 '}';
     }

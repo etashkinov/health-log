@@ -14,4 +14,6 @@
     <string name="empty">Empty placeholder</string>
     <string name="pain_type_hint">Type of pain</string>
     <string name="search">Search</string>
+    <string name="fromDate">From %s</string>
+    <string name="historyChartDates">From %s till %s</string>
 </resources>

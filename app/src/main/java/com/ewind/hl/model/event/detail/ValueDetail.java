@@ -2,7 +2,6 @@ package com.ewind.hl.model.event.detail;
 
 import com.ewind.hl.model.event.EventType;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -12,14 +11,14 @@ import java.math.BigDecimal;
  */
 public class ValueDetail implements EventDetail {
 
-    private final EventType type;
+    private final EventType valueType;
     private final BigDecimal value;
 
     @JsonCreator
     public ValueDetail(
-            @JsonProperty("type") EventType type,
+            @JsonProperty("valueType") EventType valueType,
             @JsonProperty("value") BigDecimal value) {
-        this.type = type;
+        this.valueType = valueType;
         this.value = value;
     }
 
@@ -27,10 +26,18 @@ public class ValueDetail implements EventDetail {
         return value;
     }
 
-    @JsonIgnore
+    @Override
+    public double getScore() {
+        return getValue().doubleValue();
+    }
+
     @Override
     public EventType getType() {
-        return type;
+        return getValueType();
+    }
+
+    public EventType getValueType() {
+        return valueType;
     }
 
     @Override

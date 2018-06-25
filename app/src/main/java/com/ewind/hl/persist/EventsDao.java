@@ -2,6 +2,7 @@ package com.ewind.hl.persist;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.Event;
@@ -24,7 +25,9 @@ public class EventsDao {
 
     public EventsDao(Context context) {
         if (db == null) {
-            db = Room.databaseBuilder(context, AppDatabase.class, "health-log-db").build();
+            db = Room.databaseBuilder(context, AppDatabase.class, "health-log-db")
+                    .allowMainThreadQueries()
+                    .build();
         }
 
         entityDao = db.eventEntityDao();
@@ -32,6 +35,11 @@ public class EventsDao {
 
     public List<Event> getEvents(Area area, EventDate date) {
         List<EventEntity> eventEntities = entityDao.findByAreaAndDate(area.getId(), date.toString());
+        return toEvents(eventEntities, area);
+    }
+
+    @NonNull
+    private List<Event> toEvents(List<EventEntity> eventEntities, Area area) {
         List<Event> result = new ArrayList<>(eventEntities.size());
         for (EventEntity eventEntity : eventEntities) {
             result.add(toEvent(eventEntity, area));
@@ -86,10 +94,16 @@ public class EventsDao {
             result.setArea(event.getArea().getId());
             result.setDate(event.getDate().toString());
             result.setType(event.getValue().getType().name());
+            result.setScore(event.getValue().getScore());
             result.setValue(MAPPER.writeValueAsString(event.getValue()));
             return result;
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Failed to serialize " + event, e);
         }
+    }
+
+    public List<Event> getEvents(EventType type, Area area, EventDate from, EventDate till) {
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(area.getId(), from.toString(), till.toString(), type.name());
+        return toEvents(eventEntities, area);
     }
 }

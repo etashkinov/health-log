@@ -29,4 +29,9 @@ public class BloodPressureDetail implements EventDetail {
     public String toString() {
         return lowPressure + "x" + highPressure;
     }
+
+    @Override
+    public double getScore() {
+        return (double) (highPressure + lowPressure) / 2;
+    }
 }

@@ -13,4 +13,11 @@ public enum MoodDetail implements EventDetail {
     public EventType getType() {
         return EventType.MOOD;
     }
+
+    @Override
+    public double getScore() {
+        return (MoodDetail.values().length - (double) ordinal()) / MoodDetail.values().length * 100;
+    }
+
+
 }

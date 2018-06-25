@@ -37,8 +37,7 @@ public class Event<T extends EventDetail> {
 
     @Override
     public String toString() {
-        return "Event{" +
-                ", area=" + area +
+        return "Event{area=" + area +
                 ", date=" + date +
                 ", value=" + value +
                 ", note='" + note + '\'' +
