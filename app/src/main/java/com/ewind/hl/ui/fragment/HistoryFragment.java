@@ -39,8 +39,11 @@ public class HistoryFragment extends Fragment {
         EventDate from = getFromDate(till);
 
         initHeader(view, till, from);
-        initChart(view, state, till, from);
 
+        List<Event> events = new EventsDao(getContext()).getEvents(state.getType(), state.getArea(), from, till);
+        if (!events.isEmpty()) {
+            initChart(view, events);
+        }
         view.findViewById(R.id.eventFormButton).setOnClickListener(this::onShowForm);
 
         return view;
@@ -57,22 +60,27 @@ public class HistoryFragment extends Fragment {
         historyChartDates.setText(text);
     }
 
-    private void initChart(View view, MainActivity.State state, EventDate till, EventDate from) {
+    private void initChart(View view, List<Event> events) {
         LineChart chart = view.findViewById(R.id.historyChart);
 
         List<Entry> entries = new ArrayList<>();
-
-        List<Event> events = new EventsDao(getContext()).getEvents(state.getType(), state.getArea(),
-                from,
-                till);
         for (Event event : events) {
             entries.add(new EventEntry(event));
         }
 
         EventType type = events.get(0).getValue().getType();
-        LineDataSet dataSet = new LineDataSet(entries, LocalizationService.getEventTypeName(type)); // add entries to dataset
+        LineDataSet dataSet = new LineDataSet(entries, LocalizationService.getEventTypeName(type));
+        dataSet.setColor(R.color.colorAccent);
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
+        chart.setDrawBorders(false);
+        chart.setDrawGridBackground(false);
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setDrawGridLines(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getXAxis().setDrawGridLines(false);
+        chart.getXAxis().setEnabled(false);
         chart.invalidate(); // refresh
     }
 

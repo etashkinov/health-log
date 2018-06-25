@@ -20,6 +20,7 @@ parts:
             events:
               - EYE_SIGHT
               - EYE_PRESSURE
+              - WATERY
             parts:
               eyebrow:
               eyelid:
@@ -27,6 +28,8 @@ parts:
               temple:
               pupil:
           nose:
+            events:
+              - CONGESTION
           cheeks:
             dual: cheek
           mouth:

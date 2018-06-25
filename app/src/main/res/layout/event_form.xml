@@ -35,7 +35,7 @@
             android:id="@+id/eventHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_more"
+            android:src="@drawable/chart"
             android:tint="@android:color/white" />
 
         <View

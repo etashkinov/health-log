@@ -13,10 +13,11 @@
 
     <Button
         android:id="@+id/eventDatePickerButton"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/colorAccent"
         android:layout_toStartOf="@id/eventDateForwardButton"
         android:text="@string/event_date_today" />
 

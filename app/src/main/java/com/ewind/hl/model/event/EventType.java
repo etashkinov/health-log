@@ -18,7 +18,9 @@ public enum EventType {
     TREMOR(ValueDetail.class, true),
     TEMPERATURE(ValueDetail.class),
     EYE_SIGHT (EyeSightDetail.class),
-    EYE_PRESSURE(ValueDetail.class);
+    EYE_PRESSURE(ValueDetail.class),
+    CONGESTION(ValueDetail.class),
+    WATERY(ValueDetail.class);
 
     private final Class<? extends EventDetail> detailClass;
     private final boolean propagateDown;
