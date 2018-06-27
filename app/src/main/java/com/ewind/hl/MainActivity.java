@@ -2,8 +2,6 @@ package com.ewind.hl;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -88,11 +86,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        eventsBar = findViewById(R.id.eventsBar);
-        backButton = findViewById(R.id.areaBackButton);
-        currentAreaHeaderText = findViewById(R.id.currentAreaHeaderText);
-        eventDatePicker = findViewById(R.id.eventDatePicker);
-        eventDatePicker.setListener(this::onDateChanged);
+//        eventsBar = findViewById(R.id.eventsBar);
+//        backButton = findViewById(R.id.areaBackButton);
+//        currentAreaHeaderText = findViewById(R.id.currentAreaHeaderText);
+//        eventDatePicker = findViewById(R.id.eventDatePicker);
+//        eventDatePicker.setListener(this::onDateChanged);
 
         Area area = loadBodyConfiguration();
         EventDate date = EventDate.of(Calendar.getInstance());
@@ -209,11 +207,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContent(Fragment fragment) {
-        FragmentManager fragMan = getFragmentManager();
-        FragmentTransaction fragTransaction = fragMan.beginTransaction();
-
-        fragTransaction.replace(R.id.mainContentContainer, fragment, CONTENT_FRAGMENT_TAG);
-        fragTransaction.commit();
+//        FragmentManager fragMan = getFragmentManager();
+//        FragmentTransaction fragTransaction = fragMan.beginTransaction();
+//
+//        fragTransaction.replace(R.id.mainContentContainer, fragment, CONTENT_FRAGMENT_TAG);
+//        fragTransaction.commit();
     }
 
     @Override
@@ -246,6 +244,19 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
+    public void onEventAdd(View view) {
+        final EventSearchView eventSearchView = (EventSearchView) LayoutInflater.from(this).inflate(R.layout.event_search, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(eventSearchView).create();
+        eventSearchView.setOnEventClickListener(e -> {
+            dialog.cancel();
+            onEventTypeChanged(e);
+        });
+
+        dialog.show();
+    }
+
+
 
     public State getState() {
         return state;
