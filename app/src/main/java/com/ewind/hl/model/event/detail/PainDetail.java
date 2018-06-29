@@ -1,6 +1,5 @@
 package com.ewind.hl.model.event.detail;
 
-import com.ewind.hl.model.event.EventType;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,7 +33,7 @@ public class PainDetail extends ValueDetail {
     public PainDetail(
             @JsonProperty("value") BigDecimal value,
             @JsonProperty("painTypes") List<PainType> painTypes) {
-        super(EventType.PAIN, value);
+        super(value);
         this.painTypes = Collections.unmodifiableList(painTypes);
     }
 

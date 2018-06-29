@@ -1,5 +1,9 @@
 package com.ewind.hl.model.area;
 
+import android.content.Context;
+import android.text.TextUtils;
+
+import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -16,10 +20,6 @@ public class AreaFactory {
 
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
     private static Area body;
-
-    public static Area get(int area) {
-        return null;
-    }
 
     public static class AreaConfig {
         private List<String> events = new LinkedList<>();
@@ -44,19 +44,49 @@ public class AreaFactory {
         }
     }
 
+    public static Area getArea(String name) {
+        return getArea(body, name);
+    }
 
-    public static Area getBody(InputStream stream) {
-        if (body == null) try {
-            AreaConfig config = MAPPER.readValue(stream, AreaConfig.class);
-            body = createArea("body", config);
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to parse the body config", e);
+    public static Area getArea(Area area, String name) {
+        if (name == null) {
+            return null;
+        } else if (area.getName().equals(name)) {
+            return area;
+        } else {
+            for (Area part : area.getParts()) {
+                Area result = getArea(part, name);
+                if (result != null) {
+                    return result;
+                }
+            }
+
+            return null;
         }
+    }
 
+    public static Area getBody() {
         return body;
     }
 
-    private static Area createArea(String name, AreaConfig config) {
+    public static void initBody(Context context) {
+        try (InputStream stream = context.getResources().openRawResource(R.raw.body)) {
+            initBody(stream);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load body configuration", e);
+        }
+    }
+
+    static void initBody(InputStream stream) {
+        if (body == null) try {
+            AreaConfig config = MAPPER.readValue(stream, AreaConfig.class);
+            body = createArea(null, "body", config);
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to parse the body config", e);
+        }
+    }
+
+    private static Area createArea(String scope, String name, AreaConfig config) {
         List<EventType> events = new ArrayList<>(config.events.size());
         List<String> eventsToPropagateDown = new LinkedList<>();
 
@@ -72,13 +102,13 @@ public class AreaFactory {
         if (config.dual != null) {
             String dual = config.dual;
             config.dual = null;
-            children.add(createArea("left_" + dual, config));
-            children.add(createArea("right_" + dual, config));
+            children.add(createArea(addScope(scope,"left"), dual, config));
+            children.add(createArea(addScope(scope,"right"), dual, config));
         } else if (!config.multiple.isEmpty()) {
             List<String> multiple = config.multiple;
             config.multiple = Collections.emptyList();
             for (String mult : multiple) {
-                children.add(createArea(mult, config));
+                children.add(createArea(addScope(scope,mult), "", config));
             }
         } else if (!config.parts.isEmpty()) {
             for (Entry<String, AreaConfig> part : config.parts.entrySet()) {
@@ -89,11 +119,19 @@ public class AreaFactory {
                 }
 
                 partConfig.events.addAll(eventsToPropagateDown);
-                children.add(createArea(part.getKey(), partConfig));
+                children.add(createArea(scope, part.getKey(), partConfig));
             }
         }
 
-        return new Area(name, events, children);
+        return new Area(addScope(scope, name), events, children);
+    }
+
+    private static String addScope(String scope, String value) {
+        if (TextUtils.isEmpty(scope)) {
+            return value;
+        } else {
+            return scope + "_" + value;
+        }
     }
 
 }

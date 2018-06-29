@@ -1,8 +1,6 @@
 package com.ewind.hl.model.event.detail;
 
-import com.ewind.hl.model.event.EventType;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,12 +40,6 @@ public class EyeSightDetail implements EventDetail {
         return (sphere == null ? BigDecimal.ZERO : sphere).abs()
                 .add(cylinder == null ? BigDecimal.ZERO : cylinder.abs())
                 .doubleValue();
-    }
-
-    @JsonIgnore
-    @Override
-    public EventType getType() {
-        return EventType.EYE_SIGHT;
     }
 
     @Override

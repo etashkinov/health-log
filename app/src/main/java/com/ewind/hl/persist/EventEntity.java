@@ -6,20 +6,20 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class EventEntity {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String date;
     private String note;
     private String value;
     private String type;
     private double score;
-    private int area;
+    private String area;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -55,11 +55,11 @@ public class EventEntity {
         this.type = type;
     }
 
-    public int getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(int area) {
+    public void setArea(String area) {
         this.area = area;
     }
 

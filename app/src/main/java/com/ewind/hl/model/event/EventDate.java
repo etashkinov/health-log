@@ -15,12 +15,16 @@ public class EventDate implements Serializable {
     public static EventDate of(Calendar calendar) {
         return new EventDate(
                 calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
     }
 
     public static EventDate of(String date) {
+        if (date == null) {
+            return null;
+        }
+
         String[] split = date.split("-");
         return new EventDate(Integer.parseInt(split[0]),
                 Integer.parseInt(split[1]),
@@ -50,7 +54,7 @@ public class EventDate implements Serializable {
     public Calendar toCalendar() {
         Calendar result = Calendar.getInstance();
         result.set(Calendar.YEAR, year);
-        result.set(Calendar.MONTH, month);
+        result.set(Calendar.MONTH, month - 1);
         result.set(Calendar.DAY_OF_MONTH, day);
         return result;
     }
@@ -89,6 +93,6 @@ public class EventDate implements Serializable {
 
     @Override
     public String toString() {
-        return year + "-" + (month + 1) + "-" + day;
+        return year + "-" + month + "-" + day;
     }
 }

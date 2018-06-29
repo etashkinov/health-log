@@ -1,7 +1,5 @@
 package com.ewind.hl.model.event.detail;
 
-import com.ewind.hl.model.event.EventType;
-
 import java.math.BigDecimal;
 
 public class HeartBeatDetail extends ValueDetail {
@@ -15,7 +13,7 @@ public class HeartBeatDetail extends ValueDetail {
     private final HeartBeatState state;
 
     public HeartBeatDetail(int rate, HeartBeatState state) {
-        super(EventType.HEART_BEAT, BigDecimal.valueOf(rate));
+        super(BigDecimal.valueOf(rate));
         this.state = state;
     }
 

@@ -9,9 +9,6 @@ import static java.util.Collections.unmodifiableList;
 
 public class Area {
 
-    private static int areaId = 0;
-
-    private final int id;
     private final String name;
     private final List<EventType> events;
     private final List<Area> parts;
@@ -19,7 +16,6 @@ public class Area {
     private Area parent;
 
     public Area(String name, List<EventType> events, List<Area> children) {
-        this.id = areaId++;
         this.name = name;
         this.events = events == null ? emptyList() : unmodifiableList(events);
         this.parts = children == null ? emptyList() : unmodifiableList(children);
@@ -47,9 +43,5 @@ public class Area {
 
     public Area getParent() {
         return parent;
-    }
-
-    public int getId() {
-        return id;
     }
 }

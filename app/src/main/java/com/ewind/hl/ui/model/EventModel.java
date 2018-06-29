@@ -16,8 +16,8 @@ public class EventModel {
 
     public static EventModel of(Event event) {
         return new EventModel(
-                event.getValue().getType(),
-                event.getValue(),
+                event.getType(),
+                event.getDetail(),
                 event.getNote(),
                 event.getArea(),
                 event.getDate());
@@ -27,7 +27,7 @@ public class EventModel {
         return new EventModel(type, null, null, area, date);
     }
 
-    private EventModel(EventType type, EventDetail detail, String note, Area area, EventDate date) {
+    public EventModel(EventType type, EventDetail detail, String note, Area area, EventDate date) {
         this.type = type;
         this.detail = detail;
         this.note = note;
@@ -53,5 +53,9 @@ public class EventModel {
 
     public EventDate getDate() {
         return date;
+    }
+
+    public Event toEvent(long id) {
+        return new Event(id, date, type, detail, area, note);
     }
 }

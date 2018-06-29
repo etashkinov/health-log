@@ -50,8 +50,8 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
     @Override
     public T getDetail() {
         try {
-            Constructor<? extends EventDetail> constructor = eventType.getDetailClass().getConstructor(EventType.class, BigDecimal.class);
-            return (T) constructor.newInstance(eventType, getValue());
+            Constructor<? extends EventDetail> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
+            return (T) constructor.newInstance(getValue());
         } catch (Exception e) {
             throw new IllegalStateException("Failed to create value details for " + eventType, e);
         }

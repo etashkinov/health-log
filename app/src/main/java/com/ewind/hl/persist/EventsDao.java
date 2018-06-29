@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
@@ -34,20 +35,20 @@ public class EventsDao {
     }
 
     public List<Event> getEvents(Area area, EventDate date) {
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDate(area.getId(), date.toString());
-        return toEvents(eventEntities, area);
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDate(area.getName(), date.toString());
+        return toEvents(eventEntities);
     }
 
     @NonNull
-    private List<Event> toEvents(List<EventEntity> eventEntities, Area area) {
+    private List<Event> toEvents(List<EventEntity> eventEntities) {
         List<Event> result = new ArrayList<>(eventEntities.size());
         for (EventEntity eventEntity : eventEntities) {
-            result.add(toEvent(eventEntity, area));
+            result.add(toEvent(eventEntity));
         }
         return result;
     }
 
-    private Event toEvent(EventEntity eventEntity, Area area) {
+    private Event toEvent(EventEntity eventEntity) {
         if (eventEntity == null) {
             return null;
         }
@@ -55,47 +56,37 @@ public class EventsDao {
         try {
             EventType type = EventType.valueOf(eventEntity.getType());
             EventDetail detail = MAPPER.readValue(eventEntity.getValue(), type.getDetailClass());
-            return new Event(detail, EventDate.of(eventEntity.getDate()), area, null);
+            Area area = AreaFactory.getArea(eventEntity.getArea());
+            EventDate date = EventDate.of(eventEntity.getDate());
+            return new Event(eventEntity.getId(), date, type, detail, area, null);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to parse " + eventEntity, e);
         }
     }
 
-    private EventEntity getEventEntity(EventType type, Area area, EventDate date) {
-        List<EventEntity> result = entityDao.findByAreaAndDateAndType(area.getId(), date.toString(), type.name());
-        if (result.isEmpty()) {
-            return null;
-        } else if (result.size() > 1) {
-            throw new IllegalStateException("Not unique event per day: " + result);
-        } else {
-            return result.get(0);
-        }
-    }
-
-    public Event getEvent(EventType type, Area area, EventDate date) {
-        return toEvent(getEventEntity(type, area, date), area);
+    public Event getEvent(long id) {
+        return toEvent(entityDao.findById(id));
     }
 
     public void store(Event event) {
-        EventEntity storedEvent = getEventEntity(event.getValue().getType(), event.getArea(), event.getDate());
-        if (storedEvent == null) {
-            EventEntity eventEntity = toEventEntity(0, event);
+        if (event.getId() == 0) {
+            EventEntity eventEntity = toEventEntity(event);
             entityDao.insert(eventEntity);
         } else {
-            EventEntity eventEntity = toEventEntity(storedEvent.getId(), event);
+            EventEntity eventEntity = toEventEntity(event);
             entityDao.update(eventEntity);
         }
     }
 
-    private EventEntity toEventEntity(int id, Event event) {
+    private EventEntity toEventEntity(Event event) {
         try {
             EventEntity result = new EventEntity();
-            result.setId(id);
-            result.setArea(event.getArea().getId());
+            result.setId(event.getId());
+            result.setArea(event.getArea().getName());
             result.setDate(event.getDate().toString());
-            result.setType(event.getValue().getType().name());
-            result.setScore(event.getValue().getScore());
-            result.setValue(MAPPER.writeValueAsString(event.getValue()));
+            result.setType(event.getType().name());
+            result.setScore(event.getDetail().getScore());
+            result.setValue(MAPPER.writeValueAsString(event.getDetail()));
             return result;
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Failed to serialize " + event, e);
@@ -103,7 +94,15 @@ public class EventsDao {
     }
 
     public List<Event> getEvents(EventType type, Area area, EventDate from, EventDate till) {
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(area.getId(), from.toString(), till.toString(), type.name());
-        return toEvents(eventEntities, area);
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(area.getName(), from.toString(), till.toString(), type.name());
+        return toEvents(eventEntities);
+    }
+
+    public void delete(Event event) {
+        entityDao.delete(toEventEntity(event));
+    }
+
+    public List<Event> getLatestEvents() {
+        return toEvents(entityDao.findLatest());
     }
 }

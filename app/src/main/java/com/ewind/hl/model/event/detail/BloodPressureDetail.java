@@ -1,7 +1,5 @@
 package com.ewind.hl.model.event.detail;
 
-import com.ewind.hl.model.event.EventType;
-
 public class BloodPressureDetail implements EventDetail {
 
     private final int highPressure;
@@ -18,11 +16,6 @@ public class BloodPressureDetail implements EventDetail {
 
     public int getLowPressure() {
         return lowPressure;
-    }
-
-    @Override
-    public EventType getType() {
-        return EventType.BLOOD_PRESSURE;
     }
 
     @Override

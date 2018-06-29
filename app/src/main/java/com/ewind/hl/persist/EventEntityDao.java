@@ -1,6 +1,7 @@
 package com.ewind.hl.persist;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -14,20 +15,27 @@ public interface EventEntityDao {
 
     @Query("SELECT * FROM evententity WHERE area = :area AND "
             + "date = :date")
-    List<EventEntity> findByAreaAndDate(int area, String date);
+    List<EventEntity> findByAreaAndDate(String area, String date);
 
-    @Query("SELECT * FROM evententity WHERE area = :area AND "
-            + "date = :date AND type = :type")
-    List<EventEntity> findByAreaAndDateAndType(int area, String date, String type);
+    @Query("SELECT * FROM evententity WHERE id = :id")
+    EventEntity findById(long id);
 
     @Query("SELECT * FROM evententity WHERE area = :area AND "
             + "date >= :from AND date <= :till AND type = :type "
             + " ORDER BY date ASC")
-    List<EventEntity> findByAreaAndDateRangeAndType(int area, String from, String till, String type);
+    List<EventEntity> findByAreaAndDateRangeAndType(String area, String from, String till, String type);
 
     @Insert
     void insert(EventEntity eventEntity);
 
     @Update
     void update(EventEntity eventEntity);
+
+    @Delete
+    void delete(EventEntity eventEntity);
+
+    @Query("SELECT e.* FROM evententity e " +
+            " JOIN (SELECT type, max(date) as date FROM evententity GROUP BY type) le " +
+            " WHERE e.type = le.type AND e.date = le.date")
+    List<EventEntity> findLatest();
 }
