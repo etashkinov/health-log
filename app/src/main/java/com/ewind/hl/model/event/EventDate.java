@@ -11,28 +11,11 @@ public class EventDate implements Serializable {
     private final int month;
     private final int day;
 
-//    private final DayPart dayPart;
-//    private final Integer hour;
-//    private final Integer minute;
-
-    @NonNull
-    public static EventDate of(Calendar calendar) {
-        return new EventDate(
+    public EventDate(Calendar calendar) {
+        this(
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH)
-        );
-    }
-
-    public static EventDate of(String date) {
-        if (date == null) {
-            return null;
-        }
-
-        String[] split = date.split("-");
-        return new EventDate(Integer.parseInt(split[0]),
-                Integer.parseInt(split[1]),
-                Integer.parseInt(split[2])
         );
     }
 
@@ -81,7 +64,7 @@ public class EventDate implements Serializable {
     private EventDate plusDays(int amount) {
         Calendar calendar = toCalendar();
         calendar.add(Calendar.DAY_OF_MONTH, amount);
-        return EventDate.of(calendar);
+        return new EventDate(calendar);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class EventDatePicker extends LinearLayout {
 
     @NonNull
     private EventDate getToday() {
-        return EventDate.of(Calendar.getInstance());
+        return new EventDate(Calendar.getInstance());
     }
 
     private void showTimePickerDialog(View view) {

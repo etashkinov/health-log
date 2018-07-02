@@ -57,12 +57,13 @@ public class EventsDao {
             EventType type = EventType.valueOf(eventEntity.getType());
             EventDetail detail = MAPPER.readValue(eventEntity.getValue(), type.getDetailClass());
             Area area = AreaFactory.getArea(eventEntity.getArea());
-            EventDate date = EventDate.of(eventEntity.getDate());
+            EventDate date = EventDateConverter.deserialize(eventEntity.getDate());
             return new Event(eventEntity.getId(), date, type, detail, area, null);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to parse " + eventEntity, e);
         }
     }
+
 
     public Event getEvent(long id) {
         return toEvent(entityDao.findById(id));
@@ -83,7 +84,7 @@ public class EventsDao {
             EventEntity result = new EventEntity();
             result.setId(event.getId());
             result.setArea(event.getArea().getName());
-            result.setDate(event.getDate().toString());
+            result.setDate(EventDateConverter.serialize(event.getDate()));
             result.setType(event.getType().name());
             result.setScore(event.getDetail().getScore());
             result.setValue(MAPPER.writeValueAsString(event.getDetail()));

@@ -68,7 +68,7 @@ public class EventActionListener {
     }
 
     private EventDate getToday() {
-        return EventDate.of(Calendar.getInstance());
+        return new EventDate(Calendar.getInstance());
     }
 
     public void onAddLike(Event event) {
