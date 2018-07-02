@@ -3,6 +3,7 @@ package com.ewind.hl.ui.view;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -37,6 +38,7 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
 
         list = findViewById(R.id.eventsList);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
+        list.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         SearchView eventFilter = findViewById(R.id.eventFilter);
         eventFilter.setOnQueryTextListener(this);

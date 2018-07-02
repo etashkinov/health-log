@@ -2,41 +2,29 @@ package com.ewind.hl.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;
-import com.ewind.hl.ui.view.detail.ValueDetailForm;
 
-public class EventFormActivity extends AppCompatActivity {
-
-
+public class EventFormActivity extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = EventFormActivity.class.getName();
 
-
     public static final String EVENT_ID = "EVENT_ID";
-    public static final String EVENT_TYPE = "EVENT_TYPE";
-    public static final String EVENT_DATE = "EVENT_DATE";
-    public static final String EVENT_AREA = "EVENT_AREA";
-    public static final String EVENT_DETAIL = "EVENT_DETAIL";
+    public static final String EVENT = "EVENT";
 
     private long id;
     private EventModel model;
@@ -62,11 +50,8 @@ public class EventFormActivity extends AppCompatActivity {
         if (id != 0) {
             model = EventModel.of(new EventsDao(this).getEvent(id));
         } else {
-            EventType type = EventType.valueOf(getIntent().getStringExtra(EVENT_TYPE));
-            EventDate date = EventDate.of(getIntent().getStringExtra(EVENT_DATE));
-            Area area = AreaFactory.getArea(getIntent().getStringExtra(EVENT_AREA));
-
-            model = EventModel.empty(type, area, date);
+            model = (EventModel) getIntent().getSerializableExtra(EVENT);
+            findViewById(R.id.deleteButton).setVisibility(View.INVISIBLE);
         }
 
         setEvent(model);
@@ -84,10 +69,18 @@ public class EventFormActivity extends AppCompatActivity {
 
     private void onOk(View view) {
         updateEvent();
+        finishOk();
+    }
+
+    private void finishOk() {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EVENT_ID, id);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
+    }
+
+    public void onDelete(View view) {
+        new EventActionListener(this).onDelete(model.toEvent(id));
     }
 
     private void updateEvent() {
@@ -109,18 +102,15 @@ public class EventFormActivity extends AppCompatActivity {
 
     private void initHeader(EventType type) {
         ImageView eventImage = findViewById(R.id.eventImage);
-        eventImage.setImageDrawable(getEventDrawable(type));
+        Drawable drawable = EventUI.getEventDrawable(type, this);
+        eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);
         eventText.setText(LocalizationService.getEventTypeName(type));
     }
 
-    private Drawable getEventDrawable(EventType type) {
-        return getDrawable(android.R.drawable.ic_menu_mylocation);
-    }
-
     private void initDetailForm(EventModel event) {
-        detailForm = getDetailForm(event.getType());
+        detailForm = EventUI.getEventDetailForm(event, this);
         ((ViewGroup) findViewById(R.id.eventDetailContainer)).addView((View) detailForm);
 
         if (event.getDetail() != null) {
@@ -128,16 +118,18 @@ public class EventFormActivity extends AppCompatActivity {
         }
     }
 
-    private EventDetailForm getDetailForm(EventType type) {
-        try {
-            String name = "event_" + type.name().toLowerCase() + "_form";
-            int layout = getResources().getIdentifier(name, "layout", getPackageName());
-            return (EventDetailForm) LayoutInflater.from(this).inflate(layout, null);
-        } catch (Resources.NotFoundException e) {
-            Log.w(TAG, "Detail form layout for " + type + " not found");
-            ValueDetailForm valueDetailForm = (ValueDetailForm) LayoutInflater.from(this).inflate(R.layout.event_value_form, null);
-            valueDetailForm.setEventType(type);
-            return valueDetailForm;
-        }
+    @Override
+    public void onEventCreated(Event event) {
+        // do nothing
+    }
+
+    @Override
+    public void onEventUpdated(Event event) {
+        // do nothing
+    }
+
+    @Override
+    public void onEventDeleted(Event event) {
+        finishOk();
     }
 }

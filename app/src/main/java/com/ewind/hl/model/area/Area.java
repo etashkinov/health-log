@@ -2,12 +2,13 @@ package com.ewind.hl.model.area;
 
 import com.ewind.hl.model.event.EventType;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-public class Area {
+public class Area implements Serializable {
 
     private final String name;
     private final List<EventType> events;

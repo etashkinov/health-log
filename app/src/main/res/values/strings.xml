@@ -9,6 +9,11 @@
     <string name="event_date_yesterday">Yesterday</string>
     <string name="event_date_forward_text"><![CDATA[>]]></string>
     <string name="event_date_back_text"><![CDATA[<]]></string>
+
+    <string name="event_description_mood">%s</string>
+    <string name="event_description_temperature">%.1f°</string>
+    <string name="event_description_energy">%.1f%%</string>
+
     <string name="areaViewBackButton">Back</string>
 
     <string name="empty">Empty placeholder</string>

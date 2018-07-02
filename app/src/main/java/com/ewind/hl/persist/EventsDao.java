@@ -105,4 +105,8 @@ public class EventsDao {
     public List<Event> getLatestEvents() {
         return toEvents(entityDao.findLatest());
     }
+
+    public Event getLatestEvent(EventType type) {
+        return toEvent(entityDao.findLatest(type.name()));
+    }
 }

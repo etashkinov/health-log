@@ -11,6 +11,10 @@ public class EventDate implements Serializable {
     private final int month;
     private final int day;
 
+//    private final DayPart dayPart;
+//    private final Integer hour;
+//    private final Integer minute;
+
     @NonNull
     public static EventDate of(Calendar calendar) {
         return new EventDate(
@@ -56,6 +60,10 @@ public class EventDate implements Serializable {
         result.set(Calendar.YEAR, year);
         result.set(Calendar.MONTH, month - 1);
         result.set(Calendar.DAY_OF_MONTH, day);
+        result.set(Calendar.HOUR_OF_DAY, 0);
+        result.set(Calendar.MINUTE, 0);
+        result.set(Calendar.SECOND, 0);
+        result.set(Calendar.MILLISECOND, 0);
         return result;
     }
 
@@ -94,5 +102,11 @@ public class EventDate implements Serializable {
     @Override
     public String toString() {
         return year + "-" + month + "-" + day;
+    }
+
+    public boolean before(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        return toCalendar().before(calendar);
     }
 }

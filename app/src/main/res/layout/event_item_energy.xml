@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        app:srcCompat="@drawable/ic_temperature"
+        app:srcCompat="@drawable/ic_energy"
         android:tint="@color/colorAccent"/>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,6 +21,6 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:textSize="32dp"
-        android:text="36.6"
+        android:text="36%"
         android:textColor="@color/colorAccent" />
 </LinearLayout>

@@ -80,7 +80,7 @@ public class EventDatePicker extends LinearLayout {
     }
 
     private void refreshDate() {
-        Button eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
+        View eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
         eventDateForwardButton.setEnabled(true);
         Button datePicker = findViewById(R.id.eventDatePickerButton);
         datePicker.setText(this.date.toString());

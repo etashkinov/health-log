@@ -44,4 +44,8 @@ public class Event<T extends EventDetail> {
     public String getNote() {
         return note;
     }
+
+    public boolean isExpired(long timestamp) {
+        return getDate().before(timestamp - getType().getExpiration().getDuration());
+    }
 }

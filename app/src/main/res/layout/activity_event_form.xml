@@ -19,9 +19,10 @@
 
         <ImageView
             android:id="@+id/eventImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_mylocation"
+            android:layout_width="45sp"
+            android:layout_height="45sp"
+            android:padding="5sp"
+            android:src="@drawable/ic_event"
             android:tint="@android:color/white" />
 
         <TextView
@@ -36,6 +37,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="10" />
+
+        <ImageView
+            android:id="@+id/deleteButton"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:padding="5sp"
+            android:onClick="onDelete"
+            android:src="@drawable/ic_delete"
+            android:tint="@android:color/white" />
 
     </LinearLayout>
 

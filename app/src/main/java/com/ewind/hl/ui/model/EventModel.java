@@ -6,7 +6,9 @@ import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
 
-public class EventModel {
+import java.io.Serializable;
+
+public class EventModel implements Serializable {
     private final EventType type;
     private final EventDetail detail;
     private final String note;
@@ -21,6 +23,15 @@ public class EventModel {
                 event.getNote(),
                 event.getArea(),
                 event.getDate());
+    }
+
+    public static EventModel copyOf(Event event, EventDate date) {
+        return new EventModel(
+                event.getType(),
+                event.getDetail(),
+                null,
+                event.getArea(),
+                date);
     }
 
     public static EventModel empty(EventType type, Area area, EventDate date) {
@@ -58,4 +69,5 @@ public class EventModel {
     public Event toEvent(long id) {
         return new Event(id, date, type, detail, area, note);
     }
+
 }

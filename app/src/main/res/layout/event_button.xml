@@ -5,16 +5,17 @@
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
     android:gravity="center"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true">
 
     <ImageView
         android:id="@+id/eventImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:padding="5sp"
         android:tint="@color/colorAccent"
-        android:src="@android:drawable/ic_menu_mylocation"
+        android:src="@drawable/ic_event"
         android:contentDescription="@string/empty" />
 
     <TextView

@@ -43,6 +43,11 @@ public class EyeSightDetail implements EventDetail {
     }
 
     @Override
+    public Object getDescription() {
+        return getScore();
+    }
+
+    @Override
     public String toString() {
         return sphere + (cylinder == null ? "" : ", CYL " + cylinder + ", AX " + axis + "°");
     }

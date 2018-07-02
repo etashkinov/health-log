@@ -9,15 +9,14 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventSearchView;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
-import static com.ewind.hl.ui.EventFormActivity.EVENT_AREA;
-import static com.ewind.hl.ui.EventFormActivity.EVENT_DATE;
+import static com.ewind.hl.ui.EventFormActivity.EVENT;
 import static com.ewind.hl.ui.EventFormActivity.EVENT_ID;
-import static com.ewind.hl.ui.EventFormActivity.EVENT_TYPE;
 
 public class EventActionListener {
 
@@ -61,25 +60,22 @@ public class EventActionListener {
         eventSearchView.setOnEventClickListener(e -> {
             dialog.cancel();
             Intent intent = new Intent(activity, EventFormActivity.class);
-            intent.putExtra(EVENT_TYPE, e.name());
-            intent.putExtra(EVENT_DATE, getToday());
+            intent.putExtra(EVENT, EventModel.empty(e, null, getToday()));
             activity.startActivityForResult(intent, ADD_REQUEST_CODE);
         });
 
         dialog.show();
     }
 
-    private String getToday() {
-        return EventDate.of(Calendar.getInstance()).toString();
+    private EventDate getToday() {
+        return EventDate.of(Calendar.getInstance());
     }
 
     public void onAddLike(Event event) {
         Activity activity = activityWeakReference.get();
 
         Intent intent = new Intent(activity, EventFormActivity.class);
-        intent.putExtra(EVENT_DATE, getToday());
-        intent.putExtra(EVENT_TYPE, event.getType().name());
-        intent.putExtra(EVENT_AREA, event.getArea().getName());
+        intent.putExtra(EVENT, EventModel.copyOf(event, getToday()));
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }
 }

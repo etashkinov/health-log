@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.ui.EventUI;
 import com.ewind.hl.ui.LocalizationService;
 
 public class EventButton extends LinearLayout {
@@ -41,7 +42,7 @@ public class EventButton extends LinearLayout {
     }
 
     private Drawable getEventDrawable() {
-        return getContext().getDrawable(android.R.drawable.ic_menu_mylocation);
+        return EventUI.getEventDrawable(type, getContext());
     }
 
     private String getEventName(EventType type, EventDetail detail) {

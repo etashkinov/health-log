@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
 
         eventsList = findViewById(R.id.eventsList);
-        eventsList.setLayoutManager(new LinearLayoutManager(this));
+//        GridLayoutManager layout = new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        eventsList.setLayoutManager(layout);
         refreshEvents();
     }
 
