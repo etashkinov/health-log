@@ -42,7 +42,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         addDetailView(event);
         eventDateTextView.setText(event.getDate().toString());
 
-        if (!this.event.isExpired(System.currentTimeMillis())) {
+        if (!this.event.isExpired()) {
             addButton.setVisibility(View.INVISIBLE);
         }
     }

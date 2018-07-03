@@ -1,8 +1,9 @@
 package com.ewind.hl.persist;
 
+import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
-import com.ewind.hl.model.event.EventDayPart;
-import com.ewind.hl.model.event.EventDayTime;
+
+import org.joda.time.LocalDate;
 
 import java.util.Locale;
 
@@ -14,12 +15,12 @@ public class EventDateConverter {
             return null;
         }
 
-        String result = format(Locale.getDefault(), "%04d-%02d-%02d", date.getYear(), date.getMonth(), date.getDay());
+        String result = date.getLocalDate().toString("yyyy-MM-dd");
 
-        if (date instanceof EventDayTime) {
-            result += format(Locale.getDefault(), "-%02d", ((EventDayTime)date).getHour());
-        } else if (date instanceof EventDayPart) {
-            result += "-" + ((EventDayPart)date).getDayPart();
+        if (date.getHour() != null) {
+            result += format(Locale.getDefault(), "-%s-%02d", date.getDayPart(), date.getHour());
+        } else if (date.getDayPart() != null) {
+            result += "-" + date.getDayPart();
         }
         return result;
     }
@@ -35,13 +36,17 @@ public class EventDateConverter {
         int month = Integer.parseInt(split[1]);
         int day = Integer.parseInt(split[2]);
 
-        if (split.length == 3) {
-            return new EventDate(year, month, day);
-        } else try {
-            int hour = Integer.parseInt(split[3]);
-            return new EventDayTime(year, month, day, hour);
-        } catch (NumberFormatException e) {
-            return new EventDayPart(year, month, day, EventDayPart.DayPart.valueOf(split[3]));
+        DayPart dayPart = null;
+        Integer hour = null;
+
+        if (split.length > 3) {
+            dayPart = DayPart.valueOf(split[3]);
+
+            if (split.length > 4) {
+                hour = Integer.parseInt(split[4]);
+            }
         }
+
+        return new EventDate(new LocalDate(year, month, day), dayPart, hour);
     }
 }

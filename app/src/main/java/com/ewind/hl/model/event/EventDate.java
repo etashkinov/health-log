@@ -1,95 +1,54 @@
 package com.ewind.hl.model.event;
 
-import android.support.annotation.NonNull;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Objects;
+import java.util.Locale;
 
 public class EventDate implements Serializable {
-    private final int year;
-    private final int month;
-    private final int day;
+    private final LocalDate localDate;
 
-    public EventDate(Calendar calendar) {
-        this(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
+    private final DayPart dayPart;
+    private final Integer hour;
+
+    public EventDate(LocalDate localDate, DayPart dayPart, Integer hour) {
+        this.localDate = localDate;
+        this.dayPart = dayPart;
+        this.hour = hour;
     }
 
-    public EventDate(int year, int month, int day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
-    public int getYear() {
-        return year;
+    public DayPart getDayPart() {
+        return dayPart;
     }
 
-    public int getMonth() {
-        return month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    @NonNull
-    public Calendar toCalendar() {
-        Calendar result = Calendar.getInstance();
-        result.set(Calendar.YEAR, year);
-        result.set(Calendar.MONTH, month - 1);
-        result.set(Calendar.DAY_OF_MONTH, day);
-        result.set(Calendar.HOUR_OF_DAY, 0);
-        result.set(Calendar.MINUTE, 0);
-        result.set(Calendar.SECOND, 0);
-        result.set(Calendar.MILLISECOND, 0);
-        return result;
-    }
-
-    @NonNull
-    public EventDate yesterday() {
-        return plusDays(-1);
-    }
-
-    @NonNull
-    public EventDate tomorrow() {
-        return plusDays(1);
-    }
-
-    @NonNull
-    private EventDate plusDays(int amount) {
-        Calendar calendar = toCalendar();
-        calendar.add(Calendar.DAY_OF_MONTH, amount);
-        return new EventDate(calendar);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EventDate eventDate = (EventDate) o;
-        return year == eventDate.year &&
-                month == eventDate.month &&
-                day == eventDate.day;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(year, month, day);
+    public Integer getHour() {
+        return hour;
     }
 
     @Override
     public String toString() {
-        return year + "-" + month + "-" + day;
+        return localDate.toString("yyyy-MM-dd")
+                + (dayPart == null ? "" : " " + dayPart)
+                + (hour == null ? "" : String.format(Locale.getDefault(), " %02d", hour));
     }
 
-    public boolean before(long timestamp) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timestamp);
-        return toCalendar().before(calendar);
+    public LocalDateTime getStart() {
+        int hour = this.hour != null
+                    ? this.hour
+                    : (dayPart != null ? dayPart.getFirstHour() : 0);
+        return localDate.toLocalDateTime(new LocalTime(hour, 0));
+    }
+
+    public LocalDateTime getEnd() {
+        int hour = this.hour != null
+                ? this.hour + 1
+                : (dayPart != null ? dayPart.getLastHour() : 0);
+        return localDate.toLocalDateTime(new LocalTime(hour, 0)).minusMillis(1);
     }
 }

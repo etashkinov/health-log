@@ -8,32 +8,35 @@ import com.ewind.hl.model.event.detail.MoodDetail;
 import com.ewind.hl.model.event.detail.PainDetail;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
-import static com.ewind.hl.model.event.ChronoUnit.*;
-import static com.ewind.hl.model.event.Duration.of;
+import org.joda.time.Period;
+
+import static org.joda.time.Period.days;
+import static org.joda.time.Period.hours;
+import static org.joda.time.Period.years;
 
 public enum EventType {
-    MOOD(MoodDetail.class, of(1, QUARTER)),
-    ENERGY(ValueDetail.class, of(1, DAYS)),
-    HEART_BEAT(HeartBeatDetail.class, of(1, QUARTER)),
-    BLOOD_PRESSURE(BloodPressureDetail.class, of(1, QUARTER)),
-    PAIN(PainDetail.class, true, of(1, QUARTER)),
-    SWEAT (ValueDetail.class, true, of(1, QUARTER)),
-    TREMOR(ValueDetail.class, true, of(1, QUARTER)),
-    TEMPERATURE(ValueDetail.class, of(4, HOURS)),
-    EYE_SIGHT (EyeSightDetail.class, of(2, YEARS)),
-    EYE_PRESSURE(ValueDetail.class,  of(1, DAYS)),
-    CONGESTION(ValueDetail.class, of(1, QUARTER)),
-    WATERY(ValueDetail.class, of(1, QUARTER));
+    MOOD(MoodDetail.class, hours(6)),
+    ENERGY(ValueDetail.class, days(1)),
+    HEART_BEAT(HeartBeatDetail.class, hours(6)),
+    BLOOD_PRESSURE(BloodPressureDetail.class, hours(6)),
+    PAIN(PainDetail.class, true, hours(6)),
+    SWEAT (ValueDetail.class, true, hours(6)),
+    TREMOR(ValueDetail.class, true, hours(6)),
+    TEMPERATURE(ValueDetail.class, hours(6)),
+    EYE_SIGHT (EyeSightDetail.class, years(2)),
+    EYE_PRESSURE(ValueDetail.class,  days(1)),
+    CONGESTION(ValueDetail.class, hours(6)),
+    WATERY(ValueDetail.class, hours(6));
 
     private final Class<? extends EventDetail> detailClass;
     private final boolean propagateDown;
-    private final Duration expiration;
+    private final Period expiration;
 
-    EventType(Class<? extends EventDetail> detailClass, Duration expiration) {
+    EventType(Class<? extends EventDetail> detailClass, Period expiration) {
         this(detailClass, false, expiration);
     }
 
-    EventType(Class<? extends EventDetail> detailClass, boolean propagateDown, Duration expiration) {
+    EventType(Class<? extends EventDetail> detailClass, boolean propagateDown, Period expiration) {
         this.detailClass = detailClass;
         this.propagateDown = propagateDown;
         this.expiration = expiration;
@@ -47,7 +50,7 @@ public enum EventType {
         return detailClass;
     }
 
-    public Duration getExpiration() {
+    public Period getExpiration() {
         return expiration;
     }
 }

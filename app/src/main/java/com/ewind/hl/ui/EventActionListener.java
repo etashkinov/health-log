@@ -12,8 +12,9 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventSearchView;
 
+import org.joda.time.LocalDate;
+
 import java.lang.ref.WeakReference;
-import java.util.Calendar;
 
 import static com.ewind.hl.ui.EventFormActivity.EVENT;
 import static com.ewind.hl.ui.EventFormActivity.EVENT_ID;
@@ -68,7 +69,7 @@ public class EventActionListener {
     }
 
     private EventDate getToday() {
-        return new EventDate(Calendar.getInstance());
+        return new EventDate(LocalDate.now(), null, null);
     }
 
     public void onAddLike(Event event) {

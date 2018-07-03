@@ -3,6 +3,8 @@ package com.ewind.hl.model.event;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.detail.EventDetail;
 
+import org.joda.time.LocalDateTime;
+
 public class Event<T extends EventDetail> {
 
     private final long id;
@@ -45,7 +47,8 @@ public class Event<T extends EventDetail> {
         return note;
     }
 
-    public boolean isExpired(long timestamp) {
-        return getDate().before(timestamp - getType().getExpiration().getDuration());
+    public boolean isExpired() {
+        LocalDateTime expirationTime = getDate().getStart().plus(getType().getExpiration());
+        return expirationTime.isBefore(LocalDateTime.now());
     }
 }

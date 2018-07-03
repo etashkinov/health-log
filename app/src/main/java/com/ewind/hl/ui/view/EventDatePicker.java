@@ -2,28 +2,43 @@ package com.ewind.hl.ui.view;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
 
-import java.util.Calendar;
+import org.joda.time.LocalDate;
 
 public class EventDatePicker extends LinearLayout {
+
+    private LocalDate localDate;
+    private DayPart dayPart;
+    private Integer hour;
+    private Spinner eventDayPartSpinner;
+
     public EventDate getDate() {
-        return date;
+        return new EventDate(localDate, dayPart, hour);
+    }
+
+    public int getSpinnerSelection() {
+        return dayPart == null ? 0 : getDayPartSpinnerSelection();
+    }
+
+    private int getDayPartSpinnerSelection() {
+        return ;
     }
 
     public interface OnChangeListener {
         void onDateChanged(EventDate date);
     }
 
-    private EventDate date;
     private OnChangeListener listener;
 
     public EventDatePicker(Context context, @Nullable AttributeSet attrs) {
@@ -38,58 +53,73 @@ public class EventDatePicker extends LinearLayout {
         findViewById(R.id.eventDateBackButton).setOnClickListener(this::eventDateBack);
         findViewById(R.id.eventDateForwardButton).setOnClickListener(this::eventDateForward);
         findViewById(R.id.eventDatePickerButton).setOnClickListener(this::showTimePickerDialog);
+
+        eventDayPartSpinner = findViewById(R.id.eventDayPartSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.day_parts, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventDayPartSpinner.setAdapter(adapter);
     }
 
     public void setListener(OnChangeListener listener) {
         this.listener = listener;
     }
 
-    @NonNull
-    private EventDate getToday() {
-        return new EventDate(Calendar.getInstance());
-    }
-
     private void showTimePickerDialog(View view) {
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog dialog = new DatePickerDialog(view.getContext(),
-                (v,y,m,d) -> onDateChanged(new EventDate(y,m,d)),
-                date.getYear(),
-                date.getMonth(),
-                date.getDay());
+                (v,y,m,d) -> onDateChanged(y,m,d),
+                localDate.getYear(),
+                localDate.getMonthOfYear() - 1,
+                localDate.getDayOfMonth());
         dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         dialog.show();
     }
 
+    private void onDateChanged(int year, int month, int day) {
+        localDate = localDate
+                        .withYear(year)
+                        .withMonthOfYear(month + 1)
+                        .withDayOfMonth(day);
+
+        notifyDateChanged();
+    }
+
+    private void notifyDateChanged() {
+        refreshDate();
+        listener.onDateChanged(getDate());
+    }
+
     private void eventDateBack(View view) {
-        onDateChanged(date.yesterday());
+        localDate = localDate.minusDays(1);
+        notifyDateChanged();
     }
 
     private void eventDateForward(View view) {
-        onDateChanged(date.tomorrow());
-    }
+        localDate = localDate.plusDays(1);
+        notifyDateChanged();  }
 
     public void setDate(EventDate date) {
-        this.date = date;
+        localDate = date.getLocalDate();
+        dayPart = date.getDayPart();
+        hour = date.getHour();
+
         refreshDate();
-    }
-
-    public void onDateChanged(EventDate date) {
-        setDate(date);
-
-        listener.onDateChanged(date);
     }
 
     private void refreshDate() {
         View eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
         eventDateForwardButton.setEnabled(true);
         Button datePicker = findViewById(R.id.eventDatePickerButton);
-        datePicker.setText(this.date.toString());
-        EventDate today = getToday();
-        if (date.equals(today)) {
+        datePicker.setText(localDate.toString("dd/MM/yyyy"));
+        LocalDate today = LocalDate.now();
+        if (localDate.equals(today)) {
             datePicker.setText(R.string.event_date_today);
             eventDateForwardButton.setEnabled(false);
-        } else if (date.equals(today.yesterday())) {
+        } else if (localDate.equals(today.minusDays(1))) {
             datePicker.setText(R.string.event_date_yesterday);
         }
+
+        eventDayPartSpinner.setSelection(getSpinnerSelection());
     }
 }
