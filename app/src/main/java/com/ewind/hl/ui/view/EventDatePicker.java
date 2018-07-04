@@ -59,13 +59,17 @@ public class EventDatePicker extends LinearLayout {
         eventDayPartSpinner.setAdapter(adapter);
         eventDayPartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                dayPart = DayPart.values()[position];
-
-                notifyDateChanged();
+                onDayPartChanged(DayPart.values()[position]);
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private void onDayPartChanged(DayPart dayPart) {
+        EventDatePicker.this.dayPart = dayPart;
+
+        notifyDateChanged();
     }
 
     public void setListener(OnChangeListener listener) {

@@ -1,6 +1,7 @@
 package com.ewind.hl.model.area;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ewind.hl.R;
@@ -20,6 +21,30 @@ public class AreaFactory {
 
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
     private static Area body;
+
+    @NonNull
+    public static List<Area> getAreas() {
+        List<Area> result = new LinkedList<>();
+
+        result.add(body);
+        result.addAll(getParts(body));
+
+        return result;
+    }
+
+    @NonNull
+    private static List<Area> getParts(Area area) {
+        List<Area> result = new LinkedList<>();
+        List<Area> parts = area.getParts();
+        if (parts != null) {
+            for (Area part : parts) {
+                result.add(part);
+                result.addAll(getParts(part));
+            }
+        }
+
+        return result;
+    }
 
     public static class AreaConfig {
         private List<String> events = new LinkedList<>();

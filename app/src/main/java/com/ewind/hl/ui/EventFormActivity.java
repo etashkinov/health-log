@@ -19,6 +19,7 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;
+import com.ewind.hl.ui.view.body.AreaSelector;
 
 public class EventFormActivity extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = EventFormActivity.class.getName();
@@ -29,6 +30,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
     private long id;
     private EventModel model;
     private EventDatePicker eventDatePicker;
+    private AreaSelector areaSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
 
         eventDatePicker = findViewById(R.id.eventDatePicker);
         eventDatePicker.setListener(d -> {});
+
+        areaSelector = findViewById(R.id.areaSelector);
 
         id = getIntent().getLongExtra(EVENT_ID, 0L);
 
@@ -61,6 +65,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         initHeader(event.getType());
 
         eventDatePicker.setDate(event.getDate());
+        areaSelector.setArea(event.getArea());
 
         initDetailForm(event);
     }
@@ -90,7 +95,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
                 eventDatePicker.getDate(),
                 model.getType(),
                 detail,
-                model.getArea() == null ? AreaFactory.getBody() : model.getArea(),
+                areaSelector.getArea() == null ? AreaFactory.getBody() : areaSelector.getArea(),
                 model.getNote()
         ));
     }

@@ -11,6 +11,7 @@
         android:id="@+id/eventIcon"
         android:layout_width="40sp"
         android:layout_height="40sp"
+        android:paddingEnd="5sp"
         android:layout_gravity="center_vertical"
         app:srcCompat="@drawable/ic_event"
         android:tint="@color/colorAccent"/>

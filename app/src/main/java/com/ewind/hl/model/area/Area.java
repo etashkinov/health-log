@@ -39,7 +39,7 @@ public class Area implements Serializable {
 
     @Override
     public String toString() {
-        return name + "-e-" + events.size() + "-p-" + parts.size();
+        return name;
     }
 
     public Area getParent() {

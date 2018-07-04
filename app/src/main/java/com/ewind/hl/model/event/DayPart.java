@@ -51,12 +51,30 @@ public enum DayPart {
         return start;
     }
 
+    public int getStartHour() {
+        return getStart().getHourOfDay();
+    }
+
     public LocalTime getEnd() {
         return start.plus(period).minusMillis(1);
     }
 
     public Period getPeriod() {
         return period;
+    }
+
+    public int getPeriodHours() {
+        return period.toStandardHours().getHours();
+    }
+
+    public static DayPart valueOf(int firstHour, int period) {
+        for (DayPart part : values()) {
+            if (part.getStartHour() == firstHour
+                    && part.getPeriodHours() == period) {
+                return part;
+            }
+        }
+        throw new IllegalArgumentException("Unknown hour: " + firstHour + " and period:  " + period);
     }
 
     public static DayPart hourOf(int hour) {

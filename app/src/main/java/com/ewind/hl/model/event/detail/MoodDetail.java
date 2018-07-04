@@ -9,7 +9,7 @@ public enum MoodDetail implements EventDetail {
 
     @Override
     public double getScore() {
-        return (MoodDetail.values().length - (double) ordinal()) / MoodDetail.values().length * 100;
+        return (values().length - (double) ordinal()) / values().length * 100;
     }
 
     @Override
