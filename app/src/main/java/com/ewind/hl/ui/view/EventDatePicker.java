@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,19 +21,15 @@ public class EventDatePicker extends LinearLayout {
 
     private LocalDate localDate;
     private DayPart dayPart;
-    private Integer hour;
+
     private Spinner eventDayPartSpinner;
 
     public EventDate getDate() {
-        return new EventDate(localDate, dayPart, hour);
+        return new EventDate(localDate, dayPart);
     }
 
-    public int getSpinnerSelection() {
-        return dayPart == null ? 0 : getDayPartSpinnerSelection();
-    }
-
-    private int getDayPartSpinnerSelection() {
-        return ;
+    public int getDayPartSpinnerIndex() {
+        return dayPart.ordinal();
     }
 
     public interface OnChangeListener {
@@ -55,10 +52,20 @@ public class EventDatePicker extends LinearLayout {
         findViewById(R.id.eventDatePickerButton).setOnClickListener(this::showTimePickerDialog);
 
         eventDayPartSpinner = findViewById(R.id.eventDayPartSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.day_parts, android.R.layout.simple_spinner_item);
+        ArrayAdapter<DayPart> adapter = new ArrayAdapter<>(
+                getContext(), android.R.layout.simple_spinner_item,
+                DayPart.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventDayPartSpinner.setAdapter(adapter);
+        eventDayPartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                dayPart = DayPart.values()[position];
+
+                notifyDateChanged();
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     public void setListener(OnChangeListener listener) {
@@ -102,7 +109,6 @@ public class EventDatePicker extends LinearLayout {
     public void setDate(EventDate date) {
         localDate = date.getLocalDate();
         dayPart = date.getDayPart();
-        hour = date.getHour();
 
         refreshDate();
     }
@@ -120,6 +126,6 @@ public class EventDatePicker extends LinearLayout {
             datePicker.setText(R.string.event_date_yesterday);
         }
 
-        eventDayPartSpinner.setSelection(getSpinnerSelection());
+        eventDayPartSpinner.setSelection(getDayPartSpinnerIndex());
     }
 }

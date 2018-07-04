@@ -4,12 +4,13 @@ import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
-import java.util.Locale;
-
-import static java.lang.String.format;
+import static com.ewind.hl.model.event.EventDate.DAY;
+import static com.ewind.hl.model.event.EventDate.HOUR;
 
 public class EventDateConverter {
+
     public static String serialize(EventDate date) {
         if (date == null) {
             return null;
@@ -17,11 +18,16 @@ public class EventDateConverter {
 
         String result = date.getLocalDate().toString("yyyy-MM-dd");
 
-        if (date.getHour() != null) {
-            result += format(Locale.getDefault(), "-%s-%02d", date.getDayPart(), date.getHour());
-        } else if (date.getDayPart() != null) {
-            result += "-" + date.getDayPart();
+        Period period = date.getDayPart().getPeriod();
+        int startHour = date.getStart().getHourOfDay();
+        if (period == HOUR) {
+            result += "-" + DayPart.quarterOf(startHour).getStart().getHourOfDay();
         }
+
+        if (period != DAY) {
+            result += "-" + startHour;
+        }
+
         return result;
     }
 
@@ -36,17 +42,18 @@ public class EventDateConverter {
         int month = Integer.parseInt(split[1]);
         int day = Integer.parseInt(split[2]);
 
-        DayPart dayPart = null;
-        Integer hour = null;
+        DayPart dayPart = getDayPart(value, split);
 
-        if (split.length > 3) {
-            dayPart = DayPart.valueOf(split[3]);
+        return new EventDate(new LocalDate(year, month, day), dayPart);
+    }
 
-            if (split.length > 4) {
-                hour = Integer.parseInt(split[4]);
-            }
+    private static DayPart getDayPart(String value, String[] split) {
+        switch (split.length) {
+            case 3: return DayPart.ALL_DAY;
+            case 4: return DayPart.quarterOf(Integer.parseInt(split[3]));
+            case 5: return DayPart.hourOf(Integer.parseInt(split[4]));
+            default:
+                throw new IllegalArgumentException("Unknown day part for " + value);
         }
-
-        return new EventDate(new LocalDate(year, month, day), dayPart, hour);
     }
 }

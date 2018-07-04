@@ -54,7 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/eventHeader" />
+        app:layout_constraintTop_toBottomOf="@id/eventHeader"
+        tools:layout_editor_absoluteX="0dp" />
 
     <FrameLayout
         android:id="@+id/eventDetailContainer"

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".ui.EventFormActivity">
 
     <ImageView
         android:id="@+id/eventDateBackButton"
@@ -27,10 +29,17 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_forward"
         android:tint="@color/colorAccent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        />
     <Spinner
         android:id="@+id/eventDayPartSpinner"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:spinnerMode="dropdown"
         />
 </LinearLayout>

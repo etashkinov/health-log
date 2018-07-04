@@ -10,23 +10,24 @@ import com.ewind.hl.model.event.detail.ValueDetail;
 
 import org.joda.time.Period;
 
-import static org.joda.time.Period.days;
-import static org.joda.time.Period.hours;
+import static com.ewind.hl.model.event.EventDate.DAY;
+import static com.ewind.hl.model.event.EventDate.QUARTER;
 import static org.joda.time.Period.years;
 
 public enum EventType {
-    MOOD(MoodDetail.class, hours(6)),
-    ENERGY(ValueDetail.class, days(1)),
-    HEART_BEAT(HeartBeatDetail.class, hours(6)),
-    BLOOD_PRESSURE(BloodPressureDetail.class, hours(6)),
-    PAIN(PainDetail.class, true, hours(6)),
-    SWEAT (ValueDetail.class, true, hours(6)),
-    TREMOR(ValueDetail.class, true, hours(6)),
-    TEMPERATURE(ValueDetail.class, hours(6)),
+    
+    MOOD(MoodDetail.class, QUARTER),
+    ENERGY(ValueDetail.class, DAY),
+    HEART_BEAT(HeartBeatDetail.class, QUARTER),
+    BLOOD_PRESSURE(BloodPressureDetail.class, QUARTER),
+    PAIN(PainDetail.class, true, QUARTER),
+    SWEAT (ValueDetail.class, true, QUARTER),
+    TREMOR(ValueDetail.class, true, QUARTER),
+    TEMPERATURE(ValueDetail.class, QUARTER),
     EYE_SIGHT (EyeSightDetail.class, years(2)),
-    EYE_PRESSURE(ValueDetail.class,  days(1)),
-    CONGESTION(ValueDetail.class, hours(6)),
-    WATERY(ValueDetail.class, hours(6));
+    EYE_PRESSURE(ValueDetail.class,  DAY),
+    CONGESTION(ValueDetail.class, QUARTER),
+    WATERY(ValueDetail.class, QUARTER);
 
     private final Class<? extends EventDetail> detailClass;
     private final boolean propagateDown;

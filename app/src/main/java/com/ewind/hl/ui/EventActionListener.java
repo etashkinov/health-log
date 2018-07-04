@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.persist.EventsDao;
@@ -69,7 +70,7 @@ public class EventActionListener {
     }
 
     private EventDate getToday() {
-        return new EventDate(LocalDate.now(), null, null);
+        return new EventDate(LocalDate.now(), DayPart.ALL_DAY);
     }
 
     public void onAddLike(Event event) {

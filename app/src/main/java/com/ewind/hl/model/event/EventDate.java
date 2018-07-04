@@ -2,21 +2,26 @@ package com.ewind.hl.model.event;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
+import org.joda.time.Period;
 
 import java.io.Serializable;
-import java.util.Locale;
+
+import static org.joda.time.Period.days;
+import static org.joda.time.Period.hours;
 
 public class EventDate implements Serializable {
+
+    public static final Period DAY = days(1);
+    public static final Period QUARTER = hours(6);
+    public static final Period HOUR = hours(1);
+
     private final LocalDate localDate;
 
     private final DayPart dayPart;
-    private final Integer hour;
 
-    public EventDate(LocalDate localDate, DayPart dayPart, Integer hour) {
+    public EventDate(LocalDate localDate, DayPart dayPart) {
         this.localDate = localDate;
         this.dayPart = dayPart;
-        this.hour = hour;
     }
 
     public LocalDate getLocalDate() {
@@ -27,28 +32,16 @@ public class EventDate implements Serializable {
         return dayPart;
     }
 
-    public Integer getHour() {
-        return hour;
-    }
-
     @Override
     public String toString() {
-        return localDate.toString("yyyy-MM-dd")
-                + (dayPart == null ? "" : " " + dayPart)
-                + (hour == null ? "" : String.format(Locale.getDefault(), " %02d", hour));
+        return localDate.toString("yyyy-MM-dd") + ' ' + dayPart;
     }
 
     public LocalDateTime getStart() {
-        int hour = this.hour != null
-                    ? this.hour
-                    : (dayPart != null ? dayPart.getFirstHour() : 0);
-        return localDate.toLocalDateTime(new LocalTime(hour, 0));
+        return localDate.toLocalDateTime(dayPart.getStart());
     }
 
     public LocalDateTime getEnd() {
-        int hour = this.hour != null
-                ? this.hour + 1
-                : (dayPart != null ? dayPart.getLastHour() : 0);
-        return localDate.toLocalDateTime(new LocalTime(hour, 0)).minusMillis(1);
+        return localDate.toLocalDateTime(dayPart.getEnd());
     }
 }
