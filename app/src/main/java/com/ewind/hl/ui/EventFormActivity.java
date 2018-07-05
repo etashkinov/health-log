@@ -19,7 +19,7 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;
-import com.ewind.hl.ui.view.body.AreaSelector;
+import com.ewind.hl.ui.view.area.AreaSelector;
 
 public class EventFormActivity extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = EventFormActivity.class.getName();
@@ -65,7 +65,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         initHeader(event.getType());
 
         eventDatePicker.setDate(event.getDate());
-        areaSelector.setArea(event.getArea());
+        areaSelector.setArea(event.getType(), event.getArea());
 
         initDetailForm(event);
     }

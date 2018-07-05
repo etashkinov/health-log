@@ -23,23 +23,21 @@ public class AreaFactory {
     private static Area body;
 
     @NonNull
-    public static List<Area> getAreas() {
-        List<Area> result = new LinkedList<>();
-
-        result.add(body);
-        result.addAll(getParts(body));
-
-        return result;
+    public static List<Area> getAreas(EventType type) {
+        return getAreas(body, type);
     }
 
     @NonNull
-    private static List<Area> getParts(Area area) {
+    public static List<Area> getAreas(Area area, EventType type) {
         List<Area> result = new LinkedList<>();
+
+        if (area.getEvents().contains(type)) {
+            result.add(area);
+        }
         List<Area> parts = area.getParts();
         if (parts != null) {
             for (Area part : parts) {
-                result.add(part);
-                result.addAll(getParts(part));
+                result.addAll(getAreas(part, type));
             }
         }
 

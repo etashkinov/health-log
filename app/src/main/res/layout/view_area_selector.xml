@@ -6,14 +6,15 @@
     android:layout_height="match_parent"
     tools:parentTag="android.support.constraint.ConstraintLayout">
 
-    <AutoCompleteTextView
-        android:id="@+id/areaAutoComplete"
+    <Spinner
+        android:id="@+id/areaSpinner"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/areaLocatorButton"
-        android:hint="Where" />
+        app:layout_constraintTop_toTopOf="@id/areaLocatorButton"
+        app:layout_constraintBottom_toBottomOf="@id/areaLocatorButton"/>
 
     <ImageView
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"

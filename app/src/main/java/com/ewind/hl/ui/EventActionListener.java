@@ -9,14 +9,20 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
+import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventSearchView;
 
+import org.joda.time.Duration;
+import org.joda.time.Instant;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.lang.ref.WeakReference;
 
+import static com.ewind.hl.model.event.EventDate.DAY;
+import static com.ewind.hl.model.event.EventDate.QUARTER;
 import static com.ewind.hl.ui.EventFormActivity.EVENT;
 import static com.ewind.hl.ui.EventFormActivity.EVENT_ID;
 
@@ -62,22 +68,34 @@ public class EventActionListener {
         eventSearchView.setOnEventClickListener(e -> {
             dialog.cancel();
             Intent intent = new Intent(activity, EventFormActivity.class);
-            intent.putExtra(EVENT, EventModel.empty(e, null, getToday()));
+            intent.putExtra(EVENT, EventModel.empty(e, null, getNow(e)));
             activity.startActivityForResult(intent, ADD_REQUEST_CODE);
         });
 
         dialog.show();
     }
 
-    private EventDate getToday() {
-        return new EventDate(LocalDate.now(), DayPart.ALL_DAY);
+    private EventDate getNow(EventType type) {
+        Instant now = Instant.now();
+        Duration expirationDuration = type.getExpiration().toDurationFrom(now);
+        int hourOfDay = LocalTime.now().getHourOfDay();
+        DayPart dayPart;
+        if (expirationDuration.isShorterThan(QUARTER.toDurationTo(now))) {
+            dayPart = DayPart.hourOf(hourOfDay);
+        } else if (expirationDuration.isShorterThan(DAY.toDurationTo(now))) {
+            dayPart = DayPart.quarterOf(hourOfDay);
+        } else {
+            dayPart = DayPart.ALL_DAY;
+        }
+
+        return new EventDate(LocalDate.now(), dayPart);
     }
 
     public void onAddLike(Event event) {
         Activity activity = activityWeakReference.get();
 
         Intent intent = new Intent(activity, EventFormActivity.class);
-        intent.putExtra(EVENT, EventModel.copyOf(event, getToday()));
+        intent.putExtra(EVENT, EventModel.copyOf(event, getNow(event.getType())));
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }
 }
