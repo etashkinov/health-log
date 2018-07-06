@@ -35,8 +35,8 @@ public interface EventEntityDao {
     void delete(EventEntity eventEntity);
 
     @Query("SELECT e.* FROM evententity e " +
-            " JOIN (SELECT type, max(date) as date FROM evententity GROUP BY type) le " +
-            " WHERE e.type = le.type AND e.date = le.date")
+            " JOIN (SELECT type, area, max(date) as date FROM evententity GROUP BY type, area) le " +
+            " WHERE e.type = le.type AND e.area = le.area AND e.date = le.date")
     List<EventEntity> findLatest();
 
     @Query("SELECT e.* FROM evententity e " +

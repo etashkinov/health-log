@@ -48,7 +48,7 @@ public class Event<T extends EventDetail> {
     }
 
     public boolean isExpired() {
-        LocalDateTime expirationTime = getDate().getStart().plus(getType().getExpiration());
+        LocalDateTime expirationTime = getDate().getEnd();
         return expirationTime.isBefore(LocalDateTime.now());
     }
 }

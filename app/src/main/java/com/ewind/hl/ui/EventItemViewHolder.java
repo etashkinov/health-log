@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
 
@@ -69,6 +70,8 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         String text = EventUI.getEventDescription(event, context);
         if (EventUI.isDefaultIcon(type, context)) {
             text = LocalizationService.getEventTypeName(type) + ": " + text;
+        } else if (AreaFactory.getAreas(type).size() > 1) {
+            text = LocalizationService.getAreaName(event.getArea()) + ": " + text;
         }
 
         TextView eventText = eventDetailContainer.findViewById(R.id.eventText);
