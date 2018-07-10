@@ -29,6 +29,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         this.listener = listener;
 
         itemView.setOnLongClickListener(this::onUpdate);
+        itemView.findViewById(R.id.historyButton).setOnClickListener(this::onHistory);
         addButton = itemView.findViewById(R.id.addButton);
         addButton.setOnClickListener(this::onAddLike);
 
@@ -51,6 +52,10 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
     private boolean onUpdate(View view) {
         listener.onUpdate(event);
         return true;
+    }
+
+    private void onHistory(View view) {
+        listener.onHistory(event);
     }
 
     private void onAddLike(View view) {

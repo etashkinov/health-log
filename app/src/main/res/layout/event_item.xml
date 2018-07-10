@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/AppTheme"
     android:layout_margin="5dp"
     android:layout_width="wrap_content"
@@ -45,5 +46,15 @@
         android:layout_height="1dp"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/historyButton"
+        android:layout_width="25sp"
+        android:layout_height="25sp"
+        android:layout_marginEnd="10sp"
+        android:tint="@color/colorAccent"
+        app:srcCompat="@drawable/ic_chart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

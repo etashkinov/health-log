@@ -11,6 +11,7 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.ui.history.HistoryActivity;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventSearchView;
 
@@ -35,6 +36,15 @@ public class EventActionListener {
 
     public EventActionListener(Activity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
+    }
+
+    public void onHistory(Event event) {
+        Activity activity = activityWeakReference.get();
+
+        Intent intent = new Intent(activity, HistoryActivity.class);
+        intent.putExtra(HistoryActivity.EVENT_TYPE, event.getType());
+        intent.putExtra(HistoryActivity.EVENT_AREA, event.getArea());
+        activity.startActivity(intent);
     }
 
     public void onUpdate(Event event) {

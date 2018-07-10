@@ -2,16 +2,12 @@ package com.ewind.hl.ui.history;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ewind.hl.MainActivity;
 import com.ewind.hl.R;
+import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
@@ -22,13 +18,18 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
     private static final String TAG = HistoryActivity.class.getName();
     public static final String EVENT_TYPE = "EVENT_TYPE";
+    public static final String EVENT_AREA = "EVENT_AREA";
+
+    private EventDate from;
+    private EventDate till;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,30 +37,28 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.history_chart);
 
         EventType type = (EventType) getIntent().getSerializableExtra(EVENT_TYPE);
-        EventDate till = new EventDate()
+        Area area = (Area) getIntent().getSerializableExtra(EVENT_AREA);
 
-        MainActivity.State state = ((MainActivity) getActivity()).getState();
-        EventDate till = state.getDate();
-        EventDate from = getFromDate(till);
+        from = new EventDate(LocalDate.now().minusDays(30), DayPart.ALL_DAY);
+        till = new EventDate(LocalDate.now(), DayPart.PM_11);
 
-        initHeader(view, till, from);
+        initHeader();
 
-        List<Event> events = new EventsDao(getContext()).getEvents(state.getType(), state.getArea(), from, till);
+        List<Event> events = new EventsDao(this).getEvents(type, area, from, till);
         if (!events.isEmpty()) {
-            initChart(view, events);
+            initChart(events);
         }
-        view.findViewById(R.id.eventFormButton).setOnClickListener(this::onShowForm);
     }
 
-    private void initHeader(View view, EventDate till, EventDate from) {
+    private void initHeader() {
         Resources res = getResources();
         String text = String.format(res.getString(R.string.historyChartDates), from, till);
-        TextView historyChartDates = view.findViewById(R.id.historyChartDates);
+        TextView historyChartDates = findViewById(R.id.historyChartDates);
         historyChartDates.setText(text);
     }
 
-    private void initChart(View view, List<Event> events) {
-        LineChart chart = view.findViewById(R.id.historyChart);
+    private void initChart(List<Event> events) {
+        LineChart chart = findViewById(R.id.historyChart);
 
         List<Entry> entries = new ArrayList<>();
         for (Event event : events) {
@@ -82,13 +81,6 @@ public class HistoryActivity extends AppCompatActivity {
         chart.invalidate(); // refresh
     }
 
-    @NonNull
-    private EventDate getFromDate(EventDate till) {
-        Calendar monthAgo = till.toCalendar();
-        monthAgo.add(Calendar.MONTH, -1);
-        return EventDate.of(monthAgo);
-    }
-
     private static final class EventEntry extends Entry {
         private final Event event;
 
@@ -98,7 +90,9 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         private static float toScalar(EventDate date) {
-            return (date.getYear() - 2018) * 365 + date.getMonth() * 30 + date.getDay();
+            return (date.getLocalDate().getYear() - 2018) * 365
+                    + date.getLocalDate().getMonthOfYear() * 30
+                    + date.getLocalDate().getDayOfMonth();
         }
     }
 }

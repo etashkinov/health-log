@@ -95,7 +95,11 @@ public class EventsDao {
     }
 
     public List<Event> getEvents(EventType type, Area area, EventDate from, EventDate till) {
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(area.getName(), from.toString(), till.toString(), type.name());
+        String areaName = area.getName();
+        String fromDate = EventDateConverter.serialize(from);
+        String tillDate = EventDateConverter.serialize(till);
+        String typeName = type.name();
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(areaName, fromDate, tillDate, typeName);
         return toEvents(eventEntities);
     }
 
