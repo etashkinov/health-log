@@ -15,6 +15,8 @@ import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
 
+import org.joda.time.LocalDateTime;
+
 public class EventItemViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = EventItemViewHolder.class.getName();
     private final EventActionListener listener;
@@ -42,7 +44,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         this.event = event;
 
         addDetailView(event);
-        eventDateTextView.setText(event.getDate().toString());
+        eventDateTextView.setText(LocalizationService.getEventDateFrom(event.getDate(), LocalDateTime.now()));
 
         if (!this.event.isExpired()) {
             addButton.setVisibility(View.INVISIBLE);

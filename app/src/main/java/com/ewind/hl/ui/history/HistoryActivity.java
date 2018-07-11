@@ -52,7 +52,9 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void initHeader() {
         Resources res = getResources();
-        String text = String.format(res.getString(R.string.historyChartDates), from, till);
+        String fromDate = LocalizationService.getLocalDate(from.getLocalDate());
+        String tillDate = LocalizationService.getLocalDate(till.getLocalDate());
+        String text = String.format(res.getString(R.string.historyChartDates), fromDate, tillDate);
         TextView historyChartDates = findViewById(R.id.historyChartDates);
         historyChartDates.setText(text);
     }

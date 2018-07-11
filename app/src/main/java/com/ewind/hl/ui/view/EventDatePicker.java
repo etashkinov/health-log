@@ -2,6 +2,7 @@ package com.ewind.hl.ui.view;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -14,8 +15,12 @@ import android.widget.Spinner;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
+import com.ewind.hl.ui.LocalizationService;
 
 import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventDatePicker extends LinearLayout {
 
@@ -52,9 +57,9 @@ public class EventDatePicker extends LinearLayout {
         findViewById(R.id.eventDatePickerButton).setOnClickListener(this::showTimePickerDialog);
 
         eventDayPartSpinner = findViewById(R.id.eventDayPartSpinner);
-        ArrayAdapter<DayPart> adapter = new ArrayAdapter<>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_spinner_item,
-                DayPart.values());
+                getLocalizedDayParts());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventDayPartSpinner.setAdapter(adapter);
         eventDayPartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -64,6 +69,16 @@ public class EventDatePicker extends LinearLayout {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    @NonNull
+    private List<String> getLocalizedDayParts() {
+        DayPart[] dayParts = DayPart.values();
+        List<String> result = new ArrayList<>(dayParts.length);
+        for (DayPart part : dayParts) {
+            result.add(LocalizationService.getDayPart(part));
+        }
+        return result;
     }
 
     private void onDayPartChanged(DayPart dayPart) {
@@ -121,7 +136,7 @@ public class EventDatePicker extends LinearLayout {
         View eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
         eventDateForwardButton.setEnabled(true);
         Button datePicker = findViewById(R.id.eventDatePickerButton);
-        datePicker.setText(localDate.toString("dd/MM/yyyy"));
+        datePicker.setText(LocalizationService.getLocalDate(localDate));
         LocalDate today = LocalDate.now();
         if (localDate.equals(today)) {
             datePicker.setText(R.string.event_date_today);
