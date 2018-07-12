@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +22,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
     private final View addButton;
 
     private Event event;
-    private FrameLayout eventDetailContainer;
+    private ViewGroup eventDetailContainer;
     private final TextView eventDateTextView;
 
     public EventItemViewHolder(ViewGroup parent, EventActionListener listener) {
@@ -31,7 +30,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         this.listener = listener;
 
         itemView.setOnLongClickListener(this::onUpdate);
-        itemView.findViewById(R.id.historyButton).setOnClickListener(this::onHistory);
+//        itemView.findViewById(R.id.historyButton).setOnClickListener(this::onHistory);
         addButton = itemView.findViewById(R.id.addButton);
         addButton.setOnClickListener(this::onAddLike);
 
@@ -65,11 +64,9 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void addDetailView(Event event) {
-        eventDetailContainer.removeAllViews();
         Context context = itemView.getContext();
         EventType type = event.getType();
 
-        LayoutInflater.from(itemView.getContext()).inflate(R.layout.event_item_detail, eventDetailContainer);
         ImageView eventIcon = eventDetailContainer.findViewById(R.id.eventIcon);
         Drawable drawable = EventUI.getEventDrawable(type, context);
         eventIcon.setImageDrawable(drawable);
