@@ -17,7 +17,7 @@ public class EventDateConverter {
         String result = date.getLocalDate().toString("yyyy-MM-dd");
 
         int startHour = date.getDayPart().getStartHour();
-        int period = date.getDayPart().getPeriodHours();
+        int period = date.getDayPart().getAccuracy().toHours();
 
         result += String.format(Locale.getDefault(), "-%02d-%02d", startHour, period);
 

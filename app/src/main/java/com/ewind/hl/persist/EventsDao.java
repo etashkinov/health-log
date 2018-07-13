@@ -9,6 +9,7 @@ import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,17 +49,17 @@ public class EventsDao {
         return result;
     }
 
-    private Event toEvent(EventEntity eventEntity) {
+    private <T extends EventDetail> Event<T> toEvent(EventEntity eventEntity) {
         if (eventEntity == null) {
             return null;
         }
 
         try {
-            EventType type = EventType.valueOf(eventEntity.getType());
-            EventDetail detail = MAPPER.readValue(eventEntity.getValue(), type.getDetailClass());
+            EventType<T> type = EventTypeFactory.get(eventEntity.getType());
+            T detail = MAPPER.readValue(eventEntity.getValue(), type.getDetailClass());
             Area area = AreaFactory.getArea(eventEntity.getArea());
             EventDate date = EventDateConverter.deserialize(eventEntity.getDate());
-            return new Event(eventEntity.getId(), date, type, detail, area, null);
+            return new Event<>(eventEntity.getId(), date, type, detail, area, null);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to parse " + eventEntity, e);
         }
@@ -85,7 +86,7 @@ public class EventsDao {
             result.setId(event.getId());
             result.setArea(event.getArea().getName());
             result.setDate(EventDateConverter.serialize(event.getDate()));
-            result.setType(event.getType().name());
+            result.setType(event.getType().getName());
             result.setScore(event.getDetail().getScore());
             result.setValue(MAPPER.writeValueAsString(event.getDetail()));
             return result;
@@ -94,12 +95,11 @@ public class EventsDao {
         }
     }
 
-    public List<Event> getEvents(EventType type, Area area, EventDate from, EventDate till) {
+    public List<Event> getEvents(String name, Area area, EventDate from, EventDate till) {
         String areaName = area.getName();
         String fromDate = EventDateConverter.serialize(from);
         String tillDate = EventDateConverter.serialize(till);
-        String typeName = type.name();
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(areaName, fromDate, tillDate, typeName);
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(areaName, fromDate, tillDate, name);
         return toEvents(eventEntities);
     }
 
@@ -112,6 +112,6 @@ public class EventsDao {
     }
 
     public Event getLatestEvent(EventType type) {
-        return toEvent(entityDao.findLatest(type.name()));
+        return toEvent(entityDao.findLatest(type.getName()));
     }
 }

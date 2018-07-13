@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.EventTypeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -114,7 +115,7 @@ public class AreaFactory {
         List<String> eventsToPropagateDown = new LinkedList<>();
 
         for (String eventName : config.events) {
-            EventType event = EventType.valueOf(eventName);
+            EventType event = EventTypeFactory.get(eventName);
             events.add(event);
             if (event.isPropagateDown()) {
                 eventsToPropagateDown.add(eventName);

@@ -6,24 +6,17 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventDate;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.history.HistoryActivity;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventSearchView;
 
-import org.joda.time.Duration;
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
+import org.joda.time.LocalDateTime;
 
 import java.lang.ref.WeakReference;
 
-import static com.ewind.hl.model.event.EventDate.DAY;
-import static com.ewind.hl.model.event.EventDate.QUARTER;
 import static com.ewind.hl.ui.EventFormActivity.EVENT;
 import static com.ewind.hl.ui.EventFormActivity.EVENT_ID;
 
@@ -42,7 +35,7 @@ public class EventActionListener {
         Activity activity = activityWeakReference.get();
 
         Intent intent = new Intent(activity, HistoryActivity.class);
-        intent.putExtra(HistoryActivity.EVENT_TYPE, event.getType());
+        intent.putExtra(HistoryActivity.EVENT_TYPE, event.getType().getName());
         intent.putExtra(HistoryActivity.EVENT_AREA, event.getArea());
         activity.startActivity(intent);
     }
@@ -78,34 +71,20 @@ public class EventActionListener {
         eventSearchView.setOnEventClickListener(e -> {
             dialog.cancel();
             Intent intent = new Intent(activity, EventFormActivity.class);
-            intent.putExtra(EVENT, EventModel.empty(e, null, getNow(e)));
+            Event<?> newEvent = e.create(LocalDateTime.now(), null, null);
+            intent.putExtra(EVENT, EventModel.of(newEvent));
             activity.startActivityForResult(intent, ADD_REQUEST_CODE);
         });
 
         dialog.show();
     }
 
-    private EventDate getNow(EventType type) {
-        Instant now = Instant.now();
-        Duration expirationDuration = type.getExpiration().toDurationFrom(now);
-        int hourOfDay = LocalTime.now().getHourOfDay();
-        DayPart dayPart;
-        if (expirationDuration.isShorterThan(QUARTER.toDurationTo(now))) {
-            dayPart = DayPart.hourOf(hourOfDay);
-        } else if (expirationDuration.isShorterThan(DAY.toDurationTo(now))) {
-            dayPart = DayPart.quarterOf(hourOfDay);
-        } else {
-            dayPart = DayPart.ALL_DAY;
-        }
-
-        return new EventDate(LocalDate.now(), dayPart);
-    }
-
-    public void onAddLike(Event event) {
+    public <T extends EventDetail> void onAddLike(Event<T> event) {
         Activity activity = activityWeakReference.get();
 
         Intent intent = new Intent(activity, EventFormActivity.class);
-        intent.putExtra(EVENT, EventModel.copyOf(event, getNow(event.getType())));
+        Event<T> newEvent = event.getType().create(LocalDateTime.now(), event.getArea(), event.getDetail());
+        intent.putExtra(EVENT, EventModel.of(newEvent));
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }
 }

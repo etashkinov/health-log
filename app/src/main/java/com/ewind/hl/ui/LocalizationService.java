@@ -3,6 +3,7 @@ package com.ewind.hl.ui;
 import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.event.Accuracy;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
@@ -13,8 +14,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.Months;
 import org.joda.time.Years;
 
-import static com.ewind.hl.model.event.EventDate.HOUR;
-import static com.ewind.hl.model.event.EventDate.QUARTER;
+import static com.ewind.hl.model.event.Accuracy.HOUR;
 
 public class LocalizationService {
 
@@ -23,7 +23,7 @@ public class LocalizationService {
     }
 
     public static String getEventTypeName(EventType type) {
-        return snakeCaseToReadable(type.name().toLowerCase());
+        return snakeCaseToReadable(type.getName().toLowerCase());
     }
 
     public static String getEventDate(EventDate date) {
@@ -50,21 +50,20 @@ public class LocalizationService {
         int monthsAgo = Months.monthsBetween(localDate, fromDate).getMonths();
         int yearsAgo = Years.yearsBetween(localDate, fromDate).getYears();
 
+        Accuracy accuracy = dayPart.getAccuracy();
         if (daysAgo == 0) {
-            if (dayPart == DayPart.ALL_DAY) {
-                return "Today";
-            } else if (dayPart.getPeriod() == QUARTER) {
-                return "This " + getDayPart(dayPart).toLowerCase();
-            } else {
-                return from.getHourOfDay() - dayPart.getStart().getHourOfDay() + " hours ago";
+            switch (accuracy) {
+                case DAY: return "Today";
+                case QUARTER: return "This " + getDayPart(dayPart).toLowerCase();
+                case HOUR: return from.getHourOfDay() - dayPart.getStart().getHourOfDay() + " hours ago";
+                default: throw new IllegalArgumentException("Unknown accuracy " + accuracy);
             }
         } else if (daysAgo == 1) {
-            if (dayPart == DayPart.ALL_DAY) {
-                return "Yesterday";
-            } else if (dayPart.getPeriod() == QUARTER) {
-                return "Yesterdays " + getDayPart(dayPart).toLowerCase();
-            } else {
-                return "Yesterday " + getDayPart(dayPart);
+            switch (accuracy) {
+                case DAY: return "Yesterday";
+                case QUARTER: return "Yesterdays " + getDayPart(dayPart).toLowerCase();
+                case HOUR: return "Yesterday " + getDayPart(dayPart);
+                default: throw new IllegalArgumentException("Unknown accuracy " + accuracy);
             }
         } else if (monthsAgo < 1) {
             return daysAgo + " days ago";
@@ -81,7 +80,7 @@ public class LocalizationService {
 
     public static String getDayPart(DayPart part) {
         String dayPart;
-        if (part.getPeriod() == HOUR) {
+        if (part.getAccuracy() == HOUR) {
             dayPart = part.getStart().toString("haa");
         } else {
             dayPart = snakeCaseToReadable(part.name());

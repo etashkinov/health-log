@@ -21,7 +21,7 @@ public class EventUI {
     public static EventDetailForm getEventDetailForm(EventModel event, Context context) {
         EventType type = event.getType();
         try {
-            String name = "event_" + type.name().toLowerCase() + "_form";
+            String name = "event_" + type.getName().toLowerCase() + "_form";
             int layout = context.getResources().getIdentifier(name, "layout", context.getPackageName());
             return (EventDetailForm) LayoutInflater.from(context).inflate(layout, null);
         } catch (Resources.NotFoundException e) {
@@ -43,7 +43,7 @@ public class EventUI {
     }
 
     private static int getEventDrawableId(EventType type, Context context) {
-        String name = "ic_" + type.name().toLowerCase();
+        String name = "ic_" + type.getName().toLowerCase();
         int result = context.getResources().getIdentifier(name, "drawable", context.getPackageName());
         if (result == 0) {
             Log.w(TAG, "Icon for " + type + " not found");
@@ -53,7 +53,7 @@ public class EventUI {
     }
 
     public static String getEventDescription(Event event, Context context) {
-        String name = "event_description_" + event.getType().name().toLowerCase();
+        String name = "event_description_" + event.getType().getName().toLowerCase();
         Object description = event.getDetail().getDescription();
         try {
             String template = context.getString(context.getResources().getIdentifier(name, "string", context.getPackageName()));

@@ -17,16 +17,16 @@ import com.ewind.hl.ui.LocalizationService;
 public class EventButton extends LinearLayout {
 
     public interface OnEventClickListener {
-        void onClick(EventType type);
+        void onClick(EventType<?> type);
     }
 
-    private EventType type;
+    private EventType<?> type;
 
     public EventButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void setEvent(EventType type, EventDetail detail) {
+    public <T extends EventDetail> void setEvent(EventType<T> type, T detail) {
         this.type = type;
 
         String text = getEventName(type, detail);

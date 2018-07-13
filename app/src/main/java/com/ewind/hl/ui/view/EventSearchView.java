@@ -12,10 +12,10 @@ import android.widget.SearchView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
 
     @NonNull
     private List<EventType> getEventTypes() {
-        return new ArrayList<>(Arrays.asList(EventType.values()));
+        return new ArrayList<>(EventTypeFactory.list());
     }
 
     private void setValues(List<EventType> types) {

@@ -36,7 +36,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_chart);
 
-        EventType type = (EventType) getIntent().getSerializableExtra(EVENT_TYPE);
+        String type = getIntent().getStringExtra(EVENT_TYPE);
         Area area = (Area) getIntent().getSerializableExtra(EVENT_AREA);
 
         from = new EventDate(LocalDate.now().minusDays(30), DayPart.ALL_DAY);

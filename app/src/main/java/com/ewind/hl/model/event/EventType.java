@@ -1,57 +1,56 @@
 package com.ewind.hl.model.event;
 
-import com.ewind.hl.model.event.detail.BloodPressureDetail;
-import com.ewind.hl.model.event.detail.EventDetail;
-import com.ewind.hl.model.event.detail.EyeSightDetail;
-import com.ewind.hl.model.event.detail.HeartBeatDetail;
-import com.ewind.hl.model.event.detail.MoodDetail;
-import com.ewind.hl.model.event.detail.PainDetail;
-import com.ewind.hl.model.event.detail.ValueDetail;
+import android.support.annotation.NonNull;
 
+import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.event.detail.EventDetail;
+
+import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 
-import static com.ewind.hl.model.event.EventDate.DAY;
-import static com.ewind.hl.model.event.EventDate.QUARTER;
-import static org.joda.time.Period.years;
+import java.util.Set;
 
-public enum EventType {
-    
-    MOOD(MoodDetail.class, QUARTER),
-    ENERGY(ValueDetail.class, DAY),
-    HEART_BEAT(HeartBeatDetail.class, QUARTER),
-    BLOOD_PRESSURE(BloodPressureDetail.class, QUARTER),
-    PAIN(PainDetail.class, true, QUARTER),
-    SWEAT (ValueDetail.class, true, QUARTER),
-    TREMOR(ValueDetail.class, true, QUARTER),
-    TEMPERATURE(ValueDetail.class, QUARTER),
-    EYE_SIGHT (EyeSightDetail.class, years(2)),
-    EYE_PRESSURE(ValueDetail.class,  DAY),
-    CONGESTION(ValueDetail.class, QUARTER),
-    WATERY(ValueDetail.class, QUARTER);
+public abstract class EventType<T extends EventDetail> {
 
-    private final Class<? extends EventDetail> detailClass;
-    private final boolean propagateDown;
+    private final String name;
     private final Period expiration;
+    private final Accuracy accuracy;
+    private final Set<String> areas;
+    private final Class<T> detailClass;
+    private final boolean propagateDown;
 
-    EventType(Class<? extends EventDetail> detailClass, Period expiration) {
-        this(detailClass, false, expiration);
-    }
-
-    EventType(Class<? extends EventDetail> detailClass, boolean propagateDown, Period expiration) {
+    protected EventType(String name, Period expiration, Accuracy accuracy, Set<String> areas, Class<T> detailClass, boolean propagateDown) {
+        this.name = name;
+        this.expiration = expiration;
+        this.accuracy = accuracy;
+        this.areas = areas;
         this.detailClass = detailClass;
         this.propagateDown = propagateDown;
-        this.expiration = expiration;
+    }
+
+    public Event<T> create(LocalDateTime from, Area area, T detail) {
+        return new Event<>(0L, getEventDate(from), this, detail, area, null);
+    }
+
+    private EventDate getEventDate(LocalDateTime from) {
+        return new EventDate(from.toLocalDate(), DayPart.partOf(from.getHourOfDay(), accuracy));
+    }
+
+    public boolean isExpired(Event event) {
+        LocalDateTime expirationTime = event.getDate().getStart().plus(expiration);
+        return expirationTime.isBefore(LocalDateTime.now());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @NonNull
+    public Class<T> getDetailClass() {
+        return detailClass;
     }
 
     public boolean isPropagateDown() {
         return propagateDown;
-    }
-
-    public Class<? extends EventDetail>  getDetailClass() {
-        return detailClass;
-    }
-
-    public Period getExpiration() {
-        return expiration;
     }
 }

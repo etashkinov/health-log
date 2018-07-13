@@ -1,13 +1,13 @@
 package com.ewind.hl.model.event;
 
 import org.joda.time.LocalTime;
-import org.joda.time.Period;
 
-import static com.ewind.hl.model.event.EventDate.DAY;
-import static com.ewind.hl.model.event.EventDate.HOUR;
-import static com.ewind.hl.model.event.EventDate.QUARTER;
+import static com.ewind.hl.model.event.Accuracy.DAY;
+import static com.ewind.hl.model.event.Accuracy.HOUR;
+import static com.ewind.hl.model.event.Accuracy.QUARTER;
 
 public enum DayPart {
+
     ALL_DAY(0, DAY),
 
     NIGHT(0, QUARTER),
@@ -40,11 +40,11 @@ public enum DayPart {
     PM_11(23, HOUR);
 
     private final LocalTime start;
-    private final Period period;
+    private final Accuracy accuracy;
 
-    DayPart(int hour, Period period) {
+    DayPart(int hour, Accuracy accuracy) {
         this.start = new LocalTime(hour, 0);
-        this.period = period;
+        this.accuracy = accuracy;
     }
 
     public LocalTime getStart() {
@@ -56,30 +56,39 @@ public enum DayPart {
     }
 
     public LocalTime getEnd() {
-        return start.plus(period).minusMillis(1);
+        return accuracy.endOf(start);
     }
 
-    public Period getPeriod() {
-        return period;
-    }
-
-    public int getPeriodHours() {
-        return period.toStandardHours().getHours();
+    public Accuracy getAccuracy() {
+        return accuracy;
     }
 
     public static DayPart valueOf(int firstHour, int period) {
         for (DayPart part : values()) {
             if (part.getStartHour() == firstHour
-                    && part.getPeriodHours() == period) {
+                    && Accuracy.valueOf(period) == part.accuracy) {
                 return part;
             }
         }
         throw new IllegalArgumentException("Unknown hour: " + firstHour + " and period:  " + period);
     }
 
+    public static DayPart partOf(int hour, Accuracy accuracy) {
+        switch (accuracy) {
+            case DAY:
+                return ALL_DAY;
+            case QUARTER:
+                return quarterOf(hour);
+            case HOUR:
+                return hourOf(hour);
+            default:
+                throw new IllegalArgumentException("Unknown accuracy");
+        }
+    }
+
     public static DayPart hourOf(int hour) {
         for (DayPart part : values()) {
-            if (part.start.getHourOfDay() == hour && part.period == HOUR) {
+            if (part.start.getHourOfDay() == hour && part.accuracy == HOUR) {
                 return part;
             }
         }
@@ -90,7 +99,7 @@ public enum DayPart {
         for (DayPart part : values()) {
             if (part.getStart().getHourOfDay() <= hour
                     && hour <= part.getEnd().getHourOfDay()
-                    && part.period == QUARTER) {
+                    && part.accuracy == QUARTER) {
                 return part;
             }
         }
@@ -99,6 +108,6 @@ public enum DayPart {
 
     @Override
     public String toString() {
-        return period == HOUR ? start.toString("ha") : name();
+        return accuracy == HOUR ? start.toString("ha") : name();
     }
 }
