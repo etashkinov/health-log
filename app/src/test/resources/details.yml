@@ -1,0 +1,19 @@
+severtiy:
+  - none
+  - mild
+  - moderate
+  - severe
+  - intolerable
+amount:
+  - none
+  - barely
+  - little
+  - medium
+  - a_lot
+size:
+  - none
+  - tiny
+  - small
+  - medium
+  - large
+  - enormous

@@ -1,12 +1,3 @@
-events:
-  - MOOD
-  - ENERGY
-  - PAIN
-  - SWEAT
-  - TREMOR
-  - HEART_BEAT
-  - BLOOD_PRESSURE
-  - TEMPERATURE
 parts:
   head:
     parts:
@@ -17,9 +8,6 @@ parts:
           forehead:
           eyes:
             dual: eye
-            events:
-              - EYE_SIGHT
-              - EYE_PRESSURE
             parts:
               eyebrow:
               eyelid:
@@ -32,6 +20,7 @@ parts:
           mouth:
             parts:
               lips:
+              gums:
               teeth:
               tongue:
               palate:
@@ -39,7 +28,9 @@ parts:
                   hard_palate:
                   soft_palate:
               throat:
-          chin:
+          jaw:
+            parts:
+              chin:
       ears:
         dual: ear
       neck:
@@ -69,7 +60,26 @@ parts:
       upperArm:
       elbow:
   chest:
+    parts:
+      breasts:
+        dual: breast
+        parts:
+          nipple:
   stomack:
+    alias:
+      - abdomen
+  pelvis:
+    parts:
+      groin:
+        parts:
+          bladder
+          vagina:
+          penis:
+          testicles:
+            dual: testicle
+      anus:
+      buttocks:
+        dual: buttock
   hip:
   legs:
     dual: leg
@@ -85,4 +95,3 @@ parts:
           toe:
   back:
   waist:
-  buttocks:

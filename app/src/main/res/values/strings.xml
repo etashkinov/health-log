@@ -16,7 +16,7 @@
     <string name="search">Search</string>
     <string name="fromDate">From %s</string>
     <string name="historyChartDates">From %s till %s</string>
-    <string name="abdominal_pain">Abdominal Pain</string>
+
     <string name="abnormal_facial_expressions">Abnormal Facial Expressions</string>
     <string name="abscessed_tooth_symptoms_and_signs">Abscessed Tooth Symptoms and Signs</string>
     <string name="acid_reflux_gerd_symptoms_and_signs">Acid Reflux (GERD) Symptoms and Signs</string>
@@ -31,16 +31,13 @@
     <string name="anaphylaxis_symptoms_and_signs">Anaphylaxis Symptoms and Signs</string>
     <string name="anemia">Anemia</string>
     <string name="angular_cheilitis_symptoms_and_signs">Angular Cheilitis Symptoms and Signs</string>
-    <string name="ankle_pain">Ankle Pain</string>
     <string name="anxiety">Anxiety</string>
     <string name="appendicitis_symptoms_and_signs">Appendicitis Symptoms and Signs</string>
-    <string name="arm_pain">Arm Pain</string>
     <string name="arrhythmia_symptoms_and_signs">Arrhythmia Symptoms and Signs</string>
     <string name="asthma_symptoms_and_signs">Asthma Symptoms and Signs</string>
     <string name="atrial_fibrillation_afib_symptoms_and_signs">Atrial fibrillation (AFib) Symptoms and Signs</string>
     <string name="atrial_flutter_symptoms_and_signs">Atrial Flutter Symptoms and Signs</string>
     <string name="autism_symptoms_and_signs">Autism Symptoms and Signs</string>
-    <string name="back_pain">Back Pain</string>
     <string name="bad_breath">Bad Breath</string>
     <string name="bad_taste_in_the_mouth">Bad Taste in the Mouth</string>
     <string name="beaus_lines">Beau\'s Lines</string>
@@ -64,14 +61,12 @@
     <string name="breast_cancer_symptoms_and_signs">Breast Cancer Symptoms and Signs</string>
     <string name="breast_discharge">Breast Discharge</string>
     <string name="breast_lumps">Breast Lumps</string>
-    <string name="breast_pain">Breast Pain</string>
     <string name="brittle_nails">Brittle Nails</string>
     <string name="bronchitis_symptoms_and_signs">Bronchitis Symptoms and Signs</string>
     <string name="bumps_on_skin">Bumps on Skin</string>
     <string name="burning_mouth_syndrome_symptoms_and_signs">Burning Mouth Syndrome Symptoms and Signs</string>
     <string name="burning_urination">Burning Urination</string>
     <string name="bursitis_symptoms_and_signs">Bursitis Symptoms and Signs</string>
-    <string name="buttock_pain">Buttock Pain</string>
     <string name="carbon_monoxide_poisoning_symptoms_and_signs">Carbon Monoxide Poisoning Symptoms and Signs</string>
     <string name="carpal_tunnel_syndrome_symptoms_and_signs">Carpal Tunnel Syndrome Symptoms and Signs</string>
     <string name="cat_scratch_disease_symptoms_and_signs">Cat Scratch Disease Symptoms and Signs</string>
@@ -81,7 +76,6 @@
     <string name="chalazion_symptoms_and_signs">Chalazion Symptoms and Signs</string>
     <string name="changes_in_skin_of_the_breast">Changes in Skin of the Breast</string>
     <string name="chapped_lips_cheilitis">Chapped Lips (Cheilitis)</string>
-    <string name="chest_pain">Chest Pain</string>
     <string name="chills">Chills</string>
     <string name="chlamydia_symptoms_and_signs">Chlamydia Symptoms and Signs</string>
     <string name="chronic_fatigue_syndrome_symptoms_and_signs">Chronic Fatigue Syndrome Symptoms and Signs</string>
@@ -138,7 +132,6 @@
     <string name="easy_bruising">Easy Bruising</string>
     <string name="ebola_virus_disease_symptoms_and_signs">Ebola Virus Disease Symptoms and Signs</string>
     <string name="echolalia">Echolalia</string>
-    <string name="elbow_pain">Elbow Pain</string>
     <string name="endocarditis_symptoms_and_signs">Endocarditis Symptoms and Signs</string>
     <string name="endometriosis_symptoms_and_signs">Endometriosis Symptoms and Signs</string>
     <string name="enlarged_heart">Enlarged Heart</string>
@@ -147,7 +140,6 @@
     <string name="excessive_sweating">Excessive Sweating</string>
     <string name="eye_discharge">Eye Discharge</string>
     <string name="eye_floaters">Eye Floaters</string>
-    <string name="eye_pain">Eye Pain</string>
     <string name="eye_twitch">Eye Twitch</string>
     <string name="eyestrain_symptoms_and_signs">Asthenopia (Eyestrain Symptoms and Signs)</string>
     <string name="fainting">Fainting</string>
@@ -155,11 +147,9 @@
     <string name="fecal_incontinence">Fecal Incontinence</string>
     <string name="fever">Fever</string>
     <string name="fibromyalgia_symptoms_and_signs">Fibromyalgia Symptoms and Signs</string>
-    <string name="finger_pain">Finger Pain</string>
     <string name="flaky_scalp">Flaky Scalp</string>
     <string name="flat_affect">Flat Affect</string>
     <string name="flu">Flu</string>
-    <string name="foot_pain">Foot Pain</string>
     <string name="foreign_body_in_the_eye_symptoms_and_signs">Foreign Body in the Eye Symptoms and Signs</string>
     <string name="frequent_urination">Frequent Urination</string>
     <string name="gallbladder_attack_symptoms_and_signs">Gallbladder Attack Symptoms and Signs</string>
@@ -171,13 +161,11 @@
     <string name="giardiasis_symptoms_and_signs">Giardiasis Symptoms and Signs</string>
     <string name="glaucoma_symptoms_and_signs">Glaucoma Symptoms and Signs</string>
     <string name="gout_symptoms_and_signs">Gout Symptoms and Signs</string>
-    <string name="groin_pain">Groin Pain</string>
     <string name="gum_disease_symptoms_and_signs">Gum Disease Symptoms and Signs</string>
     <string name="hair_loss">Hair Loss</string>
     <string name="hairy_tongue">Hairy Tongue</string>
     <string name="hallucinations">Hallucinations</string>
     <string name="hand_foot_and_mouth_disease_symptoms_and_signs">Hand, Foot, and Mouth Disease Symptoms and Signs</string>
-    <string name="hand_pain">Hand Pain</string>
     <string name="headache">Headache</string>
     <string name="hearing_loss">Hearing Loss</string>
     <string name="heart_attack_in_men_symptoms_and_signs">Heart Attack in Men Symptoms and Signs</string>
@@ -185,7 +173,6 @@
     <string name="heart_disease_symptoms_and_signs">Heart Disease Symptoms and Signs</string>
     <string name="heart_failure_symptoms_and_signs">Heart Failure Symptoms and Signs</string>
     <string name="heartburn">Heartburn</string>
-    <string name="heel_pain">Heel Pain</string>
     <string name="helicobacter_pylori_h_pylori_symptoms_and_signs">Helicobacter pylori (H. pylori) Symptoms and Signs</string>
     <string name="hemolysis">Hemolysis</string>
     <string name="hepatitis_c_hcv_symptoms_and_signs">Hepatitis C (HCV) Symptoms and Signs</string>
@@ -194,7 +181,6 @@
     <string name="hiccups">Hiccups</string>
     <string name="high_blood_pressure_symptoms_and_signs">High Blood Pressure Symptoms and Signs</string>
     <string name="high_blood_sugar_symptoms_and_signs">High Blood Sugar Symptoms and Signs</string>
-    <string name="hip_pain">Hip Pain</string>
     <string name="hiv_infection_symptoms_and_signs">HIV Infection Symptoms and Signs</string>
     <string name="hoarseness">Hoarseness</string>
     <string name="hot_flashes">Hot Flashes</string>
@@ -223,7 +209,6 @@
     <string name="irritable_bowel_syndrome_ibs_symptoms_and_signs">Irritable Bowel Syndrome (IBS) Symptoms and Signs</string>
     <string name="itch">Itch</string>
     <string name="jaundice">Jaundice</string>
-    <string name="jaw_pain">Jaw Pain</string>
     <string name="joint_cracking">Joint Cracking</string>
     <string name="joint_deformity">Joint Deformity</string>
     <string name="joint_pain">Joint Pain</string>
@@ -235,12 +220,10 @@
     <string name="kidney_cancer_symptoms_and_signs">Kidney Cancer Symptoms and Signs</string>
     <string name="kidney_infection_symptoms_and_signs">Kidney Infection Symptoms and Signs</string>
     <string name="kidney_stone_symptoms_and_signs">Kidney Stone Symptoms and Signs</string>
-    <string name="knee_pain">Knee Pain</string>
     <string name="koilonychia">Spoon-Shaped Fingernails (Koilonychia)</string>
     <string name="lack_of_facial_expressions">Lack of Facial Expressions</string>
     <string name="lactose_intolerance_symptoms_and_signs">Lactase Deficiency (Lactose Intolerance Symptoms and Signs)</string>
     <string name="laryngitis">Inflammation of the Larynx (Laryngitis)</string>
-    <string name="leg_pain">Leg Pain</string>
     <string name="leg_sores">Leg Sores</string>
     <string name="leg_swelling">Leg Swelling</string>
     <string name="leukemia_symptoms_and_signs">Leukemia Symptoms and Signs</string>
@@ -291,9 +274,7 @@
     <string name="nail_separation">Nail Separation</string>
     <string name="nasal_congestion">Nasal Congestion</string>
     <string name="nausea">Nausea</string>
-    <string name="neck_pain">Neck Pain</string>
     <string name="neonatal_jaundice">Neonatal Jaundice</string>
-    <string name="nipple_pain">Nipple Pain</string>
     <string name="non_polio_enterovirus_symptoms_and_signs">Enterovirus D68 (Non-Polio Enterovirus Symptoms and Signs)</string>
     <string name="numbness_fingers">Numbness Fingers</string>
     <string name="numbness_or_tingling_sensation_in_the_tongue">Numbness or Tingling Sensation in the Tongue</string>
@@ -303,7 +284,7 @@
     <string name="osteoporosis_symptoms_and_signs">Osteoporosis Symptoms and Signs</string>
     <string name="ovarian_cancer_symptoms_and_signs">Ovarian Cancer Symptoms and Signs</string>
     <string name="overactive_bladder_oab_symptoms_and_signs">Overactive Bladder (OAB) Symptoms and Signs</string>
-    <string name="painful_gums">Painful Gums</string>
+    <string name="pain">Pain</string>
     <string name="painful_intercourse">Painful Intercourse</string>
     <string name="pale_skin">Pale Skin</string>
     <string name="palpitations">Palpitations</string>
@@ -315,10 +296,8 @@
     <string name="paranoia">Paranoia</string>
     <string name="peau_dorange">Dimpled Breast (Peau d\'Orange)</string>
     <string name="peeling_skin">Peeling Skin</string>
-    <string name="pelvic_pain">Pelvic Pain</string>
     <string name="penile_discharge">Discharge From Penis (Penile Discharge)</string>
     <string name="penile_itching">Penile Itching</string>
-    <string name="penile_pain">Pain in the Penis (Penile Pain)</string>
     <string name="pericoronitis_symptoms_and_signs">Gum Pain (Pericoronitis Symptoms and Signs)</string>
     <string name="peripheral_neuropathy">Peripheral Neuropathy</string>
     <string name="phlebitis_symptoms_and_signs">Phlebitis Symptoms and Signs</string>
@@ -357,7 +336,6 @@
     <string name="shaking_hands_hand_tremors">Shaking Hands (Hand Tremors)</string>
     <string name="shingles_symptoms_and_signs">Shingles Symptoms and Signs</string>
     <string name="shortness_of_breath">Shortness of Breath</string>
-    <string name="shoulder_pain">Shoulder Pain</string>
     <string name="sinus_infection_sinusitis_symptoms_and_signs">Sinus Infection (Sinusitis) Symptoms and Signs</string>
     <string name="skin_cancer_symptoms_and_signs">Skin Cancer Symptoms and Signs</string>
     <string name="sleep_apnea_symptoms_and_signs">Sleep Apnea Symptoms and Signs</string>
@@ -389,14 +367,12 @@
     <string name="swollen_tongue">Swollen Tongue</string>
     <string name="swollen_tonsils">Swollen Tonsils</string>
     <string name="tachycardia">Tachycardia</string>
-    <string name="testicular_pain">Testicular Pain</string>
     <string name="thirst">Thirst</string>
     <string name="throat_cancer_symptoms_and_signs">Throat Cancer Symptoms and Signs</string>
     <string name="thrush_oral_candidiasis_symptoms_and_signs">Thrush (Oral Candidiasis) Symptoms and Signs</string>
     <string name="tic">Tic</string>
     <string name="tightness_in_chest">Tightness in Chest</string>
     <string name="tingling_in_hands_and_feet">Tingling in Hands and Feet</string>
-    <string name="toe_pain">Toe Pain</string>
     <string name="toothache">Toothache</string>
     <string name="tremor">Tremor</string>
     <string name="tunnel_vision">Tunnel Vision</string>
@@ -414,7 +390,6 @@
     <string name="vaginal_dryness">Vaginal Dryness</string>
     <string name="vaginal_itching">Vaginal Itching</string>
     <string name="vaginal_odor">Vaginal Odor</string>
-    <string name="vaginal_pain">Vaginal Pain</string>
     <string name="vaginal_yeast_infection_symptoms_and_signs">Vaginal Yeast Infection Symptoms and Signs</string>
     <string name="vertical_ridges_on_the_fingernails">Vertical Ridges on the Fingernails</string>
     <string name="vertigo">Vertigo</string>
@@ -430,7 +405,6 @@
     <string name="west_nile_virus_symptoms_and_signs">West Nile Virus Symptoms and Signs</string>
     <string name="wheezing">Wheezing</string>
     <string name="white_tongue">White Tongue</string>
-    <string name="wrist_pain">Wrist Pain</string>
     <string name="yawning">Yawning</string>
     <string name="zika_virus_infection_symptoms_and_signs">Zika Virus Infection Symptoms and Signs</string>
 </resources>

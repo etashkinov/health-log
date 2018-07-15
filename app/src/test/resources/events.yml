@@ -1,0 +1,466 @@
+symptoms:
+  pain:
+    areas:
+      - body
+    propagateDown: true
+  abnormal_facial_expressions:
+    areas:
+      - face
+  altered_mental_status:
+  itching:
+    areas:
+      - body
+    propagateDown: true
+  anxiety:
+    detail: amount
+  bad_breath:
+    areas:
+      - mouth
+  bad_taste_in_the_mouth:
+    areas:
+      - mouth
+  beaus_lines:
+    areas:
+      - nail
+    detail: amount
+  bladder_spasms:
+    areas:
+      - bladder
+  bleeding_gums:
+    areas:
+      - gums
+    detail: amount
+  blisters:
+    areas:
+      - body
+    propagateDown: true
+    detail: amount
+  blood_in_semen:
+    areas:
+      - penis
+    detail: amount
+  blood_in_urine:
+    areas:
+      - bladder
+    detail: amount
+  bloody_nose:
+    areas:
+      - nose
+    detail: amount
+  bloody_sputum:
+    areas:
+      - mouth
+    detail: amount
+  blurred_vision:
+    areas:
+      - eyes
+    detail: amount
+  breast_discharge:
+    areas:
+      - breasts
+    detail: amount
+  lumps:
+    areas:
+      - body
+    propagateDown: true
+    detail: size
+  brittle_nails:
+    areas:
+      - nail
+    detail: amount
+  bumps_on_skin:
+    detail: amount
+  burning_urination:
+    areas:
+      - bladder
+    detail: amount
+  catatonia_catatonic_behavior:
+  changes_in_skin:
+    areas:
+      - body
+    propagateDown: true
+  chapped_lips_cheilitis:
+    areas:
+      - lips
+  chills:
+  chronic_pain:
+    areas:
+      - body
+    propagateDown: true
+  cloudy_urine:
+    areas:
+      - bladder
+  coccydynia:
+  cold:
+  cold_feet:
+  cold_fingers:
+  cold_hands:
+  confusion:
+  constipation:
+  cough:
+    areas:
+      - throat
+  cyanosisturning_blue:
+  dark_circles_under_the_eyes:
+    areas:
+      - eyes
+  dark_urine:
+    areas:
+      - bladder
+  decreased_appetite:
+  delirium:
+  delusions:
+  depigmentation_of_skin:
+  depression:
+  diarrhea:
+  difficulty_concentrating:
+  difficulty_urinating:
+  difficulty_with_speech:
+  dilated_pupils_mydriasis:
+  distended_stomach_abdominal_distention:
+  distractibility:
+  dizziness:
+  double_vision:
+  drainage_of_pus:
+  drooling:
+  dry_eye:
+  dry_mouth:
+  dry_skin:
+  dysarthria:
+  dyspepsia:
+  dysphagia:
+  earache:
+  easy_bruising:
+  echolalia:
+  enlarged_heart:
+  euphoria:
+  excessive_sweating:
+  eye_discharge:
+  eye_floaters:
+  eye_twitch:
+  fainting:
+  fatigue_and_tiredness:
+  fecal_incontinence:
+  fever:
+  flaky_scalp:
+  flat_affect:
+  flu:
+  frequent_urination:
+  gas:
+  hair_loss:
+  hairy_tongue:
+  hallucinations:
+  headache:
+  hearing_loss:
+  heartburn:
+  hemolysis:
+  hiccups:
+  hoarseness:
+  hot_flashes:
+  hyperactivity:
+  hyperventilation:
+  impotence:
+  impulsivity:
+  inability_to_regulate_emotions:
+  inattention:
+  incontinence_urine:
+  increased_appetite:
+  infertility:
+  insomnia:
+  inverted_nipple:
+  itch:
+  jaundice:
+  joint_cracking:
+  joint_deformity:
+  joint_pain:
+  joint_redness:
+  joint_stiffness:
+  joint_warmth:
+  koilonychia:
+  lack_of_facial_expressions:
+  laryngitis:
+  leg_sores:
+  leg_swelling:
+  limping:
+  loss_of_appetite:
+  loss_of_speech:
+  loss_of_taste_sensation:
+  loss_of_temperature_sensation:
+  low_libido:
+  low_testosterone_low_t:
+  low_urine_output:
+  lump_or_mass_on_gums:
+  memory_loss:
+  menstrual_cramps:
+  metallic_taste_in_the_mouth:
+  missed_menstrual_period:
+  mood_swings:
+  mouth_sores:
+  muscle_cramps:
+  muscle_pain_myalgia:
+  nail_clubbing:
+  nail_discoloration:
+  nail_pitting:
+  nail_separation:
+  nasal_congestion:
+  nausea:
+  neonatal_jaundice:
+  numbness_fingers:
+  numbness_or_tingling_sensation_in_the_tongue:
+  numbness_toes:
+  osteopenia:
+  pain:
+  painful_intercourse:
+  pale_skin:
+  palpitations:
+  paralysis:
+  paranoia:
+  peau_dorange:
+  peeling_skin:
+  penile_discharge:
+  penile_itching:
+  peripheral_neuropathy:
+  photophobia:
+  pink_eye:
+  pleurisy:
+  poor_hygiene:
+  proteinuria_protein_in_the_urine:
+  ptosis:
+  rash:
+  rectal_bleeding:
+  rectal_pain:
+  red_spots_on_the_skin:
+  red_streaks_on_the_skin:
+  restless_leg_syndrome:
+  ringing_in_ears:
+  runny_nose:
+  seizures:
+  self_neglect:
+  shaking_hands_hand_tremors:
+  shortness_of_breath:
+  sneezing:
+  snoring:
+  sore_throat:
+  sore_tongue:
+  spasticity:
+  stiff_neck:
+  stomach_cramps:
+  stool_color_and_texture_changes:
+  suicide:
+  swollen_ankles_andor_swollen_feet:
+  swollen_breast:
+  swollen_eyes:
+  swollen_joints:
+  swollen_knee:
+  swollen_lip:
+  swollen_lymph_nodes:
+  swollen_testicles:
+  swollen_tongue:
+  swollen_tonsils:
+  tachycardia:
+  thirst:
+  tic:
+  tightness_in_chest:
+  tingling_in_hands_and_feet:
+  toothache:
+  tremor:
+  tunnel_vision:
+  unsteady_gait:
+  unusual_behavior:
+  urinary_retention:
+  urinary_urgency:
+  urine_odor:
+  vaginal_bleeding:
+  vaginal_discharge:
+  vaginal_dryness:
+  vaginal_itching:
+  vaginal_odor:
+  vertical_ridges_on_the_fingernails:
+  vertigo:
+  vision_loss:
+  vocal_outbursts:
+  vomiting:
+  vomiting_blood:
+  watery_eye:
+  weakness:
+  weight_gain:
+  weight_loss:
+  wheezing:
+  white_tongue:
+  yawning:
+
+diagnosis:
+  abscessed_tooth_symptoms_and_signs:
+  acid_reflux_gerd_symptoms_and_signs:
+  acute_sinusitis_symptoms_and_signs:
+  adhd_symptoms_and_signs:
+  alcohol_poisoning_symptoms_and_signs:
+  alcohol_withdrawal_symptoms_and_signs:
+  allergy:
+  anemia:
+  alzheimers_disease_symptoms_and_signs:
+  anaphylaxis_symptoms_and_signs:
+  angular_cheilitis_symptoms_and_signs:
+  appendicitis_symptoms_and_signs:
+  arrhythmia_symptoms_and_signs:
+  asthma_symptoms_and_signs:
+  atrial_fibrillation_afib_symptoms_and_signs:
+  atrial_flutter_symptoms_and_signs:
+  autism_symptoms_and_signs:
+  benign_positional_vertigo_symptoms_and_signs:
+  binge_eating_disorder_symptoms_and_signs:
+  bipolar_disorder_symptoms_and_signs:
+  bird_flu_avian_influenza_symptoms_and_signs:
+  bladder_infection_symptoms_and_signs:
+  blepharitis_symptoms_and_signs:
+  blood_clot_symptoms_and_signs:
+  brain_aneurysm_symptoms_and_signs:
+  brain_tumor_symptoms_and_signs:
+  breast_cancer_symptoms_and_signs:
+  bronchitis_symptoms_and_signs:
+  burning_mouth_syndrome_symptoms_and_signs:
+  bursitis_symptoms_and_signs:
+  carbon_monoxide_poisoning_symptoms_and_signs:
+  carpal_tunnel_syndrome_symptoms_and_signs:
+  cat_scratch_disease_symptoms_and_signs:
+  cellulitis_symptoms_and_signs:
+  cervical_cancer_symptoms_and_signs:
+  chalazion_symptoms_and_signs:
+  chlamydia_symptoms_and_signs:
+  chronic_fatigue_syndrome_symptoms_and_signs:
+  chronic_sore_throat_symptoms_and_signs:
+  colitis_symptoms_and_signs:
+  colon_cancer_symptoms_and_signs:
+  concussion_symptoms_and_signs:
+  contact_dermatitis_symptoms_and_signs:
+  copd_symptoms_and_signs:
+  crohns_disease_symptoms_and_signs:
+  cystic_fibrosis_symptoms_and_signs:
+  dehydration_symptoms_and_signs:
+  dengue_symptoms_and_signs:
+  diabetes_symptoms_and_signs:
+  diabetic_ketoacidosis_dka_symptoms_and_signs:
+  diverticulitis_symptoms_and_signs:
+  dry_socket_symptoms_and_signs:
+  ebola_virus_disease_symptoms_and_signs:
+  endocarditis_symptoms_and_signs:
+  endometriosis_symptoms_and_signs:
+  enthesitis_symptoms_and_signs:
+  eyestrain_symptoms_and_signs:
+  fibromyalgia_symptoms_and_signs:
+  foreign_body_in_the_eye_symptoms_and_signs:
+  gallbladder_attack_symptoms_and_signs:
+  gastritis_symptoms_and_signs:
+  gastroenteritis_stomach_flu_symptoms_and_signs:
+  generalized_anxiety_disorder_symptoms_and_signs:
+  genital_warts_symptoms_and_signs:
+  giardiasis_symptoms_and_signs:
+  glaucoma_symptoms_and_signs:
+  gout_symptoms_and_signs:
+  gum_disease_symptoms_and_signs:
+  hand_foot_and_mouth_disease_symptoms_and_signs:
+  heart_attack_in_men_symptoms_and_signs:
+  heart_attack_in_women_symptoms_and_signs:
+  heart_disease_symptoms_and_signs:
+  heart_failure_symptoms_and_signs:
+  helicobacter_pylori_h_pylori_symptoms_and_signs:
+  hepatitis_c_hcv_symptoms_and_signs:
+  herpes_symptoms_and_signs:
+  hiatal_hernia_symptoms_and_signs:
+  high_blood_pressure_symptoms_and_signs:
+  high_blood_sugar_symptoms_and_signs:
+  hiv_infection_symptoms_and_signs:
+  hyperthermia_symptoms_and_signs:
+  hyperthyroidism_symptoms_and_signs:
+  hypocalcemia_symptoms_and_signs:
+  hypoglycemia_symptoms_and_signs:
+  hypopituitarism_symptoms_and_signs:
+  hypothermia_symptoms_and_signs:
+  hypothyroidism_symptoms_and_signs:
+  infectious_mononucleosis_mono_symptoms_and_signs:
+  inflammatory_bowel_disease_symptoms_and_signs:
+  insulin_resistance_symptoms_and_signs:
+  interstitial_cystitis_symptoms_and_signs:
+  irritable_bowel_syndrome_ibs_symptoms_and_signs:
+  kawasaki_disease_symptoms_and_signs:
+  keratitis_symptoms_and_signs:
+  kidney_cancer_symptoms_and_signs:
+  kidney_infection_symptoms_and_signs:
+  kidney_stone_symptoms_and_signs:
+  lactose_intolerance_symptoms_and_signs:
+  leukemia_symptoms_and_signs:
+  liver_cancer_symptoms_and_signs:
+  low_blood_pressure_symptoms_and_signs:
+  lung_cancer_symptoms_and_signs:
+  lupus_symptoms_and_signs:
+  lyme_disease_symptoms_and_signs:
+  lymphedema_symptoms_and_signs:
+  macular_degeneration_symptoms_and_signs:
+  malnutrition_symptoms_and_signs:
+  mania_symptoms_and_signs:
+  mastitis_symptoms_and_signs:
+  measles_rubeola_symptoms_and_signs:
+  melanoma_symptoms_and_signs:
+  menieres_disease_symptoms_and_signs:
+  meningitis_symptoms_and_signs:
+  menopause_symptoms_and_signs:
+  middle_ear_infection_symptoms_and_signs:
+  migraine_symptoms_and_signs:
+  miscarriage_symptoms_and_signs:
+  morning_sickness_symptoms_and_signs:
+  mrsa_infection_symptoms_and_signs:
+  multiple_myeloma_symptoms_and_signs:
+  multiple_sclerosis_ms_symptoms_and_signs:
+  mumps_symptoms_and_signs:
+  nail_fungus_onychomycosis_symptoms_and_signs:
+  non_polio_enterovirus_symptoms_and_signs:
+  ocular_herpes_symptoms_and_signs:
+  osteoporosis_symptoms_and_signs:
+  ovarian_cancer_symptoms_and_signs:
+  overactive_bladder_oab_symptoms_and_signs:
+  pancreatic_cancer_symptoms_and_signs:
+  pancreatitis_symptoms_and_signs:
+  panic_attack_symptoms_and_signs:
+  paraneoplastic_syndrome_symptoms_and_signs:
+  pericoronitis_symptoms_and_signs:
+  phlebitis_symptoms_and_signs:
+  pms_premenstrual_syndrome_symptoms_and_signs:
+  pneumonia_symptoms_and_signs:
+  polycystic_kidney_disease_pkd_symptoms_and_signs:
+  postnasal_drip_symptoms_and_signs:
+  postpartum_depression_symptoms_and_signs:
+  pregnancy_symptoms_and_signs:
+  prostate_cancer_symptoms_and_signs:
+  psoriasis_symptoms_and_signs:
+  psoriatic_arthritis_symptoms_and_signs:
+  pulmonary_embolism_symptoms_and_signs:
+  retinal_detachment_symptoms_and_signs:
+  rheumatoid_arthritis_ra_symptoms_and_signs:
+  roseola_symptoms_and_signs:
+  scarlet_fever_symptoms_and_signs:
+  schizophrenia_symptoms_and_signs:
+  scleritis_symptoms_and_signs:
+  shingles_symptoms_and_signs:
+  sinus_infection_sinusitis_symptoms_and_signs:
+  skin_cancer_symptoms_and_signs:
+  sleep_apnea_symptoms_and_signs:
+  small_intestine_cancer_symptoms_and_signs:
+  stomach_ulcer_peptic_ulcer_symptoms_and_signs:
+  strep_throat_symptoms_and_signs:
+  stroke_symptoms_and_signs:
+  sty_symptoms_and_signs:
+  subconjunctival_hemorrhage_symptoms_and_signs:
+  swimmers_ear_otitis_externa_symptoms_and_signs:
+  swine_flu_symptoms_and_signs:
+  throat_cancer_symptoms_and_signs:
+  thrush_oral_candidiasis_symptoms_and_signs:
+  ulcerative_colitis_symptoms_and_signs:
+  upper_respiratory_infection_symptoms_and_signs:
+  urinary_tract_infection_uti_symptoms_and_signs:
+  uterine_endometrial_cancer_symptoms_and_signs:
+  vaginal_yeast_infection_symptoms_and_signs:
+  vitamin_b12_deficiency_symptoms_and_signs:
+  west_nile_virus_symptoms_and_signs:
+  zika_virus_infection_symptoms_and_signs:
+  
+  
