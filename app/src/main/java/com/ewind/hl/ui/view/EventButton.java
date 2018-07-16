@@ -46,6 +46,6 @@ public class EventButton extends LinearLayout {
     }
 
     private String getEventName(EventType type, EventDetail detail) {
-        return LocalizationService.getEventTypeName(type) + (detail == null ? "" : "!");
+        return LocalizationService.getEventTypeName(getContext(), type) + (detail == null ? "" : "!");
     }
 }

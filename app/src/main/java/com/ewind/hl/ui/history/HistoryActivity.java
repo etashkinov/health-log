@@ -68,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         EventType type = events.get(0).getType();
-        LineDataSet dataSet = new LineDataSet(entries, LocalizationService.getEventTypeName(type));
+        LineDataSet dataSet = new LineDataSet(entries, LocalizationService.getEventTypeName(this, type));
         dataSet.setColor(R.color.colorAccent);
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);

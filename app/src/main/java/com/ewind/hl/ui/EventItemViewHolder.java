@@ -70,7 +70,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
 
         String text = EventUI.getEventDescription(event, context);
         if (EventUI.isDefaultIcon(type, context)) {
-            text = LocalizationService.getEventTypeName(type) + ": " + text;
+            text = LocalizationService.getEventTypeName(context, type) + ": " + text;
         } else if (EventTypeFactory.getAreas(type).size() > 1) {
             text = LocalizationService.getAreaName(event.getArea()) + ": " + text;
         }

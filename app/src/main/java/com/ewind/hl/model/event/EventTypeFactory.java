@@ -7,6 +7,7 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.event.detail.PainDetail;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -24,6 +25,14 @@ import java.util.Set;
 public class EventTypeFactory {
 
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
+
+    private static final Map<String, Class<? extends EventDetail>> EVENT_DETAILS;
+    public static final Class<ValueDetail> DEFAULT_DETAIL = ValueDetail.class;
+
+    static {
+        EVENT_DETAILS = new HashMap<>();
+        EVENT_DETAILS.put("pain", PainDetail.class);
+    }
 
     private static Map<String, EventType> events;
 
@@ -93,6 +102,21 @@ public class EventTypeFactory {
             eventConfig = new EventConfig();
         }
 
+        Accuracy accuracy = getAccuracy(eventConfig);
+
+        Set<String> areas = getAreas(eventConfig);
+
+        Class<? extends EventDetail> detailClass = EVENT_DETAILS.get(name);
+        if (detailClass == null) {
+            detailClass = DEFAULT_DETAIL;
+        }
+
+        return new SymptomEventType(name, Period.hours(accuracy.toHours()),
+                accuracy, areas, detailClass, eventConfig.propagateDown);
+    }
+
+    @NonNull
+    private static Accuracy getAccuracy(EventConfig eventConfig) {
         String accuracyStr = eventConfig.accuracy;
         Accuracy accuracy;
         if (accuracyStr == null) {
@@ -100,7 +124,10 @@ public class EventTypeFactory {
         } else {
             accuracy = Accuracy.valueOf(accuracyStr.toUpperCase());
         }
+        return accuracy;
+    }
 
+    private static Set<String> getAreas(EventConfig eventConfig) {
         Set<String> areas;
         if (eventConfig.propagateDown) {
             areas = new HashSet<>();
@@ -110,8 +137,7 @@ public class EventTypeFactory {
         } else {
             areas = eventConfig.areas;
         }
-
-        return new SymptomEventType<>(name, Period.hours(accuracy.toHours()), accuracy, areas, ValueDetail.class, eventConfig.propagateDown);
+        return areas;
     }
 
     private static void addArea(Set<String> areas, Area area) {

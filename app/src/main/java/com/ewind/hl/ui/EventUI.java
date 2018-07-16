@@ -46,7 +46,7 @@ public class EventUI {
         String name = "ic_" + type.getName().toLowerCase();
         int result = context.getResources().getIdentifier(name, "drawable", context.getPackageName());
         if (result == 0) {
-            Log.w(TAG, "Icon for " + type + " not found");
+            Log.w(TAG, "Icon for " + type.getName() + " not found");
             result = DEFAULT_ICON;
         }
         return result;

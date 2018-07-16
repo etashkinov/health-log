@@ -1,6 +1,8 @@
 package com.ewind.hl.ui;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.Accuracy;
@@ -18,6 +20,8 @@ import static com.ewind.hl.model.event.Accuracy.HOUR;
 
 public class LocalizationService {
 
+    private static final String TAG = LocalizationService.class.getName();
+
     public static String getAreaName(Area area) {
         String name = area.getName();
         return getAreaName(name);
@@ -28,8 +32,15 @@ public class LocalizationService {
         return snakeCaseToReadable(name);
     }
 
-    public static String getEventTypeName(EventType type) {
-        return getAreaName(type.getName().toLowerCase());
+    public static String getEventTypeName(Context context, EventType type) {
+        int resourceId = context.getResources().getIdentifier(type.getName(), "string", context.getPackageName());
+
+        if (resourceId == 0) {
+            Log.w(TAG, "Failed to find localization for '" + type.getName() + "'");
+            return snakeCaseToReadable(type.getName());
+        } else {
+            return context.getString(resourceId);
+        }
     }
 
     public static String getEventDate(EventDate date) {

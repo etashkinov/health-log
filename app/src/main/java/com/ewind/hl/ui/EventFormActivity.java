@@ -111,7 +111,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);
-        eventText.setText(LocalizationService.getEventTypeName(type));
+        eventText.setText(LocalizationService.getEventTypeName(this, type));
     }
 
     private void initDetailForm(EventModel event) {

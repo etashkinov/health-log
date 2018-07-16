@@ -69,7 +69,7 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
         if (newText.length() > 1) {
             Iterator<EventType> iterator = eventTypes.iterator();
             while (iterator.hasNext()) {
-                String name = LocalizationService.getEventTypeName(iterator.next()).toLowerCase();
+                String name = LocalizationService.getEventTypeName(getContext(), iterator.next()).toLowerCase();
                 if (!name.contains(newText.toLowerCase())) {
                     iterator.remove();
                 }
