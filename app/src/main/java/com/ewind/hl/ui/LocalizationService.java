@@ -19,11 +19,17 @@ import static com.ewind.hl.model.event.Accuracy.HOUR;
 public class LocalizationService {
 
     public static String getAreaName(Area area) {
-        return snakeCaseToReadable(area.getName());
+        String name = area.getName();
+        return getAreaName(name);
+    }
+
+    @NonNull
+    public static String getAreaName(String name) {
+        return snakeCaseToReadable(name);
     }
 
     public static String getEventTypeName(EventType type) {
-        return snakeCaseToReadable(type.getName().toLowerCase());
+        return getAreaName(type.getName().toLowerCase());
     }
 
     public static String getEventDate(EventDate date) {

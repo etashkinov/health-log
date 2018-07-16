@@ -1,17 +1,13 @@
 package com.ewind.hl.model.area;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.EventTypeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,37 +19,10 @@ public class AreaFactory {
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
     private static Area body;
 
-    @NonNull
-    public static List<Area> getAreas(EventType type) {
-        return getAreas(body, type);
-    }
-
-    @NonNull
-    public static List<Area> getAreas(Area area, EventType type) {
-        List<Area> result = new LinkedList<>();
-
-        if (area.getEvents().contains(type)) {
-            result.add(area);
-        }
-        List<Area> parts = area.getParts();
-        if (parts != null) {
-            for (Area part : parts) {
-                result.addAll(getAreas(part, type));
-            }
-        }
-
-        return result;
-    }
-
     public static class AreaConfig {
-        private List<String> events = new LinkedList<>();
         private Map<String, AreaConfig> parts = Collections.emptyMap();
         private String dual;
         private List<String> multiple = Collections.emptyList();
-
-        public void setEvents(List<String> events) {
-            this.events = events;
-        }
 
         public void setParts(Map<String, AreaConfig> parts) {
             this.parts = parts;
@@ -111,17 +80,6 @@ public class AreaFactory {
     }
 
     private static Area createArea(String scope, String name, AreaConfig config) {
-        List<EventType> events = new ArrayList<>(config.events.size());
-        List<String> eventsToPropagateDown = new LinkedList<>();
-
-        for (String eventName : config.events) {
-            EventType event = EventTypeFactory.get(eventName);
-            events.add(event);
-            if (event.isPropagateDown()) {
-                eventsToPropagateDown.add(eventName);
-            }
-        }
-
         List<Area> children = new LinkedList<>();
         if (config.dual != null) {
             String dual = config.dual;
@@ -142,12 +100,11 @@ public class AreaFactory {
                     partConfig = new AreaConfig();
                 }
 
-                partConfig.events.addAll(eventsToPropagateDown);
                 children.add(createArea(scope, part.getKey(), partConfig));
             }
         }
 
-        return new Area(addScope(scope, name), events, children);
+        return new Area(addScope(scope, name), children);
     }
 
     private static String addScope(String scope, String value) {

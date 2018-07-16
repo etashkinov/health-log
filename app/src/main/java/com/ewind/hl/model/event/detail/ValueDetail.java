@@ -9,6 +9,7 @@ import java.math.BigDecimal;
  * Created by etashkinov on 12.06.2018.
  */
 public class ValueDetail implements EventDetail {
+
     private final BigDecimal value;
 
     @JsonCreator

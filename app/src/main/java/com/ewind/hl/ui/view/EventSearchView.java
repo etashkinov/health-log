@@ -49,7 +49,7 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
 
     @NonNull
     private List<EventType> getEventTypes() {
-        return new ArrayList<>(EventTypeFactory.list());
+        return new ArrayList<>(EventTypeFactory.getAll());
     }
 
     private void setValues(List<EventType> types) {

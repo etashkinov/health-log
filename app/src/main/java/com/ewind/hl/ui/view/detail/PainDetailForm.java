@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.PainDetail;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class PainDetailForm extends ValueDetailForm<PainDetail> {
 
     public PainDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setEventType(EventType.PAIN);
     }
 
     @Override

@@ -11,19 +11,20 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AreaSelector extends ConstraintLayout {
 
     private final Spinner areaSpinner;
 
-    private Map<String, Area> values;
+    private Map<String, String> values;
 
     public AreaSelector(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,8 +35,8 @@ public class AreaSelector extends ConstraintLayout {
 
     public void setArea(EventType type, Area area) {
         values = new HashMap<>();
-        List<Area> areas = AreaFactory.getAreas(type);
-        for (Area value : areas) {
+        Set<String> areas = EventTypeFactory.getAreas(type);
+        for (String value : areas) {
             values.put(getAreaName(value), value);
         }
 
@@ -46,7 +47,7 @@ public class AreaSelector extends ConstraintLayout {
         areaSpinner.setAdapter(adapter);
 
         if (area != null) {
-            areaSpinner.setSelection(strings.indexOf(getAreaName(area)));
+            areaSpinner.setSelection(strings.indexOf(getAreaName(area.getName())));
         }
 
         if (values.size() <= 1) {
@@ -56,12 +57,12 @@ public class AreaSelector extends ConstraintLayout {
     }
 
     @NonNull
-    private String getAreaName(Area value) {
+    private String getAreaName(String value) {
         return LocalizationService.getAreaName(value);
     }
 
     public Area getArea() {
         String item = (String) areaSpinner.getSelectedItem();
-        return values.get(item);
+        return AreaFactory.getArea(values.get(item));
     }
 }

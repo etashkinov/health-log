@@ -8,9 +8,10 @@ import com.ewind.hl.model.event.detail.EventDetail;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public abstract class EventType<T extends EventDetail> {
+public abstract class EventType<T extends EventDetail> implements Serializable {
 
     private final String name;
     private final Period expiration;
@@ -43,6 +44,18 @@ public abstract class EventType<T extends EventDetail> {
 
     public String getName() {
         return name;
+    }
+
+    public Period getExpiration() {
+        return expiration;
+    }
+
+    public Accuracy getAccuracy() {
+        return accuracy;
+    }
+
+    public Set<String> getAreas() {
+        return areas;
     }
 
     @NonNull

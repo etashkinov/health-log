@@ -12,6 +12,7 @@ import android.view.View;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         super.onCreate(savedInstanceState);
 
         AreaFactory.initBody(this); // FIXME
+        EventTypeFactory.initEvents(this);
 
         setContentView(R.layout.main_activity);
         setSupportActionBar(findViewById(R.id.toolbar));

@@ -2,6 +2,7 @@ symptoms:
   pain:
     areas:
       - body
+    accuracy: quarter
     propagateDown: true
   abnormal_facial_expressions:
     areas:
@@ -209,7 +210,6 @@ symptoms:
   numbness_or_tingling_sensation_in_the_tongue:
   numbness_toes:
   osteopenia:
-  pain:
   painful_intercourse:
   pale_skin:
   palpitations:

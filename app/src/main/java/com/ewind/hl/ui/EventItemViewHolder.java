@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.EventTypeFactory;
 
 import org.joda.time.LocalDateTime;
 
@@ -22,7 +22,6 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
     private final View addButton;
 
     private Event event;
-    private ViewGroup eventDetailContainer;
     private final TextView eventDateTextView;
 
     public EventItemViewHolder(ViewGroup parent, EventActionListener listener) {
@@ -35,8 +34,6 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         addButton.setOnClickListener(this::onAddLike);
 
         eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
-
-        eventDetailContainer = itemView.findViewById(R.id.eventDetailContainer);
     }
 
     void setEvent(Event event) {
@@ -67,18 +64,18 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         Context context = itemView.getContext();
         EventType type = event.getType();
 
-        ImageView eventIcon = eventDetailContainer.findViewById(R.id.eventIcon);
+        ImageView eventIcon = itemView.findViewById(R.id.eventIcon);
         Drawable drawable = EventUI.getEventDrawable(type, context);
         eventIcon.setImageDrawable(drawable);
 
         String text = EventUI.getEventDescription(event, context);
         if (EventUI.isDefaultIcon(type, context)) {
             text = LocalizationService.getEventTypeName(type) + ": " + text;
-        } else if (AreaFactory.getAreas(type).size() > 1) {
+        } else if (EventTypeFactory.getAreas(type).size() > 1) {
             text = LocalizationService.getAreaName(event.getArea()) + ": " + text;
         }
 
-        TextView eventText = eventDetailContainer.findViewById(R.id.eventText);
+        TextView eventText = itemView.findViewById(R.id.eventText);
         eventText.setText(text);
     }
 }
