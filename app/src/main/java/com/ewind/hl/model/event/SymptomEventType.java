@@ -1,15 +1,20 @@
 package com.ewind.hl.model.event;
 
+import android.content.Context;
+
+import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
-import org.joda.time.Period;
-
-import java.util.Set;
+import java.text.DecimalFormat;
 
 public class SymptomEventType<T extends ValueDetail> extends EventType<T> {
 
-    public SymptomEventType(String name, Period expiration, Accuracy accuracy, Set<String> areas, Class<T> detailClass, boolean propagateDown) {
-        super(name, expiration, accuracy, areas, detailClass, propagateDown);
+    public SymptomEventType(String name, EventConfig config) {
+        this(name, (Class<T>) ValueDetail.class, config);
+    }
+
+    protected SymptomEventType(String name, Class<T> detailClass, EventConfig config) {
+        super(name, detailClass, config);
     }
 
     public int getMaximum() {
@@ -22,5 +27,10 @@ public class SymptomEventType<T extends ValueDetail> extends EventType<T> {
 
     public int getNormal() {
         return 0;
+    }
+
+    @Override
+    public String getDescription(Event<T> event, Context context) {
+        return new DecimalFormat("##").format(event.getDetail().getScore());
     }
 }

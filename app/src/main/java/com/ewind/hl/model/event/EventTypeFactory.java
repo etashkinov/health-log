@@ -2,17 +2,12 @@ package com.ewind.hl.model.event;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.area.Area;
-import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
-import com.ewind.hl.model.event.detail.PainDetail;
-import com.ewind.hl.model.event.detail.ValueDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
-import org.joda.time.Period;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -24,20 +19,28 @@ import java.util.Set;
 
 public class EventTypeFactory {
 
+    private static final String TAG = EventTypeFactory.class.getName();
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
 
-    private static final Map<String, Class<? extends EventDetail>> EVENT_DETAILS;
-    public static final Class<ValueDetail> DEFAULT_DETAIL = ValueDetail.class;
+    private static final Map<String, Class<? extends EventType>> EVENT_TYPES = new HashMap<>();
+    private static final Class<? extends EventType> DEFAULT_SYMPTOM_TYPE = SeverityEventType.class;
+
+    public static void registerType(String name, Class<? extends EventType> type) {
+        EVENT_TYPES.put(name, type);
+    }
 
     static {
-        EVENT_DETAILS = new HashMap<>();
-        EVENT_DETAILS.put("pain", PainDetail.class);
+        registerType("pain", PainEventType.class);
+        registerType("amount", AmountEventType.class);
+        registerType("size", SizeEventType.class);
+        registerType("severity", SeverityEventType.class);
     }
 
     private static Map<String, EventType> events;
 
     public static class EventsConfig {
         private Map<String, EventConfig> symptoms = new HashMap<>();
+        private Map<String, EventConfig> measurements = new HashMap<>();
         private Map<String, EventConfig> diagnosis = new HashMap<>();
 
         public void setSymptoms(Map<String, EventConfig> symptoms) {
@@ -47,12 +50,16 @@ public class EventTypeFactory {
         public void setDiagnosis(Map<String, EventConfig> diagnosis) {
             this.diagnosis = diagnosis;
         }
+
+        public void setMeasurements(Map<String, EventConfig> measurements) {
+            this.measurements = measurements;
+        }
     }
 
     public static class EventConfig {
         private Set<String> areas = new HashSet<>();
         private boolean propagateDown = false;
-        private String detail;
+        private String type;
         private String accuracy;
 
         public void setAreas(Set<String> areas) {
@@ -63,12 +70,28 @@ public class EventTypeFactory {
             this.propagateDown = propagateDown;
         }
 
-        public void setDetail(String detail) {
-            this.detail = detail;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public void setAccuracy(String accuracy) {
             this.accuracy = accuracy;
+        }
+
+        public Set<String> getAreas() {
+            return areas;
+        }
+
+        public boolean isPropagateDown() {
+            return propagateDown;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getAccuracy() {
+            return accuracy;
         }
     }
 
@@ -92,59 +115,26 @@ public class EventTypeFactory {
     private static Map<String, EventType> createEvents(Map<String, EventConfig> symptoms) {
         Map<String, EventType> result = new HashMap<>();
         for (Entry<String, EventConfig> entry : symptoms.entrySet()) {
-            result.put(entry.getKey(), createEvent(entry.getKey(), entry.getValue()));
+            try {
+                result.put(entry.getKey(), createEvent(entry.getKey(), entry.getValue()));
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to parse config for " + entry.getKey());
+            }
         }
         return result;
     }
 
-    private static EventType createEvent(String name, EventConfig eventConfig) {
+    private static EventType createEvent(String name, EventConfig eventConfig) throws Exception {
         if (eventConfig == null) {
             eventConfig = new EventConfig();
         }
 
-        Accuracy accuracy = getAccuracy(eventConfig);
-
-        Set<String> areas = getAreas(eventConfig);
-
-        Class<? extends EventDetail> detailClass = EVENT_DETAILS.get(name);
-        if (detailClass == null) {
-            detailClass = DEFAULT_DETAIL;
+        Class<? extends EventType> eventTypeClass = EVENT_TYPES.get(eventConfig.type);
+        if (eventTypeClass == null) {
+            eventTypeClass = DEFAULT_SYMPTOM_TYPE;
         }
 
-        return new SymptomEventType(name, Period.hours(accuracy.toHours()),
-                accuracy, areas, detailClass, eventConfig.propagateDown);
-    }
-
-    @NonNull
-    private static Accuracy getAccuracy(EventConfig eventConfig) {
-        String accuracyStr = eventConfig.accuracy;
-        Accuracy accuracy;
-        if (accuracyStr == null) {
-            accuracy = Accuracy.QUARTER;
-        } else {
-            accuracy = Accuracy.valueOf(accuracyStr.toUpperCase());
-        }
-        return accuracy;
-    }
-
-    private static Set<String> getAreas(EventConfig eventConfig) {
-        Set<String> areas;
-        if (eventConfig.propagateDown) {
-            areas = new HashSet<>();
-            for (String configArea : eventConfig.areas) {
-                addArea(areas, AreaFactory.getArea(configArea));
-            }
-        } else {
-            areas = eventConfig.areas;
-        }
-        return areas;
-    }
-
-    private static void addArea(Set<String> areas, Area area) {
-        areas.add(area.getName());
-        for (Area part : area.getParts()) {
-            addArea(areas, part);
-        }
+        return eventTypeClass.getConstructor(String.class, EventConfig.class).newInstance(name, eventConfig);
     }
 
     @NonNull
@@ -159,7 +149,7 @@ public class EventTypeFactory {
 
 
     @NonNull
-    public static Set<String> getAreas(EventType type) {
+    public static Set<String> getAreas(EventType<?> type) {
         return type.getAreas();
     }
 

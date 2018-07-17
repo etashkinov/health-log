@@ -106,7 +106,7 @@ public class LocalizationService {
     }
 
     @NonNull
-    private static String snakeCaseToReadable(String string) {
+    public static String snakeCaseToReadable(String string) {
         String title = string.toLowerCase().replaceAll("_", " ");
         return Character.toUpperCase(title.charAt(0)) + title.substring(1);
     }

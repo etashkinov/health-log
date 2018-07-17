@@ -7,9 +7,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.detail.ValueDetail;
+import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.view.EventDetailForm;
 
 import java.lang.reflect.Constructor;
@@ -50,8 +51,8 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
     @Override
     public T getDetail() {
         try {
-            Constructor<? extends EventDetail> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
-            return (T) constructor.newInstance(getValue());
+            Constructor<T> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
+            return constructor.newInstance(getValue());
         } catch (Exception e) {
             throw new IllegalStateException("Failed to create value details for " + eventType, e);
         }
@@ -63,7 +64,13 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        textView.setText(String.valueOf(progress));
+        String text;
+        if (eventType instanceof EnumEventType) {
+            text = LocalizationService.snakeCaseToReadable(((EnumEventType) eventType).getType(progress).name());
+        } else {
+            text = String.valueOf(progress);
+        }
+        textView.setText(text);
     }
 
     @Override

@@ -27,11 +27,6 @@ public class ValueDetail implements EventDetail {
     }
 
     @Override
-    public Object getDescription() {
-        return getScore();
-    }
-
-    @Override
     public String toString() {
         return String.valueOf(value);
     }

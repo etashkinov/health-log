@@ -68,14 +68,15 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         Drawable drawable = EventUI.getEventDrawable(type, context);
         eventIcon.setImageDrawable(drawable);
 
-        String text = EventUI.getEventDescription(event, context);
-        if (EventUI.isDefaultIcon(type, context)) {
-            text = LocalizationService.getEventTypeName(context, type) + ": " + text;
-        } else if (EventTypeFactory.getAreas(type).size() > 1) {
-            text = LocalizationService.getAreaName(event.getArea()) + ": " + text;
+        String text = LocalizationService.getEventTypeName(context, type);
+        if (EventTypeFactory.getAreas(type).size() > 1) {
+            text = LocalizationService.getAreaName(event.getArea()) + " " + text;
         }
 
-        TextView eventText = itemView.findViewById(R.id.eventText);
-        eventText.setText(text);
+        TextView eventTypeText = itemView.findViewById(R.id.eventTypeText);
+        eventTypeText.setText(text);
+
+        TextView eventDetailText = itemView.findViewById(R.id.eventDetailText);
+        eventDetailText.setText(EventUI.getEventDescription(event, context));
     }
 }

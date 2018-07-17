@@ -53,14 +53,6 @@ public class EventUI {
     }
 
     public static String getEventDescription(Event event, Context context) {
-        String name = "event_description_" + event.getType().getName().toLowerCase();
-        Object description = event.getDetail().getDescription();
-        try {
-            String template = context.getString(context.getResources().getIdentifier(name, "string", context.getPackageName()));
-            return String.format(template, description);
-        } catch (Resources.NotFoundException e) {
-            Log.w(TAG, "Description for " + event.getType() + " not found");
-            return String.format("%.1f", description);
-        }
+        return event.getType().getDescription(event, context);
     }
 }

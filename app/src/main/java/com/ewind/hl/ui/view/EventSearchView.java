@@ -13,11 +13,13 @@ import android.widget.SearchView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.EventTypeFactory;
-import com.ewind.hl.ui.LocalizationService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.ewind.hl.ui.LocalizationService.getEventTypeName;
 
 public class EventSearchView extends LinearLayout implements SearchView.OnQueryTextListener {
     private EventButton.OnEventClickListener listener;
@@ -53,6 +55,8 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
     }
 
     private void setValues(List<EventType> types) {
+        Context context = getContext();
+        Collections.sort(types, (o1, o2) -> getEventTypeName(context, o1).compareTo(getEventTypeName(context, o2)));
         EventTypesAdapter adapter = new EventTypesAdapter(types, listener);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -69,7 +73,7 @@ public class EventSearchView extends LinearLayout implements SearchView.OnQueryT
         if (newText.length() > 1) {
             Iterator<EventType> iterator = eventTypes.iterator();
             while (iterator.hasNext()) {
-                String name = LocalizationService.getEventTypeName(getContext(), iterator.next()).toLowerCase();
+                String name = getEventTypeName(getContext(), iterator.next()).toLowerCase();
                 if (!name.contains(newText.toLowerCase())) {
                     iterator.remove();
                 }

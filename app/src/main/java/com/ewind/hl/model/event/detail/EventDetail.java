@@ -9,7 +9,4 @@ import java.io.Serializable;
 public interface EventDetail extends Serializable {
     @JsonIgnore
     double getScore();
-
-    @JsonIgnore
-    Object getDescription();
 }

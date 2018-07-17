@@ -4,6 +4,7 @@ symptoms:
       - body
     accuracy: quarter
     propagateDown: true
+    type: pain
   abnormal_facial_expressions:
     areas:
       - face
@@ -13,7 +14,7 @@ symptoms:
       - body
     propagateDown: true
   anxiety:
-    detail: amount
+    type: amount
   bad_breath:
     areas:
       - mouth
@@ -23,58 +24,58 @@ symptoms:
   beaus_lines:
     areas:
       - nail
-    detail: amount
+    type: amount
   bladder_spasms:
     areas:
       - bladder
   bleeding_gums:
     areas:
       - gums
-    detail: amount
+    type: amount
   blisters:
     areas:
       - body
     propagateDown: true
-    detail: amount
+    type: amount
   blood_in_semen:
     areas:
       - penis
-    detail: amount
+    type: amount
   blood_in_urine:
     areas:
       - bladder
-    detail: amount
+    type: amount
   bloody_nose:
     areas:
       - nose
-    detail: amount
+    type: amount
   bloody_sputum:
     areas:
       - mouth
-    detail: amount
+    type: amount
   blurred_vision:
     areas:
       - eyes
-    detail: amount
+    type: amount
   breast_discharge:
     areas:
       - breasts
-    detail: amount
+    type: amount
   lumps:
     areas:
       - body
     propagateDown: true
-    detail: size
+    type: size
   brittle_nails:
     areas:
       - nail
-    detail: amount
+    type: amount
   bumps_on_skin:
-    detail: amount
+    type: amount
   burning_urination:
     areas:
       - bladder
-    detail: amount
+    type: amount
   catatonia_catatonic_behavior:
   changes_in_skin:
     areas:
