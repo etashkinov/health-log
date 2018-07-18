@@ -5,7 +5,7 @@ import com.ewind.hl.model.event.detail.PainDetail;
 
 public class PainEventType extends SeverityEventType<PainDetail> {
 
-    protected PainEventType(String name, EventConfig config) {
+    public PainEventType(String name, EventConfig config) {
         super(name, PainDetail.class, config);
     }
 }

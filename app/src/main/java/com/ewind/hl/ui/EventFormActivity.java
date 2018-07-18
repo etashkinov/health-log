@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDatePicker;
@@ -31,6 +31,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
     private EventModel model;
     private EventDatePicker eventDatePicker;
     private AreaSelector areaSelector;
+    private EditText noteText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         eventDatePicker.setListener(d -> {});
 
         areaSelector = findViewById(R.id.areaSelector);
+        noteText = findViewById(R.id.noteText);
 
         id = getIntent().getLongExtra(EVENT_ID, 0L);
 
@@ -68,6 +70,8 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         areaSelector.setArea(event.getType(), event.getArea());
 
         initDetailForm(event);
+
+        noteText.setText(event.getNote());
     }
 
     private EventDetailForm detailForm;
@@ -89,14 +93,13 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
     }
 
     private void updateEvent() {
-        EventDetail detail = detailForm.getDetail();
         new EventsDao(this).store(new Event(
                 id,
                 eventDatePicker.getDate(),
                 model.getType(),
-                detail,
+                detailForm.getDetail(),
                 areaSelector.getArea() == null ? AreaFactory.getBody() : areaSelector.getArea(),
-                model.getNote()
+                noteText.getText().toString()
         ));
     }
 

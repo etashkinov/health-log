@@ -18,7 +18,7 @@ public class SeverityEventType<T extends ValueDetail> extends EnumEventType<Seve
         super(name, config, detailClass, Severity.class);
     }
 
-    protected SeverityEventType(String name, EventConfig config) {
+    public SeverityEventType(String name, EventConfig config) {
         super(name, config, Severity.class);
     }
 }

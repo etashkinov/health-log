@@ -18,7 +18,7 @@ public class SizeEventType<T extends ValueDetail> extends EnumEventType<SizeEven
         super(name, config, detailClass, Size.class);
     }
 
-    protected SizeEventType(String name, EventConfig config) {
+    public SizeEventType(String name, EventConfig config) {
         super(name, config, Size.class);
     }
 }

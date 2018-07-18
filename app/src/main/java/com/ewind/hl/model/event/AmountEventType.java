@@ -13,7 +13,7 @@ public class AmountEventType<T extends ValueDetail> extends EnumEventType<Amount
         HOARD
     }
 
-    protected AmountEventType(String name, EventTypeFactory.EventConfig config) {
+    public AmountEventType(String name, EventTypeFactory.EventConfig config) {
         super(name, config, Amount.class);
     }
 
