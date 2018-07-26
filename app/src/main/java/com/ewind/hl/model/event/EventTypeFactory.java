@@ -139,7 +139,11 @@ public class EventTypeFactory {
 
     @NonNull
     public static <T extends EventDetail> EventType<T> get(String typeName) {
-        return events.get(typeName);
+        EventType result = events.get(typeName);
+        if (result == null) {
+            throw new IllegalArgumentException("Unknown typeName: " + typeName);
+        }
+        return result;
     }
 
     @NonNull

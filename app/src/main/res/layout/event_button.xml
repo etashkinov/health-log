@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ewind.hl.ui.view.EventButton xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
+    android:padding="5dp"
     android:gravity="center"
     android:orientation="horizontal"
     android:clickable="true"
@@ -26,4 +25,4 @@
         android:text="@string/app_name"
         style="@style/TextAppearance.AppCompat.Small"/>
 
-</com.ewind.hl.ui.view.EventButton>
+</LinearLayout>

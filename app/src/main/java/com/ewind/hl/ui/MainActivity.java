@@ -62,12 +62,17 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            refreshEvents();
+            String eventType = data.getStringExtra(EventTypeSearchActivity.SELECTED_EVENT_TYPE);
+            if (eventType != null) {
+                new EventActionListener(this).onAddNew(eventType);
+            } else {
+                refreshEvents();
+            }
         }
     }
 
     public void onEventAdd(View view) {
-        new EventActionListener(this).onAddNew();
+        new EventActionListener(this).onSelectEventType();
     }
 
     @Override

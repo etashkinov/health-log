@@ -1,0 +1,7 @@
+package com.ewind.hl.ui;
+
+import com.ewind.hl.model.event.EventType;
+
+public interface EventTypeSelectedListener {
+    void onEventTypeSelected(EventType<?> type);
+}
