@@ -5,11 +5,12 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <include layout="@layout/event_value_form"/>
+    <include layout="@layout/event_enum_form"/>
 
     <MultiAutoCompleteTextView
         android:id="@+id/painTypeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
         android:hint="@string/pain_type_hint"/>
 </com.ewind.hl.ui.view.detail.PainDetailForm>

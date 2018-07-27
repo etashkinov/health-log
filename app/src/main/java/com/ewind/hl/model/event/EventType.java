@@ -105,4 +105,7 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
     }
 
     public abstract String getDescription(Event<D> event, Context context);
+
+
+    public abstract boolean isAbnormal(Event<D> event);
 }

@@ -16,6 +16,6 @@
         android:id="@+id/moodText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/empty" />
 </com.ewind.hl.ui.view.detail.MoodDetailForm>

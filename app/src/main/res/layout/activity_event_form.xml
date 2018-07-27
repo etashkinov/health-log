@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +19,7 @@
             android:id="@+id/cancelButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:padding="5sp"
+            android:padding="5dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_return"
             android:tint="@android:color/white" />
@@ -29,7 +28,7 @@
             android:id="@+id/eventImage"
             android:layout_width="45sp"
             android:layout_height="45sp"
-            android:padding="5sp"
+            android:padding="5dp"
             android:src="@drawable/ic_event"
             android:tint="@android:color/white" />
 
@@ -51,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onDelete"
+            android:layout_marginEnd="10dp"
             android:text="DONE"
             android:textColor="@android:color/white" />
 
@@ -73,8 +73,8 @@
             android:id="@+id/areaSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="15sp"
-            android:paddingStart="15sp" />
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp" />
 
         <FrameLayout
             android:id="@+id/eventDetailContainer"
@@ -87,6 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textMultiLine"
+            style="@style/AppTheme"
+            android:text="tre"
             android:hint="Note"/>
 
 

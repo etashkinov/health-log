@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/historyChartDates"
-            style="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/historyChartDates"

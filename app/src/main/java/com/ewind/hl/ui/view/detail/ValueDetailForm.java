@@ -11,22 +11,22 @@ import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.ewind.hl.ui.LocalizationService;
-import com.ewind.hl.ui.view.EventDetailForm;
 
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 
-public class ValueDetailForm<T extends ValueDetail> extends LinearLayout implements EventDetailForm<T>, SeekBar.OnSeekBarChangeListener {
+public class ValueDetailForm<T extends ValueDetail> extends LinearLayout implements GenericDetailForm<T>, SeekBar.OnSeekBarChangeListener {
 
     private SeekBar seekBar;
     private TextView textView;
-    private EventType eventType;
+    private EventType<T> eventType;
 
     public ValueDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void setEventType(EventType eventType) {
+    @Override
+    public void setEventType(EventType<T> eventType) {
         this.eventType = eventType;
     }
 
@@ -66,7 +66,8 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         String text;
         if (eventType instanceof EnumEventType) {
-            text = LocalizationService.snakeCaseToReadable(((EnumEventType) eventType).getType(progress).name());
+            Enum type = ((EnumEventType) eventType).getType(BigDecimal.valueOf(progress));
+            text = LocalizationService.snakeCaseToReadable(type.name());
         } else {
             text = String.valueOf(progress);
         }

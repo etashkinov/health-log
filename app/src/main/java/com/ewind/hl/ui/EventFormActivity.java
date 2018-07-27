@@ -40,6 +40,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
 
         findViewById(R.id.cancelButton).setOnClickListener(this::onCancel);
         findViewById(R.id.okButton).setOnClickListener(this::onOk);
+        findViewById(R.id.deleteButton).setOnClickListener(this::onDelete);
 
         eventDatePicker = findViewById(R.id.eventDatePicker);
         eventDatePicker.setListener(d -> {});
@@ -110,7 +111,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
 
     private void initHeader(EventType type) {
         ImageView eventImage = findViewById(R.id.eventImage);
-        Drawable drawable = EventUI.getEventDrawable(type, this);
+        Drawable drawable = EventUI.getEventTypeDrawable(type, this);
         eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);

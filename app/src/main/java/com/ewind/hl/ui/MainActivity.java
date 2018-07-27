@@ -15,6 +15,7 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements EventChangedListener {
@@ -43,7 +44,14 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private List<Event> getEvents() {
-        return new EventsDao(this).getLatestEvents();
+        List<Event> latestEvents = new EventsDao(this).getLatestEvents();
+        List<Event> eventsToShow = new LinkedList<>();
+        for (Event latestEvent : latestEvents) {
+            if (latestEvent.getType().isAbnormal(latestEvent)) {
+                eventsToShow.add(latestEvent);
+            }
+        }
+        return eventsToShow;
     }
 
     @Override

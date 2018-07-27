@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme"
     tools:context=".ui.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -25,7 +24,7 @@
                 android:text="@string/eventTitleText"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryNegative"
-                android:textAppearance="@android:style/TextAppearance.Material.Large" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </android.support.v7.widget.Toolbar>
 

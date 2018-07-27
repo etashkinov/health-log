@@ -5,15 +5,16 @@ import android.content.Context;
 import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
-public class SymptomEventType<T extends ValueDetail> extends EventType<T> {
+public class SymptomEventType<D extends ValueDetail> extends EventType<D> {
 
     public SymptomEventType(String name, EventConfig config) {
-        this(name, (Class<T>) ValueDetail.class, config);
+        this(name, (Class<D>) ValueDetail.class, config);
     }
 
-    protected SymptomEventType(String name, Class<T> detailClass, EventConfig config) {
+    protected SymptomEventType(String name, Class<D> detailClass, EventConfig config) {
         super(name, detailClass, config);
     }
 
@@ -30,7 +31,12 @@ public class SymptomEventType<T extends ValueDetail> extends EventType<T> {
     }
 
     @Override
-    public String getDescription(Event<T> event, Context context) {
+    public String getDescription(Event<D> event, Context context) {
         return new DecimalFormat("##").format(event.getDetail().getScore());
+    }
+    
+    @Override
+    public boolean isAbnormal(Event<D> event) {
+        return event.getDetail().getValue().compareTo(BigDecimal.valueOf(getNormal())) != 0;
     }
 }

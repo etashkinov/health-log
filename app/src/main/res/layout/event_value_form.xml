@@ -15,6 +15,6 @@
         android:id="@+id/valueText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/empty" />
 </com.ewind.hl.ui.view.detail.ValueDetailForm>

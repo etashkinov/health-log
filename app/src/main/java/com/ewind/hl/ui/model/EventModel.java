@@ -8,16 +8,16 @@ import com.ewind.hl.model.event.detail.EventDetail;
 
 import java.io.Serializable;
 
-public class EventModel implements Serializable {
-    private final EventType type;
-    private final EventDetail detail;
+public class EventModel<T extends EventDetail> implements Serializable {
+    private final EventType<T> type;
+    private final T detail;
     private final String note;
 
     private final Area area;
     private final EventDate date;
 
-    public static EventModel of(Event event) {
-        return new EventModel(
+    public static <T extends EventDetail> EventModel<T> of(Event<T> event) {
+        return new EventModel<>(
                 event.getType(),
                 event.getDetail(),
                 event.getNote(),
@@ -25,8 +25,8 @@ public class EventModel implements Serializable {
                 event.getDate());
     }
 
-    public static EventModel copyOf(Event event, EventDate date) {
-        return new EventModel(
+    public static <T extends EventDetail>EventModel<T> copyOf(Event<T> event, EventDate date) {
+        return new EventModel<>(
                 event.getType(),
                 event.getDetail(),
                 null,
@@ -34,11 +34,11 @@ public class EventModel implements Serializable {
                 date);
     }
 
-    public static EventModel empty(EventType type, Area area, EventDate date) {
-        return new EventModel(type, null, null, area, date);
+    public static <T extends EventDetail> EventModel<T> empty(EventType<T> type, Area area, EventDate date) {
+        return new EventModel<>(type, null, null, area, date);
     }
 
-    public EventModel(EventType type, EventDetail detail, String note, Area area, EventDate date) {
+    public EventModel(EventType<T> type, T detail, String note, Area area, EventDate date) {
         this.type = type;
         this.detail = detail;
         this.note = note;
@@ -46,11 +46,11 @@ public class EventModel implements Serializable {
         this.date = date;
     }
 
-    public EventType getType() {
+    public EventType<T> getType() {
         return type;
     }
 
-    public EventDetail getDetail() {
+    public T getDetail() {
         return detail;
     }
 
@@ -66,8 +66,8 @@ public class EventModel implements Serializable {
         return date;
     }
 
-    public Event toEvent(long id) {
-        return new Event(id, date, type, detail, area, note);
+    public Event<T> toEvent(long id) {
+        return new Event<>(id, date, type, detail, area, note);
     }
 
 }

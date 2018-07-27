@@ -1,8 +1,11 @@
 package com.ewind.hl.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,8 +68,15 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         EventType type = event.getType();
 
         ImageView eventIcon = itemView.findViewById(R.id.eventIcon);
-        Drawable drawable = EventUI.getEventDrawable(type, context);
+        Drawable drawable = EventUI.getEventTypeDrawable(type, context);
         eventIcon.setImageDrawable(drawable);
+        int eventTint = EventUI.getEventTint(event, context);
+        int color = itemView.getContext().getColor(eventTint);
+        if (eventTint != 0) {
+            Log.i(TAG, "Tint for " + type.getName() + ": " + color);
+            eventIcon.setImageTintList(ColorStateList.valueOf(color));
+            eventIcon.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
+        }
 
         String text = LocalizationService.getEventTypeName(context, type);
         if (EventTypeFactory.getAreas(type).size() > 1) {

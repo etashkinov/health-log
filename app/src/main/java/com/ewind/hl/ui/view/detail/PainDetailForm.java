@@ -8,19 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.model.event.detail.PainDetail;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PainDetailForm extends ValueDetailForm<PainDetail> {
+public class PainDetailForm extends EnumDetailForm<PainDetail> {
 
     private MultiAutoCompleteTextView painType;
 
     public PainDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setEventType(EventTypeFactory.get("pain"));
+        setEventType((EnumEventType) EventTypeFactory.get("pain"));
     }
 
     @Override
