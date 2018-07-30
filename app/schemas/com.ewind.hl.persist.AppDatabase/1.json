@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bf815bb457a26630d28af844a9e32ba9",
+    "identityHash": "7e24d842b490191896019543ef081a26",
     "entities": [
       {
         "tableName": "EventEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT, `note` TEXT, `value` TEXT, `type` TEXT, `score` REAL NOT NULL, `area` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT, `note` TEXT, `value` TEXT, `type` TEXT, `score` INTEGER NOT NULL, `area` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -41,7 +41,7 @@
           {
             "fieldPath": "score",
             "columnName": "score",
-            "affinity": "REAL",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -63,7 +63,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"bf815bb457a26630d28af844a9e32ba9\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7e24d842b490191896019543ef081a26\")"
     ]
   }
 }

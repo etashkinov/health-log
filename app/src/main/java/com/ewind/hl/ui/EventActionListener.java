@@ -9,7 +9,6 @@ import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.history.HistoryActivity;
-import com.ewind.hl.ui.model.EventModel;
 
 import org.joda.time.LocalDateTime;
 
@@ -67,7 +66,7 @@ public class EventActionListener {
         Activity activity = activityWeakReference.get();
         Intent intent = new Intent(activity, EventFormActivity.class);
         Event<?> newEvent = EventTypeFactory.get(eventType).create(LocalDateTime.now(), null, null);
-        intent.putExtra(EVENT, EventModel.of(newEvent));
+        intent.putExtra(EVENT, newEvent);
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }
 
@@ -82,7 +81,7 @@ public class EventActionListener {
 
         Intent intent = new Intent(activity, EventFormActivity.class);
         Event<T> newEvent = event.getType().create(LocalDateTime.now(), event.getArea(), event.getDetail());
-        intent.putExtra(EVENT, EventModel.of(newEvent));
+        intent.putExtra(EVENT, newEvent);
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }
 }

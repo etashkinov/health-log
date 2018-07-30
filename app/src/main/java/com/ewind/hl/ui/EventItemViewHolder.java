@@ -71,8 +71,8 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         Drawable drawable = EventUI.getEventTypeDrawable(type, context);
         eventIcon.setImageDrawable(drawable);
         int eventTint = EventUI.getEventTint(event, context);
-        int color = itemView.getContext().getColor(eventTint);
         if (eventTint != 0) {
+            int color = itemView.getContext().getColor(eventTint);
             Log.i(TAG, "Tint for " + type.getName() + ": " + color);
             eventIcon.setImageTintList(ColorStateList.valueOf(color));
             eventIcon.setImageTintMode(PorterDuff.Mode.SRC_ATOP);

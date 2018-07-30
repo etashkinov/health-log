@@ -35,7 +35,6 @@ public class EyeSightDetail implements EventDetail {
         return axis;
     }
 
-    @Override
     public double getScore() {
         return (sphere == null ? BigDecimal.ZERO : sphere).abs()
                 .add(cylinder == null ? BigDecimal.ZERO : cylinder.abs())

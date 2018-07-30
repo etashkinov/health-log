@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         List<Event> latestEvents = new EventsDao(this).getLatestEvents();
         List<Event> eventsToShow = new LinkedList<>();
         for (Event latestEvent : latestEvents) {
-            if (latestEvent.getType().isAbnormal(latestEvent)) {
+//            if (!latestEvent.getScore().isNormal()) {
                 eventsToShow.add(latestEvent);
-            }
+//            }
         }
         return eventsToShow;
     }

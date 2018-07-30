@@ -7,7 +7,6 @@ public enum MoodDetail implements EventDetail {
     GOOD,
     HAPPY;
 
-    @Override
     public double getScore() {
         return (values().length - (double) ordinal()) / values().length * 100;
     }

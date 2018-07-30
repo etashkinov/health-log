@@ -22,11 +22,6 @@ public class ValueDetail implements EventDetail {
     }
 
     @Override
-    public double getScore() {
-        return getValue().doubleValue();
-    }
-
-    @Override
     public String toString() {
         return String.valueOf(value);
     }

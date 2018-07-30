@@ -17,22 +17,22 @@ public abstract class EnumEventType<E extends Enum<E>, D extends ValueDetail> ex
     protected EnumEventType(String name, EventConfig config, Class<E> enumType) {
         super(name, config);
         this.enumType = enumType;
-        this.step = 100 / enumType.getEnumConstants().length;
+        this.step = getMaximum() / enumType.getEnumConstants().length;
     }
 
     protected EnumEventType(String name, EventConfig config, Class<D> detailClass, Class<E> enumType) {
         super(name, detailClass, config);
         this.enumType = enumType;
-        this.step = 100 / enumType.getEnumConstants().length;
+        this.step = getMaximum() / enumType.getEnumConstants().length;
     }
 
     public E getType(D detail) {
         return getType(detail.getValue());
     }
 
-    @NonNull
-    public BigDecimal getValue(int typeOrdinal) {
-        return BigDecimal.valueOf(typeOrdinal * step);
+    @Override
+    public D createDetail(int value) {
+        return super.createDetail(value * step);
     }
 
     @NonNull
@@ -46,16 +46,20 @@ public abstract class EnumEventType<E extends Enum<E>, D extends ValueDetail> ex
     @Override
     @NonNull
     public String getDescription(Event<D> event, Context context) {
-        return getDescription(getType(event.getDetail()));
+        return getDescription(event.getDetail(), context);
+    }
+
+    public String getDescription(D detail, Context context) {
+        return getDescription(getType(detail), context);
     }
 
     @NonNull
-    public String getDescription(E type) {
+    public String getDescription(E type, Context context) {
         return LocalizationService.snakeCaseToReadable(type.name());
     }
 
     @NonNull
-    public String getDescription(int value) {
-        return getDescription(enumType.getEnumConstants()[value]);
+    public String getDescription(int value, Context context) {
+        return getDescription(enumType.getEnumConstants()[value], context);
     }
 }

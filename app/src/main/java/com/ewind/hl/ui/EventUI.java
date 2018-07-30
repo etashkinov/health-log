@@ -10,9 +10,8 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.Score;
 import com.ewind.hl.model.event.detail.EventDetail;
-import com.ewind.hl.model.event.detail.ValueDetail;
-import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.detail.GenericDetailForm;
 
@@ -21,7 +20,7 @@ public class EventUI {
     private static final String TAG = EventUI.class.getName();
     private static final int DEFAULT_ICON = R.drawable.ic_event;
 
-    public static <T extends EventDetail> EventDetailForm<T> getEventDetailForm(EventModel<T> event, Context context) {
+    public static <T extends EventDetail> EventDetailForm<T> getEventDetailForm(Event<T> event, Context context) {
         EventType<T> type = event.getType();
         try {
             String name = "event_" + type.getName().toLowerCase() + "_form";
@@ -71,11 +70,9 @@ public class EventUI {
     }
 
     public static int getEventTint(Event event, Context context) {
-        if (event.getType() instanceof EnumEventType) {
-            int value = ((EnumEventType) event.getType()).getType((ValueDetail) event.getDetail()).ordinal();
-            return context.getResources().getIdentifier("severity" + value, "color", context.getPackageName());
-        } else {
-            return 0;
-        }
+        Score score = event.getScore();
+        int value = score.getValueAtScale(6); //FIXME
+        int result = context.getResources().getIdentifier("severity" + value, "color", context.getPackageName());
+        return result == 0 ? R.color.colorAccent : result;
     }
 }

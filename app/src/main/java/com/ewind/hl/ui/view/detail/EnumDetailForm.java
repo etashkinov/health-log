@@ -8,13 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.Score;
+import com.ewind.hl.model.event.SymptomEventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.ewind.hl.ui.EventUI;
 
-import java.lang.reflect.Constructor;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +22,15 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
     private List<ImageView> severityViews;
     private int value;
     private TextView textView;
-    private EnumEventType<?, T> eventType;
+    private SymptomEventType<T> eventType;
 
     public EnumDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    @Override
     public void setEventType(EventType<T> eventType) {
-        this.eventType = (EnumEventType<?, T>) eventType;
+        this.eventType = (SymptomEventType<T>) eventType;
     }
 
     @Override
@@ -67,31 +67,28 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
         }
 
         this.value = value;
-        textView.setText(eventType.getDescription(value));
+        textView.setText(eventType.getDescription(getDetail(), getContext()));
     }
 
     private int getDrawableId(int value, int imageViewIndex) {
-        return imageViewIndex <= value
-                ? EventUI.getDrawableByName("ic_severity_" + imageViewIndex, getContext())
-                : R.drawable.ic_severity_none;
+        int valueDrawable = EventUI.getDrawableByName("ic_severity_" + value, getContext());
+        return imageViewIndex <= value ? valueDrawable : R.drawable.ic_severity_none;
     }
+
+
 
     @Override
     public void setDetail(T detail) {
-        setValue(eventType.getType(detail).ordinal());
+        Score score = eventType.getScore(detail);
+        setValue(score.getValueAtScale(severityViews.size()));
     }
 
     @Override
     public T getDetail() {
-        try {
-            Constructor<T> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
-            return constructor.newInstance(getValue());
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to create value details for " + eventType, e);
-        }
+        return eventType.createDetail(value);
     }
 
-    protected BigDecimal getValue() {
-        return eventType.getValue(value);
+    public int getValue() {
+        return value;
     }
 }

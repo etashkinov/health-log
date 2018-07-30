@@ -3,7 +3,9 @@ package com.ewind.hl.model.event;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.detail.EventDetail;
 
-public class Event<T extends EventDetail> {
+import java.io.Serializable;
+
+public class Event<T extends EventDetail> implements Serializable {
 
     private final long id;
     private final EventDate date;
@@ -11,14 +13,16 @@ public class Event<T extends EventDetail> {
     private final T detail;
     private final Area area;
     private final String note;
+    private final Score score;
 
-    public Event(long id, EventDate date, EventType<T> type, T detail, Area area, String note) {
+    public Event(long id, EventDate date, EventType<T> type, T detail, Area area, String note, Score score) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.detail = detail;
         this.area = area;
         this.note = note;
+        this.score = score;
     }
 
     public long getId() {
@@ -47,5 +51,9 @@ public class Event<T extends EventDetail> {
 
     public boolean isExpired() {
         return getType().isExpired(this);
+    }
+
+    public Score getScore() {
+        return score;
     }
 }

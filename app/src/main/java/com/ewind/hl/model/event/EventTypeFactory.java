@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class EventTypeFactory {
 
     private static final Map<String, Class<? extends EventType>> EVENT_TYPES = new HashMap<>();
     private static final Class<? extends EventType> DEFAULT_SYMPTOM_TYPE = SeverityEventType.class;
+    private static final Class<? extends EventType> DEFAULT_MEASUREMENT_TYPE = MeasurementEventType.class;
 
     public static void registerType(String name, Class<? extends EventType> type) {
         EVENT_TYPES.put(name, type);
@@ -56,11 +58,72 @@ public class EventTypeFactory {
         }
     }
 
+    public static class EventValue {
+        private String unit;
+        private BigDecimal min;
+        private BigDecimal max;
+        private BigDecimal normalMin;
+        private BigDecimal normalMax;
+        private BigDecimal step;
+        private BigDecimal normal;
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
+            this.unit = unit;
+        }
+
+        public BigDecimal getMin() {
+            return min;
+        }
+
+        public BigDecimal getMax() {
+            return max;
+        }
+
+        public void setRange(String range) {
+            String[] rangeSplit = range.split(",");
+            this.min = new BigDecimal(rangeSplit[0]);
+            this.max = new BigDecimal(rangeSplit[1]);
+        }
+
+        public BigDecimal getNormalMin() {
+            return normalMin;
+        }
+
+        public void setNormal(String normal) {
+            String[] normalSplit = normal.split(",");
+            this.normalMin = new BigDecimal(normalSplit[0]);
+            this.normal = new BigDecimal(normalSplit[1]);
+            this.normalMax = new BigDecimal(normalSplit[2]);
+        }
+
+        public BigDecimal getNormalMax() {
+            return normalMax;
+        }
+
+        public BigDecimal getStep() {
+            return step;
+        }
+
+        public void setStep(BigDecimal step) {
+            this.step = step;
+        }
+
+        public BigDecimal getNormal() {
+            return normal;
+        }
+    }
+
     public static class EventConfig {
         private Set<String> areas = new HashSet<>();
         private boolean propagateDown = false;
         private String type;
         private String accuracy;
+        private String expiration;
+        private EventValue value;
 
         public void setAreas(Set<String> areas) {
             this.areas = areas;
@@ -93,6 +156,22 @@ public class EventTypeFactory {
         public String getAccuracy() {
             return accuracy;
         }
+
+        public String getExpiration() {
+            return expiration;
+        }
+
+        public void setExpiration(String expiration) {
+            this.expiration = expiration;
+        }
+
+        public EventValue getValue() {
+            return value;
+        }
+
+        public void setValue(EventValue value) {
+            this.value = value;
+        }
     }
 
     public static void initEvents(Context context) {
@@ -105,33 +184,35 @@ public class EventTypeFactory {
 
     static void initEvents(InputStream stream) {
         if (events == null) try {
-            Map<String, EventConfig> symptoms = MAPPER.readValue(stream, EventsConfig.class).symptoms;
-            events = createEvents(symptoms);
+            EventsConfig config = MAPPER.readValue(stream, EventsConfig.class);
+
+            events = createEvents(config.symptoms, DEFAULT_SYMPTOM_TYPE);
+            events.putAll(createEvents(config.measurements, DEFAULT_MEASUREMENT_TYPE));
         } catch (Exception e) {
             throw new IllegalStateException("Unable to parse the body config", e);
         }
     }
 
-    private static Map<String, EventType> createEvents(Map<String, EventConfig> symptoms) {
+    private static Map<String, EventType> createEvents(Map<String, EventConfig> configs, Class<? extends EventType> defaultType) {
         Map<String, EventType> result = new HashMap<>();
-        for (Entry<String, EventConfig> entry : symptoms.entrySet()) {
+        for (Entry<String, EventConfig> entry : configs.entrySet()) {
             try {
-                result.put(entry.getKey(), createEvent(entry.getKey(), entry.getValue()));
+                result.put(entry.getKey(), createEvent(entry.getKey(), entry.getValue(), defaultType));
             } catch (Exception e) {
-                Log.e(TAG, "Failed to parse config for " + entry.getKey());
+                Log.e(TAG, "Failed to parse config for " + entry.getKey(), e);
             }
         }
         return result;
     }
 
-    private static EventType createEvent(String name, EventConfig eventConfig) throws Exception {
+    private static EventType createEvent(String name, EventConfig eventConfig, Class<? extends EventType> defaultType) throws Exception {
         if (eventConfig == null) {
             eventConfig = new EventConfig();
         }
 
         Class<? extends EventType> eventTypeClass = EVENT_TYPES.get(eventConfig.type);
         if (eventTypeClass == null) {
-            eventTypeClass = DEFAULT_SYMPTOM_TYPE;
+            eventTypeClass = defaultType;
         }
 
         return eventTypeClass.getConstructor(String.class, EventConfig.class).newInstance(name, eventConfig);

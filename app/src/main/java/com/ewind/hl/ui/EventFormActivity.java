@@ -16,7 +16,6 @@ import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.persist.EventsDao;
-import com.ewind.hl.ui.model.EventModel;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.area.AreaSelector;
@@ -28,7 +27,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
     public static final String EVENT = "EVENT";
 
     private long id;
-    private EventModel model;
+    private Event event;
     private EventDatePicker eventDatePicker;
     private AreaSelector areaSelector;
     private EditText noteText;
@@ -55,16 +54,16 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
 
     private void initModel() {
         if (id != 0) {
-            model = EventModel.of(new EventsDao(this).getEvent(id));
+            event = new EventsDao(this).getEvent(id);
         } else {
-            model = (EventModel) getIntent().getSerializableExtra(EVENT);
+            event = (Event) getIntent().getSerializableExtra(EVENT);
             findViewById(R.id.deleteButton).setVisibility(View.INVISIBLE);
         }
 
-        setEvent(model);
+        setEvent(event);
     }
 
-    private void setEvent(EventModel event) {
+    private void setEvent(Event event) {
         initHeader(event.getType());
 
         eventDatePicker.setDate(event.getDate());
@@ -90,18 +89,18 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
     }
 
     public void onDelete(View view) {
-        new EventActionListener(this).onDelete(model.toEvent(id));
+        new EventActionListener(this).onDelete(event);
     }
 
     private void updateEvent() {
         new EventsDao(this).store(new Event(
                 id,
                 eventDatePicker.getDate(),
-                model.getType(),
+                event.getType(),
                 detailForm.getDetail(),
                 areaSelector.getArea() == null ? AreaFactory.getBody() : areaSelector.getArea(),
-                noteText.getText().toString()
-        ));
+                noteText.getText().toString(),
+                event.getType().getScore(detailForm.getDetail())));
     }
 
     private void onCancel(View view) {
@@ -118,7 +117,7 @@ public class EventFormActivity extends AppCompatActivity implements EventChanged
         eventText.setText(LocalizationService.getEventTypeName(this, type));
     }
 
-    private void initDetailForm(EventModel event) {
+    private void initDetailForm(Event event) {
         detailForm = EventUI.getEventDetailForm(event, this);
         ((ViewGroup) findViewById(R.id.eventDetailContainer)).addView((View) detailForm);
 

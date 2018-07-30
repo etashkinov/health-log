@@ -22,20 +22,34 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
     private final Accuracy accuracy;
     private final Set<String> areas;
     private final Class<D> detailClass;
-    private final boolean propagateDown;
 
     protected EventType(String name, Class<D> detailClass, EventConfig config) {
         this.name = name;
-        this.accuracy = getAccuracy(config);
-        this.expiration = Period.hours(accuracy.toHours());
+        this.accuracy = getAccuracy(config.getAccuracy());
+
+        if (config.getExpiration() != null) {
+            this.expiration = Period.parse(config.getExpiration());
+        } else {
+            this.expiration = Period.hours(accuracy.toHours());
+        }
+
         this.areas = getAreas(config);
         this.detailClass = detailClass;
-        this.propagateDown = config.isPropagateDown();
     }
 
     public Event<D> create(LocalDateTime from, Area area, D detail) {
-        return new Event<>(0L, getEventDate(from), this, detail, area, null);
+        if (detail == null) {
+            detail = createNormalDetail();
+        }
+
+        if (area == null && getAreas().size() == 1) {
+            area = AreaFactory.getArea(getAreas().iterator().next());
+        }
+
+        return new Event<>(0L, getEventDate(from), this, detail, area, null, getScore(detail));
     }
+
+    protected abstract D createNormalDetail();
 
     private EventDate getEventDate(LocalDateTime from) {
         return new EventDate(from.toLocalDate(), DayPart.partOf(from.getHourOfDay(), accuracy));
@@ -67,13 +81,8 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
         return detailClass;
     }
 
-    public boolean isPropagateDown() {
-        return propagateDown;
-    }
-
     @NonNull
-    private static Accuracy getAccuracy(EventConfig eventConfig) {
-        String accuracyStr = eventConfig.getAccuracy();
+    private static Accuracy getAccuracy(String accuracyStr) {
         Accuracy accuracy;
         if (accuracyStr == null) {
             accuracy = Accuracy.QUARTER;
@@ -104,8 +113,11 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
         }
     }
 
-    public abstract String getDescription(Event<D> event, Context context);
+    public String getDescription(Event<D> event, Context context) {
+        return getDescription(event.getDetail(), context);
+    }
 
+    public abstract Score getScore(D detail);
 
-    public abstract boolean isAbnormal(Event<D> event);
+    public abstract String getDescription(D detail, Context context);
 }

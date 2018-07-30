@@ -12,7 +12,7 @@ public class EventEntity {
     private String note;
     private String value;
     private String type;
-    private double score;
+    private int score;
     private String area;
 
     public long getId() {
@@ -63,11 +63,11 @@ public class EventEntity {
         this.area = area;
     }
 
-    public double getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

@@ -87,7 +87,7 @@ public class HistoryActivity extends AppCompatActivity {
         private final Event event;
 
         private EventEntry(Event event) {
-            super(toScalar(event.getDate()), (float)event.getDetail().getScore());
+            super(toScalar(event.getDate()), (float)event.getScore().getValue());
             this.event = event;
         }
 

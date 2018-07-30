@@ -1,6 +1,7 @@
 package com.ewind.hl.ui.view.detail;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -8,10 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventTypeFactory;
 import com.ewind.hl.model.event.detail.PainDetail;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class PainDetailForm extends EnumDetailForm<PainDetail> {
 
     public PainDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setEventType((EnumEventType) EventTypeFactory.get("pain"));
+        setEventType(EventTypeFactory.get("pain"));
     }
 
     @Override
@@ -42,15 +43,22 @@ public class PainDetailForm extends EnumDetailForm<PainDetail> {
 
     @Override
     public PainDetail getDetail() {
+        List<PainDetail.PainType> painTypes = getPainTypes();
+        BigDecimal value = BigDecimal.valueOf(getValue());
+        return new PainDetail(value, painTypes);
+    }
+
+    @NonNull
+    protected List<PainDetail.PainType> getPainTypes() {
         String[] typeStrings = painType.getText().toString().split(",");
         List<PainDetail.PainType> painTypes = new ArrayList<>(typeStrings.length);
-        for (String typeString: typeStrings) {
+        for (String typeString : typeStrings) {
             try {
                 painTypes.add(PainDetail.PainType.valueOf(typeString.trim().toUpperCase()));
             } catch (IllegalArgumentException e) {
                 Log.e(PainDetailForm.class.getName(), "Failed to parse pain type '" + typeString + "'", e);
             }
         }
-        return new PainDetail(getValue(), painTypes);
+        return painTypes;
     }
 }

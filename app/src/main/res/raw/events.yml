@@ -290,6 +290,15 @@ symptoms:
   white_tongue:
   yawning:
 
+measurements:
+  temperature:
+    accuracy: hour
+    expiration: PT4H
+    value:
+      unit: °C
+      range: 33,42
+      normal: 36.4,36.6,36.8
+      step: 0.1
 diagnosis:
   abscessed_tooth_symptoms_and_signs:
   acid_reflux_gerd_symptoms_and_signs:

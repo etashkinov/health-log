@@ -5,6 +5,7 @@ import android.content.Context;
 import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
+import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -18,12 +19,22 @@ public class SymptomEventType<D extends ValueDetail> extends EventType<D> {
         super(name, detailClass, config);
     }
 
-    public int getMaximum() {
-        return 100;
+    @Override
+    protected D createNormalDetail() {
+        return createDetail(getNormal());
     }
 
-    public int getMinimum() {
-        return 0;
+    public D createDetail(int value) {
+        try {
+            Constructor<D> constructor = getDetailClass().getConstructor(BigDecimal.class);
+            return constructor.newInstance(BigDecimal.valueOf(value));
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to create value details for " + this, e);
+        }
+    }
+
+    public int getMaximum() {
+        return 100;
     }
 
     public int getNormal() {
@@ -31,12 +42,12 @@ public class SymptomEventType<D extends ValueDetail> extends EventType<D> {
     }
 
     @Override
-    public String getDescription(Event<D> event, Context context) {
-        return new DecimalFormat("##").format(event.getDetail().getScore());
+    public String getDescription(D detail, Context context) {
+        return new DecimalFormat("##").format(getScore(detail).getValue());
     }
-    
+
     @Override
-    public boolean isAbnormal(Event<D> event) {
-        return event.getDetail().getValue().compareTo(BigDecimal.valueOf(getNormal())) != 0;
+    public Score getScore(D detail) {
+        return new Score(detail.getValue().intValue());
     }
 }

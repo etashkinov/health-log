@@ -10,6 +10,7 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.Score;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,7 +60,8 @@ public class EventsDao {
             T detail = MAPPER.readValue(eventEntity.getValue(), type.getDetailClass());
             Area area = AreaFactory.getArea(eventEntity.getArea());
             EventDate date = EventDateConverter.deserialize(eventEntity.getDate());
-            return new Event<>(eventEntity.getId(), date, type, detail, area, eventEntity.getNote());
+            Score score = new Score(eventEntity.getScore());
+            return new Event<>(eventEntity.getId(), date, type, detail, area, eventEntity.getNote(), score);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to parse " + eventEntity, e);
         }
@@ -87,7 +89,7 @@ public class EventsDao {
             result.setArea(event.getArea().getName());
             result.setDate(EventDateConverter.serialize(event.getDate()));
             result.setType(event.getType().getName());
-            result.setScore(event.getDetail().getScore());
+            result.setScore(event.getScore().getValue());
             result.setNote(event.getNote());
             result.setValue(MAPPER.writeValueAsString(event.getDetail()));
             return result;
