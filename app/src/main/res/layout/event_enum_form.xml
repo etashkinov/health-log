@@ -1,58 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ewind.hl.ui.view.detail.EnumDetailForm xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ewind.hl.ui.view.detail.EnumDetailForm
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/eventEnumContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/eventSeverity0"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_0" />
-
-        <ImageView
-            android:id="@+id/eventSeverity1"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_1" />
-
-        <ImageView
-            android:id="@+id/eventSeverity2"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_2" />
-
-        <ImageView
-            android:id="@+id/eventSeverity3"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_3" />
-
-        <ImageView
-            android:id="@+id/eventSeverity4"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_4" />
-
-        <ImageView
-            android:id="@+id/eventSeverity5"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_severity_5" />
-    </LinearLayout>
+        tools:listitem="@layout/view_severity"
+        />
 
     <TextView
         android:id="@+id/valueText"
@@ -60,4 +20,5 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/empty" />
+
 </com.ewind.hl.ui.view.detail.EnumDetailForm>

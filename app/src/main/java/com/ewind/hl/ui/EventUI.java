@@ -71,7 +71,7 @@ public class EventUI {
 
     public static int getEventTint(Event event, Context context) {
         Score score = event.getScore();
-        int value = score.getValueAtScale(6); //FIXME
+        int value = score.getValue() / 20; //FIXME
         int result = context.getResources().getIdentifier("severity" + value, "color", context.getPackageName());
         return result == 0 ? R.color.colorAccent : result;
     }

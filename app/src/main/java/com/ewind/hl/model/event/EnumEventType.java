@@ -17,30 +17,30 @@ public abstract class EnumEventType<E extends Enum<E>, D extends ValueDetail> ex
     protected EnumEventType(String name, EventConfig config, Class<E> enumType) {
         super(name, config);
         this.enumType = enumType;
-        this.step = getMaximum() / enumType.getEnumConstants().length;
+        this.step = getMaximum() / (enumType.getEnumConstants().length - 1);
     }
 
     protected EnumEventType(String name, EventConfig config, Class<D> detailClass, Class<E> enumType) {
         super(name, detailClass, config);
         this.enumType = enumType;
-        this.step = getMaximum() / enumType.getEnumConstants().length;
+        this.step = getMaximum() / (enumType.getEnumConstants().length - 1);
     }
 
     public E getType(D detail) {
         return getType(detail.getValue());
     }
 
-    @Override
-    public D createDetail(int value) {
-        return super.createDetail(value * step);
+    public E getType(BigDecimal value) {
+        return getType(value.intValue() / step);
     }
 
-    @NonNull
-    public E getType(BigDecimal value) {
-        int index = value.intValue() / step;
-        int length = enumType.getEnumConstants().length;
-        index = index >= length ? length -1 : index;
-        return enumType.getEnumConstants()[index];
+    public E getType(int ordinal) {
+        return enumType.getEnumConstants()[ordinal];
+    }
+
+    @Override
+    public D createDetail(int ordinal) {
+        return createDetail(ordinal * step);
     }
 
     @Override
@@ -50,7 +50,7 @@ public abstract class EnumEventType<E extends Enum<E>, D extends ValueDetail> ex
     }
 
     public String getDescription(D detail, Context context) {
-        return getDescription(getType(detail), context);
+        return detail == null ? "" : getDescription(getType(detail), context);
     }
 
     @NonNull
