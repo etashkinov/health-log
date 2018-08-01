@@ -10,7 +10,6 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
-import com.ewind.hl.ui.LocalizationService;
 
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
@@ -66,8 +65,7 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         String text;
         if (eventType instanceof EnumEventType) {
-            Enum type = ((EnumEventType) eventType).getType(BigDecimal.valueOf(progress));
-            text = LocalizationService.snakeCaseToReadable(type.name());
+            text = ((EnumEventType) eventType).getDescription(progress, getContext());
         } else {
             text = String.valueOf(progress);
         }

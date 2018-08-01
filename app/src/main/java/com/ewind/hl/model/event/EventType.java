@@ -119,5 +119,9 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
 
     public abstract Score getScore(D detail);
 
+    public ScoreBand getScoreBand(D detail) {
+        return new ScoreBand(getScore(detail));
+    }
+
     public abstract String getDescription(D detail, Context context);
 }

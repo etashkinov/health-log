@@ -9,16 +9,17 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/eventEnumContainer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/view_severity"
-        />
+        android:layout_gravity="center_horizontal"
+        tools:itemCount="6"
+        tools:listitem="@layout/view_severity" />
 
     <TextView
         android:id="@+id/valueText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/empty" />
+        tools:text="@string/empty" />
 
 </com.ewind.hl.ui.view.detail.EnumDetailForm>

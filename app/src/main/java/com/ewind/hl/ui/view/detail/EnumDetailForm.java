@@ -10,18 +10,16 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.SymptomEventType;
+import com.ewind.hl.model.event.ScoreBand;
+import com.ewind.hl.model.event.ScoreEventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.ewind.hl.ui.view.SeverityAdapter;
 
 public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implements GenericDetailForm<T> {
 
-    private static final int SIZE = 6;
-
     private TextView textView;
-    private SymptomEventType<T> eventType;
+    private ScoreEventType<T> eventType;
     private SeverityAdapter adapter;
-    private int step;
 
     public EnumDetailForm(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -29,8 +27,7 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
 
     @Override
     public void setEventType(EventType<T> eventType) {
-        this.eventType = (SymptomEventType<T>) eventType;
-        this.step = this.eventType.getMaximum() / (SIZE - 1);
+        this.eventType = (ScoreEventType<T>) eventType;
     }
 
     @Override
@@ -41,28 +38,30 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(HORIZONTAL);
         eventEnumContainer.setLayoutManager(layoutManager);
-        adapter = new SeverityAdapter(SIZE, v -> updateText());
+        adapter = new SeverityAdapter(ScoreBand.BANDS_NUMBER, v -> updateText());
         eventEnumContainer.setAdapter(adapter);
 
         textView = findViewById(R.id.valueText);
-        updateText();
+        textView.setText("");
     }
 
     private void updateText() {
-        textView.setText(eventType.getDescription(getDetail(), getContext()));
+        textView.setText(eventType.getDescription(getScore(), getContext()));
     }
 
     @Override
     public void setDetail(T detail) {
-        adapter.setValue(detail.getValue().intValue() / step, getContext());
+        adapter.setValue(eventType.getScoreBand(detail).getBand());
     }
 
     @Override
     public T getDetail() {
-        return eventType.createDetail(getValue());
+        int score = getScore();
+        return eventType.createDetail(score);
     }
 
-    public int getValue() {
-        return adapter.getValue() * step;
+    protected int getScore() {
+        int band = adapter.getValue();
+        return ScoreBand.of(band).getScore();
     }
 }

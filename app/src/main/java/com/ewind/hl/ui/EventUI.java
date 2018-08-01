@@ -11,6 +11,7 @@ import com.ewind.hl.model.event.EnumEventType;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventType;
 import com.ewind.hl.model.event.Score;
+import com.ewind.hl.model.event.ScoreBand;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.detail.GenericDetailForm;
@@ -71,8 +72,8 @@ public class EventUI {
 
     public static int getEventTint(Event event, Context context) {
         Score score = event.getScore();
-        int value = score.getValue() / 20; //FIXME
-        int result = context.getResources().getIdentifier("severity" + value, "color", context.getPackageName());
+        int band = new ScoreBand(score).getBand();
+        int result = context.getResources().getIdentifier("severity" + band, "color", context.getPackageName());
         return result == 0 ? R.color.colorAccent : result;
     }
 }

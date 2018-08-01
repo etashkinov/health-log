@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 public class Score implements Serializable {
     public static final int MAX = 100;
     public static final int MIN = 0;
-    public static final int RANGE = MAX - MIN;
+    private static final double RANGE = MAX - MIN;
 
     private final int value;
 
@@ -27,7 +27,7 @@ public class Score implements Serializable {
     }
 
     public Score(int score, int scale) {
-        this((int) (score * RANGE / (double) scale));
+        this((int) (score * RANGE / (scale - 1)));
     }
 
     public boolean isNormal() {
@@ -35,7 +35,7 @@ public class Score implements Serializable {
     }
 
     public int getValueAtScale(int scale) {
-        return (int) (value * (double) scale / RANGE);
+        return (int) (value * (scale - 1) / RANGE);
     }
 
     public int getValue() {

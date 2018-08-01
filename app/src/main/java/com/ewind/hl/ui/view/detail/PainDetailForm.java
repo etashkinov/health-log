@@ -44,8 +44,8 @@ public class PainDetailForm extends EnumDetailForm<PainDetail> {
     @Override
     public PainDetail getDetail() {
         List<PainDetail.PainType> painTypes = getPainTypes();
-        BigDecimal value = BigDecimal.valueOf(getValue());
-        return new PainDetail(value, painTypes);
+        BigDecimal score = BigDecimal.valueOf(getScore());
+        return new PainDetail(score, painTypes);
     }
 
     @NonNull

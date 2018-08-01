@@ -13,7 +13,8 @@ public class AreaFactoryTest {
     @Test
     public void shouldParseBody() throws IOException {
         try (InputStream stream = AreaFactory.class.getClassLoader().getResourceAsStream("body.yml")) {
-            Area body = AreaFactory.getBody(stream);
+            AreaFactory.initBody(stream);
+            Area body = AreaFactory.getBody();
             assertNotNull(body);
 
             List<Area> areas = Collections.singletonList(body);
