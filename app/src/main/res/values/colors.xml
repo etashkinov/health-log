@@ -6,9 +6,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#F5F5F5</color>
 
-    <color name="severity1">#00ac46</color>
-    <color name="severity2">#fdc500</color>
-    <color name="severity3">#fd8c00</color>
-    <color name="severity4">#dc0000</color>
-    <color name="severity5">#780000</color>
+    <color name="severity0">#00AC46</color>
+    <color name="severity1">#FDC500</color>
+    <color name="severity2">#FD8C00</color>
+    <color name="severity3">#E60000</color>
+    <color name="severity4">#A00000</color>
+    <color name="severity5">#640000</color>
 </resources>
