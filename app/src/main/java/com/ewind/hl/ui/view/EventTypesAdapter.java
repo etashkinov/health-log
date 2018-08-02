@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.ui.EventTypeSelectedListener;
 import com.ewind.hl.ui.EventUI;
 

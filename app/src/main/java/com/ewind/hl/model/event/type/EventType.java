@@ -1,11 +1,17 @@
-package com.ewind.hl.model.event;
+package com.ewind.hl.model.event.type;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
-import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
+import com.ewind.hl.model.event.Accuracy;
+import com.ewind.hl.model.event.DayPart;
+import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.EventDate;
+import com.ewind.hl.model.event.Score;
+import com.ewind.hl.model.event.ScoreBand;
+import com.ewind.hl.model.event.type.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.EventDetail;
 
 import org.joda.time.LocalDateTime;

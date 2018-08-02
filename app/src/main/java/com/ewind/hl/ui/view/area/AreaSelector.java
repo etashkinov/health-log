@@ -10,8 +10,8 @@ import android.widget.Spinner;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
-import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
 
 import java.util.ArrayList;

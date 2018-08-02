@@ -1,6 +1,6 @@
 package com.ewind.hl.ui.view.detail;
 
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.ui.view.EventDetailForm;
 

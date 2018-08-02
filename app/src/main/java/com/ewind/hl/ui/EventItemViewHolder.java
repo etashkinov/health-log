@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 
 import org.joda.time.LocalDateTime;
 
@@ -27,14 +27,15 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
     private Event event;
     private final TextView eventDateTextView;
 
-    public EventItemViewHolder(ViewGroup parent, EventActionListener listener) {
-        super(LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item, parent, false));
+    public EventItemViewHolder(ViewGroup parent, EventActionListener listener, int itemLayoutId) {
+        super(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
         this.listener = listener;
 
-        itemView.setOnLongClickListener(this::onUpdate);
-//        itemView.findViewById(R.id.historyButton).setOnClickListener(this::onHistory);
+        itemView.setOnClickListener(this::onHistory);
         addButton = itemView.findViewById(R.id.addButton);
-        addButton.setOnClickListener(this::onAddLike);
+        if (addButton != null) {
+            addButton.setOnClickListener(this::onAddLike);
+        }
 
         eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
     }
@@ -45,7 +46,7 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         addDetailView(event);
         eventDateTextView.setText(LocalizationService.getEventDateFrom(event.getDate(), LocalDateTime.now()));
 
-        if (!this.event.isExpired()) {
+        if (addButton != null && !this.event.isExpired()) {
             addButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -84,9 +85,14 @@ public class EventItemViewHolder extends RecyclerView.ViewHolder {
         }
 
         TextView eventTypeText = itemView.findViewById(R.id.eventTypeText);
-        eventTypeText.setText(text);
+        if (eventTypeText != null) {
+            eventTypeText.setText(text);
+        }
 
         TextView eventDetailText = itemView.findViewById(R.id.eventDetailText);
-        eventDetailText.setText(EventUI.getEventDescription(event, context));
+
+        if (eventDetailText != null) {
+            eventDetailText.setText(EventUI.getEventDescription(event, context));
+        }
     }
 }

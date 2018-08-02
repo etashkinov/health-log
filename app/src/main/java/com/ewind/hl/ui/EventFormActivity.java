@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;

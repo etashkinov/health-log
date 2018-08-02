@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.detail.PainDetail;
 
 import java.math.BigDecimal;

@@ -1,6 +1,6 @@
-package com.ewind.hl.model.event;
+package com.ewind.hl.model.event.type;
 
-import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
+import com.ewind.hl.model.event.type.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
 public class SeverityEventType<T extends ValueDetail> extends EnumEventType<SeverityEventType.Severity, T> {

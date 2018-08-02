@@ -8,7 +8,7 @@ import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.Accuracy;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.EventDate;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -72,7 +72,7 @@ public class LocalizationService {
             switch (accuracy) {
                 case DAY: return "Today";
                 case QUARTER: return "This " + getDayPart(dayPart).toLowerCase();
-                case HOUR: return from.getHourOfDay() - dayPart.getStart().getHourOfDay() + " hours ago";
+                case HOUR: return getHoursAgo(from, dayPart);
                 default: throw new IllegalArgumentException("Unknown accuracy " + accuracy);
             }
         } else if (daysAgo == 1) {
@@ -93,6 +93,12 @@ public class LocalizationService {
         } else {
             return yearsAgo + " years ago";
         }
+    }
+
+    @NonNull
+    private static String getHoursAgo(LocalDateTime from, DayPart dayPart) {
+        int hoursAgo = from.getHourOfDay() - dayPart.getStart().getHourOfDay();
+        return hoursAgo == 0 ? "Now" : hoursAgo + " hours ago";
     }
 
     public static String getDayPart(DayPart part) {

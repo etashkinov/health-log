@@ -1,8 +1,9 @@
-package com.ewind.hl.model.event;
+package com.ewind.hl.model.event.type;
 
 import android.content.Context;
 
-import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
+import com.ewind.hl.model.event.ScoreBand;
+import com.ewind.hl.model.event.type.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.ewind.hl.ui.LocalizationService;
 

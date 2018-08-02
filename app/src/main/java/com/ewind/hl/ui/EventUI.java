@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EnumEventType;
+import com.ewind.hl.model.event.type.EnumEventType;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.Score;
 import com.ewind.hl.model.event.ScoreBand;
 import com.ewind.hl.model.event.detail.EventDetail;

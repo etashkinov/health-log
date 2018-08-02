@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
-    tools:context=".ui.history.HistoryActivity">
+    tools:context=".ui.history.GraphHistoryActivity">
 
     <LinearLayout
         android:id="@+id/eventHeader"

@@ -11,15 +11,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventItemViewHolder> {
 
     private final List<Event> events;
     private final EventActionListener listener;
+    private final int itemLayoutId;
 
-    public EventAdapter(List<Event> events, EventActionListener listener) {
+    public EventAdapter(List<Event> events, EventActionListener listener, int itemLayoutId) {
         this.events = events;
         this.listener = listener;
+        this.itemLayoutId = itemLayoutId;
     }
 
     @Override
     public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventItemViewHolder(parent, listener);
+        return new EventItemViewHolder(parent, listener, itemLayoutId);
     }
 
     @Override

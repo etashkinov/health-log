@@ -1,6 +1,6 @@
-package com.ewind.hl.model.event;
+package com.ewind.hl.model.event.type;
 
-import com.ewind.hl.model.event.EventTypeFactory.EventConfig;
+import com.ewind.hl.model.event.type.EventTypeFactory.EventConfig;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
 public class SizeEventType<T extends ValueDetail> extends EnumEventType<SizeEventType.Size, T> {

@@ -7,8 +7,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EnumEventType;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EnumEventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
 
 import java.lang.reflect.Constructor;

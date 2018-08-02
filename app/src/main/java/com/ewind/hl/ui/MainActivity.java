@@ -12,7 +12,7 @@ import android.view.View;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 
 import java.util.LinkedList;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void refreshEvents() {
-        eventsList.setAdapter(new EventAdapter(getEvents(), new EventActionListener(this)));
+        eventsList.setAdapter(new EventAdapter(getEvents(), new EventActionListener(this), R.layout.event_item));
     }
 
     private List<Event> getEvents() {

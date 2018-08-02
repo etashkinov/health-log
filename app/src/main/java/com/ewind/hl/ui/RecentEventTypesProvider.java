@@ -10,8 +10,8 @@ import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ewind.hl.model.event.EventType;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
 
 import java.util.ArrayList;

@@ -9,9 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.ScoreBand;
-import com.ewind.hl.model.event.ScoreEventType;
+import com.ewind.hl.model.event.type.ScoreEventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
 import com.ewind.hl.ui.view.SeverityAdapter;
 

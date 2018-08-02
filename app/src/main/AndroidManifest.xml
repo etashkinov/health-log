@@ -30,7 +30,12 @@
             android:label="@string/app_name" />
 
         <activity
-            android:name=".ui.history.HistoryActivity"
+            android:name=".ui.history.GraphHistoryActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".ui.history.ListHistoryActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustNothing" />
 

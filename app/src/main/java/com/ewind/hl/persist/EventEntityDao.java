@@ -22,7 +22,7 @@ public interface EventEntityDao {
 
     @Query("SELECT * FROM evententity WHERE area = :area AND "
             + "date >= :from AND date <= :till AND type = :type "
-            + " ORDER BY date ASC")
+            + " ORDER BY date DESC")
     List<EventEntity> findByAreaAndDateRangeAndType(String area, String from, String till, String type);
 
     @Insert

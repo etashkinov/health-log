@@ -10,7 +10,7 @@ import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
-import com.ewind.hl.model.event.EventType;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.LocalizationService;
 import com.github.mikephil.charting.charts.LineChart;
@@ -23,8 +23,8 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity {
-    private static final String TAG = HistoryActivity.class.getName();
+public class GraphHistoryActivity extends AppCompatActivity {
+    private static final String TAG = GraphHistoryActivity.class.getName();
     public static final String EVENT_TYPE = "EVENT_TYPE";
     public static final String EVENT_AREA = "EVENT_AREA";
 

@@ -1,4 +1,4 @@
-package com.ewind.hl.model.event;
+package com.ewind.hl.model.event.type;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

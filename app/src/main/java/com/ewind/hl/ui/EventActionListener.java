@@ -5,10 +5,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventTypeFactory;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.persist.EventsDao;
-import com.ewind.hl.ui.history.HistoryActivity;
+import com.ewind.hl.ui.history.GraphHistoryActivity;
+import com.ewind.hl.ui.history.ListHistoryActivity;
 
 import org.joda.time.LocalDateTime;
 
@@ -32,9 +33,9 @@ public class EventActionListener {
     public void onHistory(Event event) {
         Activity activity = activityWeakReference.get();
 
-        Intent intent = new Intent(activity, HistoryActivity.class);
-        intent.putExtra(HistoryActivity.EVENT_TYPE, event.getType().getName());
-        intent.putExtra(HistoryActivity.EVENT_AREA, event.getArea());
+        Intent intent = new Intent(activity, ListHistoryActivity.class);
+        intent.putExtra(GraphHistoryActivity.EVENT_TYPE, event.getType().getName());
+        intent.putExtra(GraphHistoryActivity.EVENT_AREA, event.getArea());
         activity.startActivity(intent);
     }
 
@@ -80,7 +81,7 @@ public class EventActionListener {
         Activity activity = activityWeakReference.get();
 
         Intent intent = new Intent(activity, EventFormActivity.class);
-        Event<T> newEvent = event.getType().create(LocalDateTime.now(), event.getArea(), event.getDetail());
+        Event newEvent = event.getType().create(LocalDateTime.now(), event.getArea(), event.getDetail());
         intent.putExtra(EVENT, newEvent);
         activity.startActivityForResult(intent, ADD_REQUEST_CODE);
     }

@@ -2,6 +2,7 @@ package com.ewind.hl.model.event;
 
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.event.type.EventType;
 
 import java.io.Serializable;
 
