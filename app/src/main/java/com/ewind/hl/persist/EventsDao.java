@@ -68,7 +68,7 @@ public class EventsDao {
     }
 
 
-    public Event getEvent(long id) {
+    public <D extends EventDetail> Event<D> getEvent(long id) {
         return toEvent(entityDao.findById(id));
     }
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ewind.hl.ui.event.def.DefaultEventFormView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <com.ewind.hl.ui.view.EventDatePicker
+        android:id="@+id/eventDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <com.ewind.hl.ui.view.area.AreaSelector
+        android:id="@+id/areaSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp" />
+
+    <FrameLayout
+        android:id="@+id/eventDetailContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/event_enum_form"/>
+
+    <EditText
+        android:id="@+id/noteText"
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Note"
+        android:inputType="text|textMultiLine"/>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/deleteButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingEnd="10dp"
+            android:paddingStart="15dp"
+            android:text="Delete" />
+
+    </android.support.v7.widget.Toolbar>
+
+</com.ewind.hl.ui.event.def.DefaultEventFormView>

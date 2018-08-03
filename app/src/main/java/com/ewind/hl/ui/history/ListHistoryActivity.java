@@ -75,6 +75,7 @@ public class ListHistoryActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             refreshEvents();
+            setResult(Activity.RESULT_OK);
         }
     }
 
