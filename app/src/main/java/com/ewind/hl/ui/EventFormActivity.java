@@ -7,16 +7,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.persist.EventsDao;
-import com.ewind.hl.ui.event.EventFormView;
 import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.view.EventDatePicker;
+import com.ewind.hl.ui.view.EventDetailForm;
+import com.ewind.hl.ui.view.area.AreaSelector;
 
 public class EventFormActivity<D extends EventDetail> extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = EventFormActivity.class.getName();
@@ -24,7 +28,13 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
     public static final String EVENT_ID = "EVENT_ID";
     public static final String EVENT = "EVENT";
 
-    private EventFormView<D> eventFormView;
+    private long id;
+    private Event<D> event;
+    private EventDatePicker eventDatePicker;
+    private AreaSelector areaSelector;
+    private EditText noteText;
+
+    private EventDetailForm<D> detailForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,46 +43,66 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
 
         findViewById(R.id.cancelButton).setOnClickListener(this::onCancel);
         findViewById(R.id.okButton).setOnClickListener(this::onOk);
+        findViewById(R.id.deleteButton).setOnClickListener(this::onDelete);
 
-        ViewGroup eventFormContainer = findViewById(R.id.eventFormContainer);
+        eventDatePicker = findViewById(R.id.eventDatePicker);
+        eventDatePicker.setListener(d -> {});
 
-        Event<D> event = getEventFromIntent(getIntent());
-        EventType<D> type = event.getType();
-        initHeader(type);
+        areaSelector = findViewById(R.id.areaSelector);
+        noteText = findViewById(R.id.noteText);
 
-        eventFormView = EventUIFactory.getUI(type).createForm(eventFormContainer);
-        eventFormView.setEvent(event);
+        id = getIntent().getLongExtra(EVENT_ID, 0L);
 
-        eventFormContainer.addView((View) eventFormView);
+        initModel();
     }
 
-
-    private Event<D> getEventFromIntent(Intent intent) {
-        long id = intent.getLongExtra(EVENT_ID, 0L);
+    private void initModel() {
         if (id != 0) {
-            return new EventsDao(this).getEvent(id);
+            event = new EventsDao(this).getEvent(id);
         } else {
-            return (Event<D>) intent.getSerializableExtra(EVENT);
+            event = (Event<D>) getIntent().getSerializableExtra(EVENT);
+            findViewById(R.id.deleteButton).setVisibility(View.INVISIBLE);
         }
+
+        setEvent(event);
     }
 
+    private void setEvent(Event<D> event) {
+        initHeader(event.getType());
+
+        eventDatePicker.setDate(event.getDate());
+        areaSelector.setArea(event.getType(), event.getArea());
+
+        initDetailForm(event);
+
+        noteText.setText(event.getNote());
+    }
 
     private void onOk(View view) {
-        Event event = updateEvent();
-        finishOk(event.getId());
+        updateEvent();
+        finishOk();
     }
 
-    private void finishOk(long id) {
+    private void finishOk() {
         Intent resultIntent = new Intent();
-        setResult(Activity.RESULT_OK, resultIntent);
         resultIntent.putExtra(EVENT_ID, id);
+        setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 
-    private Event updateEvent() {
-        Event event = eventFormView.getEvent();
-        new EventsDao(this).store(event);
-        return event;
+    public void onDelete(View view) {
+        new EventActionListener(this).onDelete(event);
+    }
+
+    private void updateEvent() {
+        new EventsDao(this).store(new Event<>(
+                id,
+                eventDatePicker.getDate(),
+                event.getType(),
+                detailForm.getDetail(),
+                areaSelector.getArea() == null ? AreaFactory.getBody() : areaSelector.getArea(),
+                noteText.getText().toString(),
+                event.getType().getScore(detailForm.getDetail())));
     }
 
     private void onCancel(View view) {
@@ -82,11 +112,21 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
 
     private void initHeader(EventType<D> type) {
         ImageView eventImage = findViewById(R.id.eventImage);
-        Drawable drawable = EventUI.getEventTypeDrawable(type, this);
+        Drawable drawable = EventUIFactory.getUI(type).getEventTypeDrawable(this);
         eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);
         eventText.setText(LocalizationService.getEventTypeName(this, type));
+    }
+
+    private void initDetailForm(Event<D> event) {
+        ViewGroup eventDetailContainer = findViewById(R.id.eventDetailContainer);
+        detailForm = EventUIFactory.getUI(event.getType()).getEventDetailForm(eventDetailContainer);
+        eventDetailContainer.addView((View) detailForm);
+
+        if (event.getDetail() != null) {
+            detailForm.setDetail(event.getDetail());
+        }
     }
 
     @Override
@@ -101,6 +141,6 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
 
     @Override
     public void onEventDeleted(Event event) {
-        finishOk(event.getId());
+        finishOk();
     }
 }

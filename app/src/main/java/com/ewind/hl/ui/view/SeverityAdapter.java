@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.ui.EventUI;
 
 public class SeverityAdapter extends RecyclerView.Adapter<SeverityAdapter.SeverityViewHolder> {
 
@@ -51,7 +50,8 @@ public class SeverityAdapter extends RecyclerView.Adapter<SeverityAdapter.Severi
     }
 
     private int getDrawableId(int value, int imageViewIndex, Context context) {
-        int valueDrawable = EventUI.getDrawableByName("ic_severity_" + value, context);
+        int valueDrawable = context.getResources().getIdentifier("ic_severity_" + value, "drawable",
+                context.getPackageName());
         return imageViewIndex <= value ? valueDrawable : R.drawable.ic_severity_none;
     }
 

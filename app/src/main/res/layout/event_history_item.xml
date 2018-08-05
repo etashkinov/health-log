@@ -14,17 +14,14 @@
         android:layout_height="32dp"
         android:layout_margin="5dp"
         android:layout_gravity="center_vertical"
-        app:srcCompat="@drawable/ic_event" />
+        app:srcCompat="@drawable/ic_severity_2" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/eventDetailText"
+    <FrameLayout
+        android:id="@+id/eventDetailContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"
-        android:text="Severe"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:layout_margin="5dp" />
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"

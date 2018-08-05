@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.ui.EventTypeSelectedListener;
-import com.ewind.hl.ui.EventUI;
+import com.ewind.hl.ui.event.EventUIFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,7 +112,7 @@ public class EventTypesAdapter extends RecyclerView.Adapter<EventTypesAdapter.Vi
         eventText.setText(eventLabel);
 
         ImageView eventImage = view.findViewById(R.id.eventImage);
-        Drawable eventDrawable = EventUI.getEventTypeDrawable(type, view.getContext());
+        Drawable eventDrawable = EventUIFactory.getUI(type).getEventTypeDrawable(view.getContext());
         eventImage.setImageDrawable(eventDrawable);
     }
 

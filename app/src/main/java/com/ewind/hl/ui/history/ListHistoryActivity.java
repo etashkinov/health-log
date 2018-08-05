@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +20,9 @@ import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
-import com.ewind.hl.ui.EventUI;
+import com.ewind.hl.ui.EventItemViewHolder;
 import com.ewind.hl.ui.LocalizationService;
+import com.ewind.hl.ui.event.EventUIFactory;
 
 import org.joda.time.LocalDate;
 
@@ -65,8 +67,13 @@ public class ListHistoryActivity extends AppCompatActivity {
                 findViewById(R.id.addButton).setOnClickListener(v -> onAdd(lastEvent));
                 RecyclerView eventsList = findViewById(R.id.eventsList);
                 eventsList.setLayoutManager(new LinearLayoutManager(this));
-                eventsList.setAdapter(new EventAdapter(events, new EventActionListener(this), R.layout.event_history_item));
-            }
+                EventActionListener listener = new EventActionListener(this);
+                eventsList.setAdapter(new EventAdapter(events){
+                    @Override
+                    public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        return new HistoryEventItemViewHolder(parent, listener);
+                    }
+                }); }
         }
     }
 
@@ -75,7 +82,6 @@ public class ListHistoryActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             refreshEvents();
-            setResult(Activity.RESULT_OK);
         }
     }
 
@@ -89,7 +95,7 @@ public class ListHistoryActivity extends AppCompatActivity {
      */
     private void initHeader() {
         ImageView eventImage = findViewById(R.id.eventImage);
-        Drawable drawable = EventUI.getEventTypeDrawable(EventTypeFactory.get(type), this);
+        Drawable drawable = EventUIFactory.getUI(EventTypeFactory.get(type)).getEventTypeDrawable(this);
         eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);

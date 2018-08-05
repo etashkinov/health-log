@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
@@ -40,7 +41,13 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void refreshEvents() {
-        eventsList.setAdapter(new EventAdapter(getEvents(), new EventActionListener(this), R.layout.event_item));
+        EventActionListener listener = new EventActionListener(MainActivity.this);
+        eventsList.setAdapter(new EventAdapter(getEvents()){
+            @Override
+            public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return new LastEventItemViewHolder(parent, listener);
+            }
+        });
     }
 
     private List<Event> getEvents() {

@@ -1,98 +1,37 @@
 package com.ewind.hl.ui;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
+import com.ewind.hl.model.event.Score;
+import com.ewind.hl.model.event.ScoreBand;
 
 import org.joda.time.LocalDateTime;
 
-public class EventItemViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = EventItemViewHolder.class.getName();
-    private final EventActionListener listener;
-    private final View addButton;
+public abstract class EventItemViewHolder extends RecyclerView.ViewHolder {
+    protected static final String TAG = LastEventItemViewHolder.class.getName();
+    protected final EventActionListener listener;
+    protected final TextView eventDateTextView;
+    protected Event event;
 
-    private Event event;
-    private final TextView eventDateTextView;
-
-    public EventItemViewHolder(ViewGroup parent, EventActionListener listener, int itemLayoutId) {
-        super(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
+    public EventItemViewHolder(View itemView, EventActionListener listener) {
+        super(itemView);
         this.listener = listener;
-
-        itemView.setOnClickListener(this::onHistory);
-        addButton = itemView.findViewById(R.id.addButton);
-        if (addButton != null) {
-            addButton.setOnClickListener(this::onAddLike);
-        }
-
-        eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
+        this.eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
     }
 
-    void setEvent(Event event) {
+    public void setEvent(Event event) {
         this.event = event;
 
-        addDetailView(event);
         eventDateTextView.setText(LocalizationService.getEventDateFrom(event.getDate(), LocalDateTime.now()));
-
-        if (addButton != null && !this.event.isExpired()) {
-            addButton.setVisibility(View.INVISIBLE);
-        }
     }
 
-    private boolean onUpdate(View view) {
-        listener.onUpdate(event);
-        return true;
-    }
-
-    private void onHistory(View view) {
-        listener.onHistory(event);
-    }
-
-    private void onAddLike(View view) {
-        listener.onAddLike(event);
-    }
-
-    private void addDetailView(Event event) {
-        Context context = itemView.getContext();
-        EventType type = event.getType();
-
-        ImageView eventIcon = itemView.findViewById(R.id.eventIcon);
-        Drawable drawable = EventUI.getEventTypeDrawable(type, context);
-        eventIcon.setImageDrawable(drawable);
-        int eventTint = EventUI.getEventTint(event, context);
-        if (eventTint != 0) {
-            int color = itemView.getContext().getColor(eventTint);
-            Log.i(TAG, "Tint for " + type.getName() + ": " + color);
-            eventIcon.setImageTintList(ColorStateList.valueOf(color));
-            eventIcon.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
-        }
-
-        String text = LocalizationService.getEventTypeName(context, type);
-        if (EventTypeFactory.getAreas(type).size() > 1) {
-            text = LocalizationService.getAreaName(event.getArea()) + " " + text;
-        }
-
-        TextView eventTypeText = itemView.findViewById(R.id.eventTypeText);
-        if (eventTypeText != null) {
-            eventTypeText.setText(text);
-        }
-
-        TextView eventDetailText = itemView.findViewById(R.id.eventDetailText);
-
-        if (eventDetailText != null) {
-            eventDetailText.setText(EventUI.getEventDescription(event, context));
-        }
+    protected int getBand(Event event) {
+        Score score = event.getScore();
+        return new ScoreBand(score).getBand();
     }
 }
