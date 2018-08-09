@@ -3,10 +3,11 @@ package com.ewind.hl.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.view.KeyEvent;
 
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.history.GraphHistoryActivity;
 import com.ewind.hl.ui.history.ListHistoryActivity;
@@ -53,13 +54,26 @@ public class EventActionListener {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setMessage("Do you want to delete this event?")
                 .setPositiveButton(android.R.string.ok, (d, v) -> doDelete(activity, event))
-                .show();
+                .setNegativeButton(android.R.string.cancel, (d, v) -> doDeleteCancelled(activity, event))
+                .setOnKeyListener((d, k, e ) -> {
+                    if (k == KeyEvent.KEYCODE_BACK) {
+                        d.dismiss();
+                        doDeleteCancelled(activity, event);
+                    }
+                    return true;
+                }).show();
     }
 
     private void doDelete(Activity activity, Event event) {
         new EventsDao(activity).delete(event);
         if (activity instanceof EventChangedListener) {
             ((EventChangedListener) activity).onEventDeleted(event);
+        }
+    }
+
+    private void doDeleteCancelled(Activity activity, Event event) {
+        if (activity instanceof EventChangedListener) {
+            ((EventChangedListener) activity).onEventUpdated(event);
         }
     }
 

@@ -9,16 +9,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.ScoreBand;
-import com.ewind.hl.model.event.type.ScoreEventType;
 import com.ewind.hl.model.event.detail.ValueDetail;
+import com.ewind.hl.model.event.type.ScoreEventType;
 import com.ewind.hl.ui.view.SeverityAdapter;
 
-public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implements GenericDetailForm<T> {
+public class EnumDetailForm<D extends ValueDetail, T extends ScoreEventType<D>> extends LinearLayout implements GenericDetailForm<D, T> {
 
     private TextView textView;
-    private ScoreEventType<T> eventType;
+    private T eventType;
     private SeverityAdapter adapter;
 
     public EnumDetailForm(Context context, @Nullable AttributeSet attrs) {
@@ -26,8 +25,8 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
     }
 
     @Override
-    public void setEventType(EventType<T> eventType) {
-        this.eventType = (ScoreEventType<T>) eventType;
+    public void setEventType(T eventType) {
+        this.eventType = eventType;
     }
 
     @Override
@@ -50,12 +49,12 @@ public class EnumDetailForm<T extends ValueDetail> extends LinearLayout implemen
     }
 
     @Override
-    public void setDetail(T detail) {
+    public void setDetail(D detail) {
         adapter.setValue(eventType.getScoreBand(detail).getBand());
     }
 
     @Override
-    public T getDetail() {
+    public D getDetail() {
         int score = getScore();
         return eventType.createDetail(score);
     }

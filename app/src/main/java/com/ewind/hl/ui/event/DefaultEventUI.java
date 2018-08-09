@@ -18,13 +18,13 @@ import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.detail.GenericDetailForm;
 
-public class DefaultEventUI<D extends EventDetail> implements EventUI<D> {
+public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> implements EventUI<D> {
     private static final String TAG = EventUI.class.getName();
     private static final int DEFAULT_ICON = R.drawable.ic_event;
 
-    private final EventType<D> type;
+    private final T type;
     public DefaultEventUI(EventType<D> type) {
-        this.type = type;
+        this.type = (T) type;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DefaultEventUI<D extends EventDetail> implements EventUI<D> {
         } catch (Resources.NotFoundException e) {
             Log.w(TAG, "Detail form layout for " + type + " not found");
             int eventDetailLayoutId = getDefaultEventDetailLayoutId();
-            GenericDetailForm<D> defaultForm = (GenericDetailForm<D>) LayoutInflater.from(context).inflate(eventDetailLayoutId, parent, false);
+            GenericDetailForm<D, T> defaultForm = (GenericDetailForm<D, T>) LayoutInflater.from(context).inflate(eventDetailLayoutId, parent, false);
             defaultForm.setEventType(type);
             return defaultForm;
         }

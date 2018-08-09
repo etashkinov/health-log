@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
+import com.ewind.hl.ui.EventChangedListener;
 import com.ewind.hl.ui.EventItemViewHolder;
 import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.event.EventUIFactory;
@@ -28,15 +30,19 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-public class ListHistoryActivity extends AppCompatActivity {
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+
+public class ListHistoryActivity extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = ListHistoryActivity.class.getName();
     public static final String EVENT_TYPE = "EVENT_TYPE";
     public static final String EVENT_AREA = "EVENT_AREA";
     private String type;
     private Area area;
+    private EventAdapter adapter;
 
     /**
      * TODO remove copy&paste
+     *
      * @see GraphHistoryActivity
      */
     @Override
@@ -50,11 +56,13 @@ public class ListHistoryActivity extends AppCompatActivity {
         findViewById(R.id.cancelButton).setOnClickListener(v -> finish());
         initHeader();
 
+        initRecyclerView();
+
         refreshEvents();
     }
 
     private void refreshEvents() {
-        EventDate from = new EventDate(LocalDate.now().minusYears(2), DayPart.ALL_DAY);
+        EventDate from = new EventDate(LocalDate.now().minusYears(100), DayPart.ALL_DAY);
         EventDate till = new EventDate(LocalDate.now(), DayPart.PM_11);
         List<Event> events = new EventsDao(this).getEvents(type, area, from, till);
         if (events.isEmpty()) {
@@ -65,16 +73,45 @@ public class ListHistoryActivity extends AppCompatActivity {
                 onAdd(lastEvent);
             } else {
                 findViewById(R.id.addButton).setOnClickListener(v -> onAdd(lastEvent));
-                RecyclerView eventsList = findViewById(R.id.eventsList);
-                eventsList.setLayoutManager(new LinearLayoutManager(this));
-                EventActionListener listener = new EventActionListener(this);
-                eventsList.setAdapter(new EventAdapter(events){
-                    @Override
-                    public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        return new HistoryEventItemViewHolder(parent, listener);
-                    }
-                }); }
+                adapter.setEvents(events);
+            }
         }
+    }
+
+    private void initRecyclerView() {
+        RecyclerView eventsList = findViewById(R.id.eventsList);
+        eventsList.setLayoutManager(new LinearLayoutManager(this));
+
+        EventActionListener listener = new EventActionListener(this);
+        adapter = new EventAdapter() {
+            @Override
+            public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return new HistoryEventItemViewHolder(parent, listener);
+            }
+        };
+        eventsList.setAdapter(adapter);
+
+        initTouchHelper(eventsList, listener);
+    }
+
+    private void initTouchHelper(RecyclerView eventsList, EventActionListener listener) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, LEFT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                if (swipeDir == LEFT) {
+                    listener.onDelete(((EventItemViewHolder)viewHolder).getEvent());
+                }
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(eventsList);
     }
 
     @Override
@@ -91,6 +128,7 @@ public class ListHistoryActivity extends AppCompatActivity {
 
     /**
      * TODO remove copy&paste
+     *
      * @see com.ewind.hl.ui.EventFormActivity
      */
     private void initHeader() {
@@ -100,5 +138,20 @@ public class ListHistoryActivity extends AppCompatActivity {
 
         TextView eventText = findViewById(R.id.eventText);
         eventText.setText(LocalizationService.getEventTypeName(this, EventTypeFactory.get(type)));
+    }
+
+    @Override
+    public void onEventCreated(Event event) {
+
+    }
+
+    @Override
+    public void onEventUpdated(Event event) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onEventDeleted(Event event) {
+        adapter.removeEvent(event);
     }
 }

@@ -1,11 +1,13 @@
 package com.ewind.hl.model.event;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
 
-public class EventDate implements Serializable {
+public class EventDate implements Serializable, Comparable<EventDate> {
 
     private final LocalDate localDate;
 
@@ -35,5 +37,11 @@ public class EventDate implements Serializable {
 
     public LocalDateTime getEnd() {
         return localDate.toLocalDateTime(dayPart.getEnd());
+    }
+
+    @Override
+    public int compareTo(@NonNull EventDate o) {
+        int result = localDate.compareTo(o.localDate);
+        return result != 0 ? result : dayPart.compareTo(o.dayPart);
     }
 }

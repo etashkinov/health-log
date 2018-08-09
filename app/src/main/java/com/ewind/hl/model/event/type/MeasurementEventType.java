@@ -20,6 +20,8 @@ public class MeasurementEventType<D extends ValueDetail> extends EventType<D> {
     private BigDecimal normal;
     private BigDecimal normMin;
 
+    private String unit;
+
     private BigDecimal step;
 
     public MeasurementEventType(String name, EventConfig config) {
@@ -28,12 +30,14 @@ public class MeasurementEventType<D extends ValueDetail> extends EventType<D> {
 
     protected MeasurementEventType(String name, Class<D> detailClass, EventConfig config) {
         super(name, detailClass, config);
-        min = config.getValue().getMin();
-        max = config.getValue().getMax();
-        normMax = config.getValue().getNormalMax();
-        normal = config.getValue().getNormal();
-        normMin = config.getValue().getNormalMin();
-        step = config.getValue().getStep();
+        EventTypeFactory.EventValue value = config.getValue();
+        min = value.getMin();
+        max = value.getMax();
+        normMax = value.getNormalMax();
+        normal = value.getNormal();
+        normMin = value.getNormalMin();
+        unit = value.getUnit();
+        step = value.getStep();
     }
 
     @Override
@@ -55,15 +59,12 @@ public class MeasurementEventType<D extends ValueDetail> extends EventType<D> {
         BigDecimal value = detail.getValue();
         BigDecimal toMin = value.subtract(normMin);
         if (toMin.signum() < 0) {
-            return new Score(toMin.negate().divide(normMin.subtract(min)));
+            return new Score(toMin.negate().divide(normMin.subtract(min), RoundingMode.HALF_UP));
         }
 
-        BigDecimal toMax = normMin.subtract(value);
+        BigDecimal toMax = normMax.subtract(value);
         if (toMax.signum() < 0) {
-            BigDecimal negate = toMax.negate();
-            BigDecimal subtract = max.subtract(normMax);
-            BigDecimal divide = negate.divide(subtract, RoundingMode.HALF_UP);
-            return new Score(divide);
+            return new Score(toMax.negate().divide(max.subtract(normMax), RoundingMode.HALF_UP));
         }
 
         return new Score(0);
@@ -92,5 +93,9 @@ public class MeasurementEventType<D extends ValueDetail> extends EventType<D> {
 
     public BigDecimal getStep() {
         return step;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 }

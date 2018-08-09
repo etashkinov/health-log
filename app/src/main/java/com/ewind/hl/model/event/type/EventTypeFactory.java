@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.detail.EventDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -219,12 +218,12 @@ public class EventTypeFactory {
     }
 
     @NonNull
-    public static <T extends EventDetail> EventType<T> get(String typeName) {
+    public static <T extends EventType> T get(String typeName) {
         EventType result = events.get(typeName);
         if (result == null) {
             throw new IllegalArgumentException("Unknown typeName: " + typeName);
         }
-        return result;
+        return (T) result;
     }
 
     @NonNull

@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements EventChangedListener {
 
     private static final String TAG = MainActivity.class.getName();
-    private RecyclerView eventsList;
+    private EventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,27 +36,29 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
         findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
 
-        eventsList = findViewById(R.id.eventsList);
-        refreshEvents();
-    }
-
-    private void refreshEvents() {
+        RecyclerView eventsList = findViewById(R.id.eventsList);
         EventActionListener listener = new EventActionListener(MainActivity.this);
-        eventsList.setAdapter(new EventAdapter(getEvents()){
+        adapter = new EventAdapter() {
             @Override
             public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 return new LastEventItemViewHolder(parent, listener);
             }
-        });
+        };
+        eventsList.setAdapter(adapter);
+        refreshEvents();
+    }
+
+    private void refreshEvents() {
+        adapter.setEvents(getEvents());
     }
 
     private List<Event> getEvents() {
         List<Event> latestEvents = new EventsDao(this).getLatestEvents();
         List<Event> eventsToShow = new LinkedList<>();
         for (Event latestEvent : latestEvents) {
-//            if (!latestEvent.getScore().isNormal()) {
+            if (!latestEvent.getScore().isNormal() || latestEvent.isExpired()) {
                 eventsToShow.add(latestEvent);
-//            }
+            }
         }
         return eventsToShow;
     }

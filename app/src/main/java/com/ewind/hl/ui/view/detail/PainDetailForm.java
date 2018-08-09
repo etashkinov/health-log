@@ -11,12 +11,13 @@ import android.widget.MultiAutoCompleteTextView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.detail.PainDetail;
+import com.ewind.hl.model.event.type.PainEventType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PainDetailForm extends EnumDetailForm<PainDetail> {
+public class PainDetailForm extends EnumDetailForm<PainDetail, PainEventType> {
 
     private MultiAutoCompleteTextView painType;
 

@@ -173,6 +173,7 @@
     <string name="heart_disease_symptoms_and_signs">Heart Disease Symptoms and Signs</string>
     <string name="heart_failure_symptoms_and_signs">Heart Failure Symptoms and Signs</string>
     <string name="heartburn">Heartburn</string>
+    <string name="height">Height</string>
     <string name="helicobacter_pylori_h_pylori_symptoms_and_signs">Helicobacter pylori (H. pylori) Symptoms and Signs</string>
     <string name="hemolysis">Hemolysis</string>
     <string name="hepatitis_c_hcv_symptoms_and_signs">Hepatitis C (HCV) Symptoms and Signs</string>
@@ -401,6 +402,7 @@
     <string name="vomiting_blood">Vomiting Blood</string>
     <string name="watery_eye">Watery Eye</string>
     <string name="weakness">Weakness</string>
+    <string name="weight">Weight</string>
     <string name="weight_gain">Weight Gain</string>
     <string name="weight_loss">Weight Loss</string>
     <string name="west_nile_virus_symptoms_and_signs">West Nile Virus Symptoms and Signs</string>

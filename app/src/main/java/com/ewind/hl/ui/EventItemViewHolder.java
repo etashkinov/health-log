@@ -1,6 +1,5 @@
 package com.ewind.hl.ui;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -33,5 +32,9 @@ public abstract class EventItemViewHolder extends RecyclerView.ViewHolder {
     protected int getBand(Event event) {
         Score score = event.getScore();
         return new ScoreBand(score).getBand();
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }

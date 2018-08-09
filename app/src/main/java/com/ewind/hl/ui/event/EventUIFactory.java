@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EnumEventType;
 import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.MeasurementEventType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class EventUIFactory {
 
     static {
         UI.put(EnumEventType.class, EnumEventUI.class);
+        UI.put(MeasurementEventType.class, MeasurementEventUI.class);
     }
 
     @NonNull

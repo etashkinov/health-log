@@ -14,18 +14,18 @@ import com.ewind.hl.model.event.detail.ValueDetail;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 
-public class ValueDetailForm<T extends ValueDetail> extends LinearLayout implements GenericDetailForm<T>, SeekBar.OnSeekBarChangeListener {
+public class ValueDetailForm<D extends ValueDetail, T extends EventType<D>> extends LinearLayout implements GenericDetailForm<D, T>, SeekBar.OnSeekBarChangeListener {
 
     private SeekBar seekBar;
     private TextView textView;
-    private EventType<T> eventType;
+    private T eventType;
 
     public ValueDetailForm(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    public void setEventType(EventType<T> eventType) {
+    public void setEventType(T eventType) {
         this.eventType = eventType;
     }
 
@@ -43,14 +43,14 @@ public class ValueDetailForm<T extends ValueDetail> extends LinearLayout impleme
     }
 
     @Override
-    public void setDetail(T detail) {
+    public void setDetail(D detail) {
         seekBar.setProgress(detail.getValue().intValue());
     }
 
     @Override
-    public T getDetail() {
+    public D getDetail() {
         try {
-            Constructor<T> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
+            Constructor<D> constructor = eventType.getDetailClass().getConstructor(BigDecimal.class);
             return constructor.newInstance(getValue());
         } catch (Exception e) {
             throw new IllegalStateException("Failed to create value details for " + eventType, e);

@@ -299,6 +299,23 @@ measurements:
       range: 33,42
       normal: 36.4,36.6,36.8
       step: 0.1
+  weight:
+    accuracy: day
+    expiration: P1M
+    value:
+      unit: kg
+      range: 3,300
+      normal: 3,60,300
+      step: 0.1
+  height:
+    accuracy: day
+    expiration: P4M
+    value:
+      unit: cm
+      range: 20,250
+      normal: 20,175,250
+      step: 1
+
 diagnosis:
   abscessed_tooth_symptoms_and_signs:
   acid_reflux_gerd_symptoms_and_signs:
