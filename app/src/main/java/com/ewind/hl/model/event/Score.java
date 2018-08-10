@@ -1,9 +1,11 @@
 package com.ewind.hl.model.event;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Score implements Serializable {
+public class Score implements Serializable, Comparable<Score> {
     public static final int MAX = 100;
     public static final int MIN = 0;
     private static final double RANGE = MAX - MIN;
@@ -40,5 +42,10 @@ public class Score implements Serializable {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public int compareTo(@NonNull Score score) {
+        return value - score.value;
     }
 }

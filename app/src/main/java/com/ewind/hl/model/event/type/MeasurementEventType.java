@@ -72,7 +72,7 @@ public class MeasurementEventType<D extends ValueDetail> extends EventType<D> {
 
     @Override
     public String getDescription(D detail, Context context) {
-        return new DecimalFormat("##.#").format(detail.getValue());
+        return new DecimalFormat("##.#").format(detail.getValue()) + " " + unit;
     }
 
     public BigDecimal getMin() {

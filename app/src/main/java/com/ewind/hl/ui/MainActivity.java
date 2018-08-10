@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.EventScoreComparator;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 
@@ -37,10 +38,10 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
 
         RecyclerView eventsList = findViewById(R.id.eventsList);
-        EventActionListener listener = new EventActionListener(MainActivity.this);
-        adapter = new EventAdapter() {
+        adapter = new EventAdapter(new EventScoreComparator()) {
             @Override
             public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                EventActionListener listener = new EventActionListener(MainActivity.this);
                 return new LastEventItemViewHolder(parent, listener);
             }
         };
@@ -56,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         List<Event> latestEvents = new EventsDao(this).getLatestEvents();
         List<Event> eventsToShow = new LinkedList<>();
         for (Event latestEvent : latestEvents) {
-            if (!latestEvent.getScore().isNormal() || latestEvent.isExpired()) {
+//            if (!latestEvent.getScore().isNormal() || latestEvent.isExpired()) {
                 eventsToShow.add(latestEvent);
-            }
+//            }
         }
         return eventsToShow;
     }

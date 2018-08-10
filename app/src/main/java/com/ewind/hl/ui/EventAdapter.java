@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import com.ewind.hl.model.event.Event;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,11 @@ import java.util.List;
 public abstract class EventAdapter extends RecyclerView.Adapter<EventItemViewHolder> {
 
     private List<Event> events;
+    private final Comparator<Event> comparator;
+
+    protected EventAdapter(Comparator<Event> comparator) {
+        this.comparator = comparator;
+    }
 
     public void setEvents(List<Event> events) {
         this.events = new LinkedList<>(events);
@@ -19,7 +25,7 @@ public abstract class EventAdapter extends RecyclerView.Adapter<EventItemViewHol
     }
 
     private void refreshEvents() {
-        Collections.sort(events, (e1, e2) -> - e1.getDate().compareTo(e2.getDate()));
+        Collections.sort(events, comparator);
         notifyItemRangeChanged(0, events.size());
         notifyDataSetChanged();
     }

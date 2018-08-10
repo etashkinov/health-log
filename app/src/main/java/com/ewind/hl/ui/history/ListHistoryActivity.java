@@ -17,6 +17,7 @@ import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
+import com.ewind.hl.model.event.EventDateComparator;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
@@ -28,6 +29,7 @@ import com.ewind.hl.ui.event.EventUIFactory;
 
 import org.joda.time.LocalDate;
 
+import java.util.Collections;
 import java.util.List;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
@@ -83,12 +85,13 @@ public class ListHistoryActivity extends AppCompatActivity implements EventChang
         eventsList.setLayoutManager(new LinearLayoutManager(this));
 
         EventActionListener listener = new EventActionListener(this);
-        adapter = new EventAdapter() {
+        adapter = new EventAdapter(new EventDateComparator()) {
             @Override
             public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 return new HistoryEventItemViewHolder(parent, listener);
             }
         };
+        adapter.setEvents(Collections.emptyList());
         eventsList.setAdapter(adapter);
 
         initTouchHelper(eventsList, listener);
@@ -118,8 +121,10 @@ public class ListHistoryActivity extends AppCompatActivity implements EventChang
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            refreshEvents();
+            setResult(Activity.RESULT_OK, data);
         }
+
+        refreshEvents();
     }
 
     private void onAdd(Event<?> lastEvent) {

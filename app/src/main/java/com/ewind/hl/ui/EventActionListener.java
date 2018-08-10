@@ -37,7 +37,7 @@ public class EventActionListener {
         Intent intent = new Intent(activity, ListHistoryActivity.class);
         intent.putExtra(GraphHistoryActivity.EVENT_TYPE, event.getType().getName());
         intent.putExtra(GraphHistoryActivity.EVENT_AREA, event.getArea());
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, UPDATE_REQUEST_CODE);
     }
 
     public void onUpdate(Event event) {

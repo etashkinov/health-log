@@ -42,7 +42,11 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
     }
 
     private void onHistory(View view) {
-        listener.onHistory(event);
+        if (event.isExpired()) {
+            onAddLike(view);
+        } else {
+            listener.onHistory(event);
+        }
     }
 
     private void onAddLike(View view) {
@@ -66,6 +70,7 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
         }
 
         ViewGroup eventDetailContainer = itemView.findViewById(R.id.eventDetailContainer);
+        eventDetailContainer.removeAllViews();
         View view = ui.getLastEventDetailView(event, eventDetailContainer);
         eventDetailContainer.addView(view);
     }
