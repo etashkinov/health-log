@@ -315,6 +315,18 @@ measurements:
       range: 20,250
       normal: 20,175,250
       step: 1
+  blood_pressure:
+    type: blood_pressure
+    accuracy: quarter
+    value:
+      unit: mmHg
+      range: 30,148
+      normal: 73,83,98
+      step: 1
+  eye_sight:
+    type: eye_sight
+    accuracy: day
+    expiration: P2Y
 
 diagnosis:
   abscessed_tooth_symptoms_and_signs:

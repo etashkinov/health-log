@@ -35,6 +35,8 @@ public class EventTypeFactory {
         registerType("amount", AmountEventType.class);
         registerType("size", SizeEventType.class);
         registerType("severity", SeverityEventType.class);
+        registerType("blood_pressure", BloodPressureEventType.class);
+        registerType("eye_sight", EyeSightEventType.class);
     }
 
     private static Map<String, EventType> events;
