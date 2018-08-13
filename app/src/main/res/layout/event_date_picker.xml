@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".ui.EventFormActivity">
+    tools:parentTag="android.support.constraint.ConstraintLayout">
 
     <ImageView
         android:id="@+id/eventDateBackButton"
         android:layout_width="24sp"
         android:layout_height="24sp"
         android:layout_gravity="center_vertical"
-        android:tint="@color/colorAccent"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/ic_back"
+        android:tint="@color/colorPrimary"
+        android:visibility="gone" />
 
-    <Button
+    <TextView
         android:id="@+id/eventDatePickerButton"
-        style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
-        android:text="@string/event_date_today" />
+        android:layout_gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/event_date_today"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         android:id="@+id/eventDateForwardButton"
@@ -28,17 +32,18 @@
         android:layout_height="24sp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_forward"
-        android:tint="@color/colorAccent" />
+        android:tint="@color/colorPrimary"
+        android:visibility="gone" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        />
     <Spinner
         android:id="@+id/eventDayPartSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:spinnerMode="dropdown"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@null"
+        app:layout_constraintStart_toEndOf="@id/eventDatePickerButton"
+        app:layout_constraintBaseline_toBaselineOf="@id/eventDatePickerButton"
         />
-</LinearLayout>
+</merge>

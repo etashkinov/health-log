@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventDateComparator;
+import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
@@ -26,6 +29,7 @@ import com.ewind.hl.ui.EventChangedListener;
 import com.ewind.hl.ui.EventItemViewHolder;
 import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.view.area.AreaSelector;
 
 import org.joda.time.LocalDate;
 
@@ -138,11 +142,19 @@ public class ListHistoryActivity extends AppCompatActivity implements EventChang
      */
     private void initHeader() {
         ImageView eventImage = findViewById(R.id.eventImage);
-        Drawable drawable = EventUIFactory.getUI(EventTypeFactory.get(type)).getEventTypeDrawable(this);
+        EventType<EventDetail> type = EventTypeFactory.get(this.type);
+        Drawable drawable = EventUIFactory.getUI(type).getEventTypeDrawable(this);
         eventImage.setImageDrawable(drawable);
 
         TextView eventText = findViewById(R.id.eventText);
-        eventText.setText(LocalizationService.getEventTypeName(this, EventTypeFactory.get(type)));
+        eventText.setText(LocalizationService.getEventTypeName(this, type));
+
+        AreaSelector areaSelector = findViewById(R.id.areaSelector);
+        if (EventTypeFactory.getAreas(type).size() < 2) {
+            areaSelector.setVisibility(View.GONE);
+        } else {
+            areaSelector.init(type, area);
+        }
     }
 
     @Override

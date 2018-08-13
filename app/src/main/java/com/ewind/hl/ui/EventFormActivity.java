@@ -16,11 +16,14 @@ import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.event.EventUIFactory;
 import com.ewind.hl.ui.view.EventDatePicker;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.area.AreaSelector;
+
+import java.util.Set;
 
 public class EventFormActivity<D extends EventDetail> extends AppCompatActivity implements EventChangedListener {
     private static final String TAG = EventFormActivity.class.getName();
@@ -71,7 +74,13 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         initHeader(event.getType());
 
         eventDatePicker.setDate(event.getDate());
-        areaSelector.setArea(event.getType(), event.getArea());
+
+        areaSelector.init(event.getType(), event.getArea());
+
+        Set<String> areas = EventTypeFactory.getAreas(event.getType());
+        if (areas.size() < 2) {
+            areaSelector.setVisibility(View.GONE);
+        }
 
         initDetailForm(event);
 
@@ -84,7 +93,7 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         if (resultCode == Activity.RESULT_OK) {
             String area = data.getStringExtra(AreaSearchActivity.SELECTED_AREA);
             if (area != null) {
-                areaSelector.setArea(event.getType(), AreaFactory.getArea(area));
+                areaSelector.setArea(AreaFactory.getArea(area));
             }
         }
     }

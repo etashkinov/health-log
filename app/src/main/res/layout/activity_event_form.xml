@@ -56,40 +56,39 @@
 
     </LinearLayout>
 
+    <com.ewind.hl.ui.view.area.AreaSelector
+        android:id="@+id/areaSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <com.ewind.hl.ui.view.area.AreaSelector
-            android:id="@+id/areaSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp" />
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <com.ewind.hl.ui.view.EventDatePicker
             android:id="@+id/eventDatePicker"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-             />
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal" />
 
         <FrameLayout
             android:id="@+id/eventDetailContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-         />
+            android:layout_marginTop="10dp" />
 
         <EditText
             android:id="@+id/noteText"
+            style="@style/AppTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text|textMultiLine"
-            style="@style/AppTheme"
-            android:text="tre"
-            android:hint="Note"/>
+            android:hint="Note"
+            android:inputType="text|textMultiLine" />
 
 
         <View

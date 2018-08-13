@@ -4,13 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.DayPart;
@@ -22,7 +22,7 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDatePicker extends LinearLayout {
+public class EventDatePicker extends ConstraintLayout {
 
     private LocalDate localDate;
     private DayPart dayPart;
@@ -135,7 +135,7 @@ public class EventDatePicker extends LinearLayout {
     private void refreshDate() {
         View eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
         eventDateForwardButton.setEnabled(true);
-        Button datePicker = findViewById(R.id.eventDatePickerButton);
+        TextView datePicker = findViewById(R.id.eventDatePickerButton);
         datePicker.setText(LocalizationService.getLocalDate(localDate));
         LocalDate today = LocalDate.now();
         if (localDate.equals(today)) {
