@@ -78,6 +78,17 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         noteText.setText(event.getNote());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            String area = data.getStringExtra(AreaSearchActivity.SELECTED_AREA);
+            if (area != null) {
+                areaSelector.setArea(event.getType(), AreaFactory.getArea(area));
+            }
+        }
+    }
+
     private void onOk(View view) {
         updateEvent();
         finishOk();

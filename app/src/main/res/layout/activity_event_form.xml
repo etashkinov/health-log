@@ -62,19 +62,19 @@
         android:orientation="vertical"
         android:padding="15dp">
 
-        <com.ewind.hl.ui.view.EventDatePicker
-            android:id="@+id/eventDatePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-             />
-
         <com.ewind.hl.ui.view.area.AreaSelector
             android:id="@+id/areaSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingEnd="15dp"
             android:paddingStart="15dp" />
+
+        <com.ewind.hl.ui.view.EventDatePicker
+            android:id="@+id/eventDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+             />
 
         <FrameLayout
             android:id="@+id/eventDetailContainer"

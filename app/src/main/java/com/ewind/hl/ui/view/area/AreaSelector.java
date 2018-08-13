@@ -1,68 +1,50 @@
 package com.ewind.hl.ui.view.area;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
-import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
+import com.ewind.hl.ui.AreaSearchActivity;
 import com.ewind.hl.ui.LocalizationService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import static com.ewind.hl.ui.EventActionListener.SEARCH_REQUEST_CODE;
 
 public class AreaSelector extends ConstraintLayout {
 
-    private final Spinner areaSpinner;
+    private final TextView areaLink;
+    private Area area;
 
-    private Map<String, String> values;
 
     public AreaSelector(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate(getContext(), R.layout.view_area_selector, this);
 
-        areaSpinner = findViewById(R.id.areaSpinner);
+        areaLink = findViewById(R.id.areaLink);
     }
 
-    public void setArea(EventType type, Area area) {
-        values = new HashMap<>();
-        Set<String> areas = EventTypeFactory.getAreas(type);
-        for (String value : areas) {
-            values.put(getAreaName(value), value);
-        }
-
-        ArrayList<String> strings = new ArrayList<>(values.keySet());
-        Collections.sort(strings);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, strings);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        areaSpinner.setAdapter(adapter);
+    public void setArea(EventType<?> type, Area area) {
+        this.area = area;
 
         if (area != null) {
-            areaSpinner.setSelection(strings.indexOf(getAreaName(area.getName())));
+            String areaName = LocalizationService.getAreaName(area);
+            this.areaLink.setText(areaName);
+        } else {
+            this.areaLink.setText("Where?");
         }
-
-        if (values.size() <= 1) {
-            setVisibility(GONE);
-            areaSpinner.setSelection(0);
-        }
-    }
-
-    @NonNull
-    private String getAreaName(String value) {
-        return LocalizationService.getAreaName(value);
+        areaLink.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AreaSearchActivity.class);
+            intent.putExtra(AreaSearchActivity.EVENT_TYPE, type.getName());
+            ((Activity) getContext()).startActivityForResult(intent, SEARCH_REQUEST_CODE);
+        });
     }
 
     public Area getArea() {
-        String item = (String) areaSpinner.getSelectedItem();
-        return AreaFactory.getArea(values.get(item));
+        return area;
     }
 }

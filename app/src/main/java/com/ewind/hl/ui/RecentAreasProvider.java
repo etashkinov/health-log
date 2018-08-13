@@ -10,22 +10,21 @@ import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
-import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.area.Area;
+import com.ewind.hl.model.area.AreaFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecentEventTypesProvider extends SearchRecentSuggestionsProvider {
-    private static final String TAG = RecentEventTypesProvider.class.getName();
+public class RecentAreasProvider extends SearchRecentSuggestionsProvider {
+    private static final String TAG = RecentAreasProvider.class.getName();
 
-    public final static String AUTHORITY = RecentEventTypesProvider.class.getName();
+    public final static String AUTHORITY = RecentAreasProvider.class.getName();
     public final static int MODE = DATABASE_MODE_QUERIES;
 
-    public static void remember(EventType<?> type, Context context) {
+    public static void remember(Area area, Context context) {
         SearchRecentSuggestions suggestions = getSuggestions(context);
-        suggestions.saveRecentQuery(type.getName(), null);
+        suggestions.saveRecentQuery(area.getName(), null);
     }
 
     @NonNull
@@ -33,23 +32,22 @@ public class RecentEventTypesProvider extends SearchRecentSuggestionsProvider {
         return new SearchRecentSuggestions(context, AUTHORITY, MODE);
     }
 
-    public static List<EventType<?>> getRecent(int limit, Context context) {
+    public static List<Area> getRecent(int limit, Context context) {
         ContentResolver contentResolver = context.getContentResolver();
 
         String contentUri = "content://" + AUTHORITY + '/' + SearchManager.SUGGEST_URI_PATH_QUERY;
         Uri uri = Uri.parse(contentUri);
 
-        List<EventType<?>> result = new ArrayList<>(limit);
+        List<Area> result = new ArrayList<>(limit);
 
-        try (Cursor cursor = contentResolver.query(uri, null, null, new String[] { "" }, null)) {
+        try (Cursor cursor = contentResolver.query(uri, null, null, new String[]{""}, null)) {
             if (cursor != null) {
                 while (cursor.moveToNext() && result.size() < limit) {
-                        String typeName = cursor.getString(2);
-                    try {
-                        EventType<EventDetail> type = EventTypeFactory.get(typeName);
-                        result.add(type);
-                    } catch (IllegalArgumentException e) {
-                        // IGNORE
+                    String areaName = cursor.getString(2);
+                    Area area = AreaFactory.getArea(areaName);
+
+                    if (area != null) {
+                        result.add(area);
                     }
                 }
             }
@@ -62,7 +60,7 @@ public class RecentEventTypesProvider extends SearchRecentSuggestionsProvider {
         return result;
     }
 
-    public RecentEventTypesProvider() {
+    public RecentAreasProvider() {
         setupSuggestions(AUTHORITY, MODE);
     }
 }
