@@ -38,13 +38,30 @@
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_add"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/eventsList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="3"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/event_item"/>
+        android:orientation="vertical"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/eventsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/event_item"/>
+
+
+        <Button
+            android:id="@+id/eventsListAllButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            tools:text="Show all"
+            android:theme="@style/PrimaryFlatButton"/>
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

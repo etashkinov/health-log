@@ -90,6 +90,21 @@
             android:hint="Note"
             android:inputType="text|textMultiLine" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+            <ImageView
+                style="@style/AppTheme.IconButton"
+                android:src="@drawable/ic_camera"
+                android:padding="5dp"/>
+            <ImageView
+                style="@style/AppTheme.IconButton"
+                android:src="@drawable/ic_attachment"
+                android:padding="5dp"/>
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"

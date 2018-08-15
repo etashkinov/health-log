@@ -9,10 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.EventComparator;
+import com.ewind.hl.model.event.EventDateComparator;
+import com.ewind.hl.model.event.EventRelevancyComparator;
 import com.ewind.hl.model.event.EventScoreComparator;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
@@ -24,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private static final String TAG = MainActivity.class.getName();
     private EventAdapter adapter;
+    private boolean showAll = false;
+    private TextView showAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +42,19 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         setSupportActionBar(findViewById(R.id.toolbar));
 
         findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
+        showAllButton = findViewById(R.id.eventsListAllButton);
+        showAllButton.setOnClickListener(this::onShowAll);
 
         RecyclerView eventsList = findViewById(R.id.eventsList);
-        adapter = new EventAdapter(new EventScoreComparator()) {
+
+
+        EventComparator comparator = new EventComparator(
+                new EventRelevancyComparator(),
+                new EventDateComparator(),
+                new EventScoreComparator()
+        );
+
+        adapter = new EventAdapter(comparator) {
             @Override
             public EventItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 EventActionListener listener = new EventActionListener(MainActivity.this);
@@ -49,7 +65,13 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         refreshEvents();
     }
 
+    private void onShowAll(View view) {
+        showAll = !showAll;
+        refreshEvents();
+    }
+
     private void refreshEvents() {
+        showAllButton.setText(showAll ? "Show less" : "Show all");
         adapter.setEvents(getEvents());
     }
 
@@ -57,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         List<Event> latestEvents = new EventsDao(this).getLatestEvents();
         List<Event> eventsToShow = new LinkedList<>();
         for (Event latestEvent : latestEvents) {
-//            if (!latestEvent.getScore().isNormal() || latestEvent.isExpired()) {
+            if (showAll || latestEvent.getType().isRelevant(latestEvent)) {
                 eventsToShow.add(latestEvent);
-//            }
+            }
         }
         return eventsToShow;
     }

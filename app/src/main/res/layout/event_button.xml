@@ -10,10 +10,8 @@
 
     <ImageView
         android:id="@+id/eventImage"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        style="@style/AppTheme.IconButton"
         android:layout_margin="5sp"
-        android:tint="@color/colorAccent"
         android:src="@drawable/ic_event"
         android:contentDescription="@string/empty" />
 

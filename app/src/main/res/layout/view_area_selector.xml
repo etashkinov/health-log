@@ -18,9 +18,7 @@
 
     <ImageView
         android:id="@+id/areaLocatorButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        style="@style/AppTheme.IconButton"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_target"
-        android:tint="@color/colorAccent"/>
+        android:src="@drawable/ic_target"/>
 </merge>

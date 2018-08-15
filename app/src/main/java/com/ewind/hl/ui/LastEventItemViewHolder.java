@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
         eventIcon.setImageDrawable(drawable);
         int eventTint = getEventTint(event, context);
         if (eventTint != 0) {
-            int color = itemView.getContext().getColor(eventTint);
+            int color = ContextCompat.getColor(itemView.getContext(), eventTint);
             Log.i(TAG, "Tint for " + type.getName() + ": " + color);
             eventIcon.setImageTintList(ColorStateList.valueOf(color));
             eventIcon.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
