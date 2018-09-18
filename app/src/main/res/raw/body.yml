@@ -72,5 +72,7 @@ parts:
           heel:
           toe:
   back:
+    parts:
+      spine:
   waist:
   buttocks:

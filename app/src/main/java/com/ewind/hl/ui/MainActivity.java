@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     private static final String TAG = MainActivity.class.getName();
     private EventAdapter adapter;
     private boolean showAll = false;
-    private TextView showAllButton;
+    private ImageView showAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void refreshEvents() {
-        showAllButton.setText(showAll ? "Show less" : "Show all");
+        showAllButton.setImageDrawable(getDrawable(showAll ? R.drawable.ic_collapse : R.drawable.ic_expand));
         adapter.setEvents(getEvents());
     }
 

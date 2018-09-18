@@ -17,14 +17,13 @@
             android:layout_height="wrap_content"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView
-                android:id="@+id/eventTitleText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/eventTitleText"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryNegative"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ImageView
+                android:id="@+id/eventsListAllButton"
+                android:layout_width="56dp"
+                android:layout_height="26dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_expand"
+                android:tint="@color/colorPrimaryNegative" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -34,34 +33,17 @@
         android:id="@+id/addNewButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"/>
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_add" />
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/eventsList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/eventsList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="android.support.v7.widget.GridLayoutManager"
-            app:spanCount="3"
-            tools:listitem="@layout/event_item"/>
-
-
-        <Button
-            android:id="@+id/eventsListAllButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            tools:text="Show all"
-            android:theme="@style/PrimaryFlatButton"/>
-    </LinearLayout>
-
+        app:spanCount="3"
+        tools:listitem="@layout/event_item" />
 
 </android.support.design.widget.CoordinatorLayout>
