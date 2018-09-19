@@ -20,7 +20,7 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/eventTitleText"
+            android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

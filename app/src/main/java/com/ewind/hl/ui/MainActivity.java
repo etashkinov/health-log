@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
@@ -29,24 +29,26 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     private static final String TAG = MainActivity.class.getName();
     private EventAdapter adapter;
     private boolean showAll = false;
-    private ImageView showAllButton;
+    private MenuItem showAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
 
         AreaFactory.initBody(this); // FIXME
         EventTypeFactory.initEvents(this);
 
         setContentView(R.layout.main_activity);
-        setSupportActionBar(findViewById(R.id.toolbar));
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.eventTitleText);
+        getSupportActionBar().setIcon(R.drawable.ic_user);
 
         findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
-        showAllButton = findViewById(R.id.eventsListAllButton);
-        showAllButton.setOnClickListener(this::onShowAll);
 
         RecyclerView eventsList = findViewById(R.id.eventsList);
-
 
         EventComparator comparator = new EventComparator(
                 new EventRelevancyComparator(),
@@ -65,13 +67,13 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         refreshEvents();
     }
 
-    private void onShowAll(View view) {
+    private void onShowAll() {
         showAll = !showAll;
+        showAllButton.setIcon(this.showAll ? R.drawable.ic_collapse : R.drawable.ic_expand);
         refreshEvents();
     }
 
     private void refreshEvents() {
-        showAllButton.setImageDrawable(getDrawable(showAll ? R.drawable.ic_collapse : R.drawable.ic_expand));
         adapter.setEvents(getEvents());
     }
 
@@ -89,12 +91,19 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_event, menu);
+        showAllButton = menu.findItem(R.id.action_show_all);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return item.getItemId() == R.id.action_settings
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_show_all) {
+            onShowAll();
+            return true;
+        }
+
+        return itemId == R.id.action_settings
                 || super.onOptionsItemSelected(item);
     }
 

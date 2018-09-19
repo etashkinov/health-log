@@ -17,16 +17,7 @@
             android:layout_height="wrap_content"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <ImageView
-                android:id="@+id/eventsListAllButton"
-                android:layout_width="56dp"
-                android:layout_height="26dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_expand"
-                android:tint="@color/colorPrimaryNegative" />
-
         </android.support.v7.widget.Toolbar>
-
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
