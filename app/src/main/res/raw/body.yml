@@ -30,6 +30,9 @@ parts:
           chin:
       ears:
         dual: ear
+        parts:
+          ear_inside:
+          lobe:
       neck:
   arms:
     dual: arm
@@ -54,16 +57,32 @@ parts:
               nail:
       shoulder:
       forearm:
-      upperArm:
+      upper_arm:
       elbow:
   chest:
-  stomack:
-  hip:
+    parts:
+      clavicles:
+        dual: clavicle
+      breasts:
+        dual: breast
+        parts:
+          nipple:
+          areaola:
+  abdomen:
+    parts:
+      stomack:
+      lower_abdomen:
+  pelvis:
+    parts:
+      penis:
+      testicles:
+        dual: testicle
   legs:
     dual: leg
     parts:
-      knee:
+      hip:
       thigh:
+      knee:
       shin:
       calf:
       ankle:
@@ -73,6 +92,10 @@ parts:
           toe:
   back:
     parts:
+      scapulas:
+        dual: scapula
       spine:
   waist:
   buttocks:
+    dual: buttock
+  anus:
