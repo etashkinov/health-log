@@ -54,6 +54,10 @@ public class Event<T extends EventDetail> implements Serializable {
         return getType().isExpired(this);
     }
 
+    public boolean isRelevant() {
+        return getType().isRelevant(this);
+    }
+
     public Score getScore() {
         return score;
     }

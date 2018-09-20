@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.SearchView;
 
 import com.ewind.hl.R;
@@ -29,7 +28,8 @@ public class EventTypeSearchActivity extends AppCompatActivity implements Search
 
         setContentView(R.layout.activity_event_type_search);
 
-        findViewById(R.id.cancelButton).setOnClickListener(this::onCancel);
+        setSupportActionBar(findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView list = findViewById(R.id.eventsList);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -52,11 +52,6 @@ public class EventTypeSearchActivity extends AppCompatActivity implements Search
             List<EventType<?>> recent = RecentEventTypesProvider.getRecent(5, this);
             adapter.setEventTypes(recent, this);
         }
-    }
-
-    private void onCancel(View view) {
-        setResult(Activity.RESULT_CANCELED);
-        finish();
     }
 
     private void doSearch(String query) {

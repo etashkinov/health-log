@@ -412,4 +412,6 @@
     <string name="yawning">Yawning</string>
     <string name="zika_virus_infection_symptoms_and_signs">Zika Virus Infection Symptoms and Signs</string>
     <string name="action_export">Export</string>
+    <string name="show_all">Show all</string>
+    <string name="show_less">Show less</string>
 </resources>

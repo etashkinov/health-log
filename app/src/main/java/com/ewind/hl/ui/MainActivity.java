@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -43,12 +41,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
         setContentView(R.layout.main_activity);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.eventTitleText);
         getSupportActionBar().setIcon(R.drawable.ic_user);
-
-        findViewById(R.id.addNewButton).setOnClickListener(this::onEventAdd);
 
         RecyclerView eventsList = findViewById(R.id.eventsList);
 
@@ -71,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private void onShowAll() {
         showAll = !showAll;
-        showAllButton.setIcon(this.showAll ? R.drawable.ic_expand : R.drawable.ic_collapse);
+        showAllButton.setTitle(this.showAll ? R.string.show_less : R.string.show_all);
         refreshEvents();
     }
 
@@ -83,12 +78,13 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         List<Event> latestEvents = new EventsDao(this).getLatestEvents();
         List<Event> eventsToShow = new LinkedList<>();
         for (Event latestEvent : latestEvents) {
-            if (showAll || latestEvent.getType().isRelevant(latestEvent)) {
+            if (showAll || latestEvent.isRelevant()) {
                 eventsToShow.add(latestEvent);
             }
         }
         return eventsToShow;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
                 return true;
             case R.id.action_export:
                 onExport();
+                return true;
+            case R.id.action_search:
+                onEventAdd();
                 return true;
             case R.id.action_settings:
                 return true;
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         }
     }
 
-    public void onEventAdd(View view) {
+    public void onEventAdd() {
         new EventActionListener(this).onSelectEventType();
     }
 
