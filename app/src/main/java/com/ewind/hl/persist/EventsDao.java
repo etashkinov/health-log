@@ -117,4 +117,8 @@ public class EventsDao {
     public Event getLatestEvent(EventType type) {
         return toEvent(entityDao.findLatest(type.getName()));
     }
+
+    public List<Event> getAll() {
+        return toEvents(entityDao.findAll());
+    }
 }

@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ewind.hl.R;
+import com.ewind.hl.export.FileExporter;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventComparator;
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private void onShowAll() {
         showAll = !showAll;
-        showAllButton.setIcon(this.showAll ? R.drawable.ic_collapse : R.drawable.ic_expand);
+        showAllButton.setIcon(this.showAll ? R.drawable.ic_expand : R.drawable.ic_collapse);
         refreshEvents();
     }
 
@@ -98,13 +100,24 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.action_show_all) {
-            onShowAll();
-            return true;
+        switch (itemId) {
+            case R.id.action_show_all:
+                onShowAll();
+                return true;
+            case R.id.action_export:
+                onExport();
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return itemId == R.id.action_settings
-                || super.onOptionsItemSelected(item);
+    private void onExport() {
+        FileExporter exporter = new FileExporter();
+        String filepath = exporter.export(new EventsDao(this).getAll());
+        Toast.makeText(this, filepath, Toast.LENGTH_LONG).show();
     }
 
     @Override

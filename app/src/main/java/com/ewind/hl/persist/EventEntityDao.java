@@ -43,4 +43,7 @@ public interface EventEntityDao {
             " JOIN (SELECT type, max(date) as date FROM evententity GROUP BY type) le " +
             " WHERE e.type = le.type AND e.date = le.date AND e.type = :type")
     EventEntity findLatest(String type);
+
+    @Query("SELECT e.* FROM evententity e ORDER BY e.date ASC")
+    List<EventEntity> findAll();
 }
