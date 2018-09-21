@@ -25,10 +25,6 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
 
         itemView.setOnClickListener(this::onHistory);
         addButton = itemView.findViewById(R.id.addButton);
-        if (addButton != null) {
-            addButton.setOnClickListener(this::onAddLike);
-        }
-
     }
 
     @Override
@@ -37,9 +33,7 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
 
         addDetailView(event);
 
-        if (addButton != null && !this.event.isExpired()) {
-            addButton.setVisibility(View.INVISIBLE);
-        }
+        addButton.setVisibility(event.isExpired() ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void onHistory(View view) {

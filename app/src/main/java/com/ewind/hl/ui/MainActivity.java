@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ewind.hl.R;
-import com.ewind.hl.export.FileExporter;
+import com.ewind.hl.export.ExportTask;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventComparator;
@@ -114,9 +114,10 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void onExport() {
-        FileExporter exporter = new FileExporter();
-        String filepath = exporter.export(new EventsDao(this).getAll());
-        Toast.makeText(this, filepath, Toast.LENGTH_LONG).show();
+        ExportTask task = new ExportTask(new EventsDao(this));
+        task.execute(path ->
+                runOnUiThread(() ->
+                    Toast.makeText(this, path, Toast.LENGTH_LONG).show()));
     }
 
     @Override

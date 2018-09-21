@@ -7,7 +7,9 @@ import android.util.Log;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.persist.EventDateConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVWriter;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,6 +21,7 @@ public class FileExporter {
 
     private static final String EXPORT_FILE_NAME = "Health Log export.csv";
     private static final String[] CSV_HEADER = { "id", "date", "type", "area", "score", "detail", "note" };
+    private static final CSVFormat FORMAT = CSVFormat.DEFAULT.withHeader(CSV_HEADER);
 
     public String export(List<Event> events) {
         Log.i(TAG, "Export " + events.size() + " events");
@@ -34,11 +37,12 @@ public class FileExporter {
                 Log.i(TAG, "Export file found: " + export.getAbsolutePath());
             }
 
-            try (CSVWriter writer = new CSVWriter(new FileWriter(export))) {
-                writer.writeNext(CSV_HEADER);
+            try (FileWriter out = new FileWriter(export);
+                 CSVPrinter printer = new CSVPrinter(out, FORMAT)) {
                 for (Event event : events) {
-                    writer.writeNext(toColumns(event));
+                    printer.printRecord(toColumns(event));
                 }
+                printer.flush();
             }
 
             Log.i(TAG, "Events exported to file: " + export.getAbsolutePath());
@@ -49,14 +53,14 @@ public class FileExporter {
     }
 
     @NonNull
-    private String[] toColumns(Event event) {
+    private Object[] toColumns(Event event) {
         try {
-            return new String[]{
-                    String.valueOf(event.getId()),
+            return new Object[]{
+                    event.getId(),
                     EventDateConverter.serialize(event.getDate()),
                     event.getType().getName(),
                     event.getArea().getName(),
-                    String.valueOf(event.getScore().getValue()),
+                    event.getScore().getValue(),
                     new ObjectMapper().writeValueAsString(event.getDetail()),
                     event.getNote()
             };
