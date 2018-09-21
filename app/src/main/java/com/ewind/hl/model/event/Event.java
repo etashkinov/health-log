@@ -61,4 +61,8 @@ public class Event<T extends EventDetail> implements Serializable {
     public Score getScore() {
         return score;
     }
+
+    public boolean updateNeeded() {
+        return getType().updateNeeded(this);
+    }
 }

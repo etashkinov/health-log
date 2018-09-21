@@ -131,8 +131,11 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
 
     public abstract String getDescription(D detail, Context context);
 
-    public boolean isRelevant(Event latestEvent) {
-        return latestEvent.getDate().getEnd().plusDays(2).isAfter(LocalDateTime.now())
-                && (!latestEvent.isExpired() || !latestEvent.getScore().isNormal());
+    public boolean isRelevant(Event event) {
+        return event.getDate().getEnd().plusDays(2).isAfter(LocalDateTime.now());
+    }
+
+    public boolean updateNeeded(Event event) {
+        return isExpired(event) && !event.getScore().isNormal();
     }
 }

@@ -75,12 +75,8 @@ public class ListHistoryActivity extends AppCompatActivity implements EventChang
             new EventActionListener(this).onAddNew(type);
         } else {
             Event<?> lastEvent = events.get(0);
-            if (lastEvent.isExpired()) {
-                onAdd(lastEvent);
-            } else {
-                findViewById(R.id.addButton).setOnClickListener(v -> onAdd(lastEvent));
-                adapter.setEvents(events);
-            }
+            findViewById(R.id.addButton).setOnClickListener(v -> onAdd(lastEvent));
+            adapter.setEvents(events);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ewind.hl.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -114,6 +115,15 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void onExport() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setMessage("Do you want to export your entire health log?")
+                .setPositiveButton(android.R.string.ok, (d, v) -> doExport())
+                .setNegativeButton(android.R.string.cancel, (d, v) -> d.dismiss())
+                .show();
+    }
+
+    private void doExport() {
         ExportTask task = new ExportTask(new EventsDao(this));
         task.execute(path ->
                 runOnUiThread(() ->

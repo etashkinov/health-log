@@ -23,7 +23,6 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
     public LastEventItemViewHolder(ViewGroup parent, EventActionListener listener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item, parent, false), listener);
 
-        itemView.setOnClickListener(this::onHistory);
         addButton = itemView.findViewById(R.id.addButton);
     }
 
@@ -33,15 +32,13 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
 
         addDetailView(event);
 
-        addButton.setVisibility(event.isExpired() ? View.VISIBLE : View.INVISIBLE);
+        boolean updateNeeded = event.updateNeeded();
+        addButton.setVisibility(updateNeeded ? View.VISIBLE : View.INVISIBLE);
+        itemView.setOnClickListener(updateNeeded ? this::onAddLike : this::onHistory);
     }
 
     private void onHistory(View view) {
-        if (event.isExpired()) {
-            onAddLike(view);
-        } else {
-            listener.onHistory(event);
-        }
+        listener.onHistory(event);
     }
 
     private void onAddLike(View view) {
