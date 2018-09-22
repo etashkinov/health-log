@@ -40,6 +40,15 @@ public class EventActionListener {
         activity.startActivityForResult(intent, UPDATE_REQUEST_CODE);
     }
 
+    public void onChart(Event event) {
+        Activity activity = activityWeakReference.get();
+
+        Intent intent = new Intent(activity, GraphHistoryActivity.class);
+        intent.putExtra(GraphHistoryActivity.EVENT_TYPE, event.getType().getName());
+        intent.putExtra(GraphHistoryActivity.EVENT_AREA, event.getArea());
+        activity.startActivityForResult(intent, UPDATE_REQUEST_CODE);
+    }
+
     public void onUpdate(Event event) {
         Activity activity = activityWeakReference.get();
 
