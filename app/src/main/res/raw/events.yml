@@ -255,6 +255,12 @@ symptoms:
   swollen_knee:
   swollen_lip:
   swollen_lymph_nodes:
+    areas:
+      - left_arm_pit
+      - right_arm_pit
+      - neck
+      - groin
+    propagateDown: true
   swollen_testicles:
   swollen_tongue:
   swollen_tonsils:
@@ -501,5 +507,3 @@ diagnosis:
   vitamin_b12_deficiency_symptoms_and_signs:
   west_nile_virus_symptoms_and_signs:
   zika_virus_infection_symptoms_and_signs:
-  
-  

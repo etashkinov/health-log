@@ -56,6 +56,7 @@ parts:
                   tip:
               nail:
       shoulder:
+      arm_pit:
       forearm:
       upper_arm:
       elbow:
@@ -74,9 +75,11 @@ parts:
       lower_abdomen:
   pelvis:
     parts:
-      penis:
-      testicles:
-        dual: testicle
+      groin:
+        parts:
+          penis:
+          testicles:
+            dual: testicle
   legs:
     dual: leg
     parts:
