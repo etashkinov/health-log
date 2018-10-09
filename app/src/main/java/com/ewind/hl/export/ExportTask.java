@@ -1,5 +1,6 @@
 package com.ewind.hl.export;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,18 +13,17 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Strin
 
     private static final String TAG = ExportTask.class.getSimpleName();
 
-    private final FileExporter fileExporter;
+    private final DriveAdapter adapter;
     private final EventsDao dao;
-
     private ExportListener[] listeners;
 
     public interface ExportListener {
         void onExportFinished(String exportPath);
     }
 
-    public ExportTask(EventsDao dao) {
-        this.dao = dao;
-        this.fileExporter = new FileExporter();
+    public ExportTask(Context context) {
+        this.dao = new EventsDao(context);
+        this.adapter = new DriveAdapter(context);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Strin
         Log.i(TAG, "Start exporting");
         List<Event> events = dao.getAll();
         Log.i(TAG, "" + events.size() + " events found for export");
-        return fileExporter.export(events);
+        return adapter.export(events);
     }
 
     @Override

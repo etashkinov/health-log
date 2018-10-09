@@ -44,7 +44,7 @@
     <string name="benign_positional_vertigo_symptoms_and_signs">Benign Positional Vertigo Symptoms and Signs</string>
     <string name="binge_eating_disorder_symptoms_and_signs">Binge Eating Disorder Symptoms and Signs</string>
     <string name="bipolar_disorder_symptoms_and_signs">Bipolar Disorder Symptoms and Signs</string>
-     <string name="bird_flu_avian_influenza_symptoms_and_signs">Bird Flu (Avian Influenza) Symptoms and Signs</string>
+    <string name="bird_flu_avian_influenza_symptoms_and_signs">Bird Flu (Avian Influenza) Symptoms and Signs</string>
     <string name="bladder_infection_symptoms_and_signs">Bladder Infection Symptoms and Signs</string>
     <string name="bladder_spasms">Bladder Spasms</string>
     <string name="bleeding_gums">Bleeding Gums</string>
@@ -411,7 +411,13 @@
     <string name="white_tongue">White Tongue</string>
     <string name="yawning">Yawning</string>
     <string name="zika_virus_infection_symptoms_and_signs">Zika Virus Infection Symptoms and Signs</string>
-    <string name="action_export">Export</string>
+    <string name="nav_menu_export">Export</string>
     <string name="show_all">Show all</string>
     <string name="show_less">Show less</string>
+    <string name="nav_menu_import">Import</string>
+    <string name="title_activity_navigator">NavigatorActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Sign in</string>
+    <string name="nav_header_desc">User pgoto</string>
 </resources>

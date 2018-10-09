@@ -4,25 +4,21 @@
     tools:context="com.ewind.hl.ui.MainActivity">
 
     <item
+        android:id="@+id/action_show_relevant"
+        android:title=""
+        android:icon="@drawable/ic_relevant_off"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_show_all"
+        android:title=""
+        android:icon="@drawable/ic_relevant_on"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:title="@android:string/search_go"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_show_all"
-        android:title="@string/show_all"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_export"
-        android:orderInCategory="100"
-        android:title="@string/action_export"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>
