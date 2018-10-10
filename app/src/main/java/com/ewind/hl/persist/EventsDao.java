@@ -22,13 +22,14 @@ import java.util.List;
 public class EventsDao {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String DB_NAME = "health-log-db";
 
     private static AppDatabase db;
     private EventEntityDao entityDao;
 
     public EventsDao(Context context) {
         if (db == null) {
-            db = Room.databaseBuilder(context, AppDatabase.class, "health-log-db")
+            db = Room.databaseBuilder(context, AppDatabase.class, DB_NAME)
                     .allowMainThreadQueries()
                     .build();
         }
@@ -36,8 +37,8 @@ public class EventsDao {
         entityDao = db.eventEntityDao();
     }
 
-    public List<Event> getEvents(Area area, EventDate date) {
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDate(area.getName(), date.toString());
+    public List<Event> getEvents(String type, Area area) {
+        List<EventEntity> eventEntities = entityDao.findByAreaAndType(area.getName(), type);
         return toEvents(eventEntities);
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.detail.EventDetail;
@@ -23,4 +24,6 @@ public interface EventUI<D extends EventDetail> {
     View getLastEventDetailView(Event<D> event, ViewGroup parent);
 
     View getHistoryEventDetailView(Event event, ViewGroup parent);
+
+    void setEventTint(ImageView image, Event event);
 }

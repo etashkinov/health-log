@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
-import com.ewind.hl.model.event.DayPart;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.EventDate;
 import com.ewind.hl.model.event.EventDateComparator;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
@@ -30,8 +28,6 @@ import com.ewind.hl.ui.EventItemViewHolder;
 import com.ewind.hl.ui.LocalizationService;
 import com.ewind.hl.ui.event.EventUIFactory;
 import com.ewind.hl.ui.view.area.AreaSelector;
-
-import org.joda.time.LocalDate;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,9 +64,7 @@ public class ListHistoryActivity extends AppCompatActivity implements EventChang
     }
 
     private void refreshEvents() {
-        EventDate from = new EventDate(LocalDate.now().minusYears(100), DayPart.ALL_DAY);
-        EventDate till = new EventDate(LocalDate.now(), DayPart.PM_11);
-        List<Event> events = new EventsDao(this).getEvents(type, area, from, till);
+        List<Event> events = new EventsDao(this).getEvents(type, area);
         if (events.isEmpty()) {
             new EventActionListener(this).onAddNew(type);
         } else {
