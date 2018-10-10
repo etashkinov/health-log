@@ -103,10 +103,6 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         finishOk();
     }
 
-    public void onChart(View view) {
-        new EventActionListener(this).onChart(event);
-    }
-
     private void finishOk() {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EVENT_ID, id);

@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
         setContentView(R.layout.activity_main);
 
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestScopes(Drive.SCOPE_FILE)

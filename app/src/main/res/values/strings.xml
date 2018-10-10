@@ -420,4 +420,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Sign in</string>
     <string name="nav_header_desc">User pgoto</string>
+    <string name="history_action_chart">Chart history</string>
+    <string name="history_action_list">List history</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

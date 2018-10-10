@@ -95,7 +95,7 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
                 Event<?> maxEvent = Collections.min(item.events, new EventScoreComparator());
 
                 float scale = chartBar.getContext().getResources().getDisplayMetrics().density;
-                int heightInPx  = (int) ((maxEvent.getScore().getValue() * 2 + 20) * scale);
+                int heightInPx  = (int) ((maxEvent.getScore().getValue() + 20) * scale);
 
                 LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, heightInPx);
                 params.gravity = Gravity.CENTER;
