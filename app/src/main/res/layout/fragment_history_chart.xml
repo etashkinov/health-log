@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_history">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <com.dant.centersnapreyclerview.SnappingRecyclerView
         android:id="@+id/history_chart"
@@ -15,9 +14,30 @@
         app:anchor="center"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
-        tools:itemCount="11"
+        tools:itemCount="50"
         tools:listitem="@layout/view_chart_bar">
 
     </com.dant.centersnapreyclerview.SnappingRecyclerView>
+
+    <TextView
+        android:id="@+id/event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1 Jan 1970"
+        app:layout_constraintTop_toBottomOf="@id/history_chart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/events_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/event_history_item"
+        app:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/event_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

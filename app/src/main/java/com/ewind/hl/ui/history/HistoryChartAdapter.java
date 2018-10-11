@@ -2,6 +2,7 @@ package com.ewind.hl.ui.history;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.dant.centersnapreyclerview.SnappingRecyclerView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventScoreComparator;
@@ -27,18 +29,18 @@ import java.util.Map;
 public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapter.HistoryChartViewHolder> {
 
     private final List<HistoryItem> items;
+    private int position;
 
     public HistoryChartAdapter(List<Event> events) {
-        LocalDate from = LocalDate.now().minusDays(30);
-        LocalDate till = LocalDate.now().plusDays(5);
-        Map<LocalDate, List<Event<?>>> grouping = new HashMap<>();
-        for (Event<?> event : events) {
+        LocalDate from = LocalDate.now();
+        Map<LocalDate, List<Event>> grouping = new HashMap<>();
+        for (Event event : events) {
             LocalDate day = event.getDate().getLocalDate();
             if (day.isBefore(from)) {
                 from = day;
             }
 
-            List<Event<?>> dayEvents = grouping.get(day);
+            List<Event> dayEvents = grouping.get(day);
             if (dayEvents == null) {
                 dayEvents = new LinkedList<>();
                 grouping.put(day, dayEvents);
@@ -48,8 +50,8 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
         }
 
         items = new LinkedList<>();
-        LocalDate current = from;
-        while (!current.isAfter(till)) {
+        LocalDate current = from.minusDays(10);
+        while (!current.isAfter(LocalDate.now().plusDays(10))) {
             items.add(new HistoryItem(current, grouping.get(current)));
             current = current.plusDays(1);
         }
@@ -65,12 +67,34 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
     @Override
     public void onBindViewHolder(@NonNull HistoryChartViewHolder holder, int position) {
-        holder.bindTo(items.get(position));
+        HistoryActivity activity = (HistoryActivity) holder.itemView.getContext();
+        SnappingRecyclerView recyclerView = activity.findViewById(R.id.history_chart);
+        holder.itemView.setOnClickListener(v -> {
+            Log.i(HistoryChartAdapter.class.getName(), "Scroll to: " + position);
+            recyclerView.scrollToPosition(position);
+        });
+        holder.bindTo(items.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public LocalDate getDate(int position) {
+        return items.get(position).date;
+    }
+
+    public List<Event> getEvents(int position) {
+        return items.get(position).events;
+    }
+
+    public void setPosition(int newPosition) {
+        int oldPosition = this.position;
+        this.position = newPosition;
+
+        notifyItemChanged(oldPosition);
+        notifyItemChanged(newPosition);
     }
 
     public final class HistoryChartViewHolder extends RecyclerView.ViewHolder {
@@ -85,10 +109,13 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
             chartBar = itemView.findViewById(R.id.chart_bar);
         }
 
-        public void bindTo(HistoryItem item) {
-            chartBarLabel.setText(String.valueOf(item.date.getDayOfMonth()));
+        public void bindTo(HistoryItem item, int position) {
+            String text = position == HistoryChartAdapter.this.position
+                    ? "^"
+                    : String.valueOf(item.date.getDayOfMonth());
+            chartBarLabel.setText(text);
 
-            if (item.events == null) {
+            if (item.events.isEmpty()) {
                 chartBar.setVisibility(View.INVISIBLE);
             } else {
                 chartBar.setVisibility(View.VISIBLE);
@@ -109,11 +136,11 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
     private final class HistoryItem {
         private final LocalDate date;
-        private final List<Event<?>> events;
+        private final List<Event> events;
 
-        private HistoryItem(LocalDate date, List<Event<?>> events) {
+        private HistoryItem(LocalDate date, List<Event> events) {
             this.date = date;
-            this.events = events;
+            this.events = events == null ? Collections.emptyList() : events;
         }
     }
 }

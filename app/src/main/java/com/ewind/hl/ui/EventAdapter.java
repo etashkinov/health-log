@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class EventAdapter extends RecyclerView.Adapter<EventItemViewHolder> {
 
-    private List<Event> events;
+    private List<Event> events = Collections.emptyList();
     private final Comparator<Event> comparator;
 
     protected EventAdapter(Comparator<Event> comparator) {
