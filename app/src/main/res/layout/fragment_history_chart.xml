@@ -4,26 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppTheme.NoActionBar"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <com.dant.centersnapreyclerview.SnappingRecyclerView
         android:id="@+id/history_chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:orientation="horizontal"
+        android:layout_height="177dp"
         app:anchor="center"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
+        app:orientation="horizontal"
         tools:itemCount="50"
         tools:listitem="@layout/view_chart_bar">
 
     </com.dant.centersnapreyclerview.SnappingRecyclerView>
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/history_chart"
+        />
+
     <TextView
         android:id="@+id/event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         tools:text="1 Jan 1970"
+        android:textColor="@color/colorPrimary"
+        style="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintTop_toBottomOf="@id/history_chart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -32,6 +46,7 @@
         android:id="@+id/events_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         tools:listitem="@layout/event_history_item"
         app:orientation="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"

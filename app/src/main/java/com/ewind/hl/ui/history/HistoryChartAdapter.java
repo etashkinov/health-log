@@ -14,12 +14,14 @@ import android.widget.TextView;
 import com.dant.centersnapreyclerview.SnappingRecyclerView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.EventDateComparator;
 import com.ewind.hl.model.event.EventScoreComparator;
 import com.ewind.hl.ui.event.EventUI;
 import com.ewind.hl.ui.event.EventUIFactory;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,9 +32,11 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
     private final List<HistoryItem> items;
     private int position;
+    private SnappingRecyclerView recyclerView;
 
     public HistoryChartAdapter(List<Event> events) {
-        LocalDate from = LocalDate.now();
+        LocalDate today = LocalDate.now();
+        LocalDate from = today;
         Map<LocalDate, List<Event>> grouping = new HashMap<>();
         for (Event event : events) {
             LocalDate day = event.getDate().getLocalDate();
@@ -50,11 +54,26 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
         }
 
         items = new LinkedList<>();
+        int i = 0;
         LocalDate current = from.minusDays(10);
-        while (!current.isAfter(LocalDate.now().plusDays(10))) {
+        while (!current.isAfter(today.plusDays(10))) {
             items.add(new HistoryItem(current, grouping.get(current)));
             current = current.plusDays(1);
+
+            i++;
+            if (current.equals(today)) {
+                position = i;
+            }
         }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        this.recyclerView = (SnappingRecyclerView) recyclerView;
+
+        scrollToPosition(this.position);
     }
 
     @NonNull
@@ -67,13 +86,13 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
     @Override
     public void onBindViewHolder(@NonNull HistoryChartViewHolder holder, int position) {
-        HistoryActivity activity = (HistoryActivity) holder.itemView.getContext();
-        SnappingRecyclerView recyclerView = activity.findViewById(R.id.history_chart);
-        holder.itemView.setOnClickListener(v -> {
-            Log.i(HistoryChartAdapter.class.getName(), "Scroll to: " + position);
-            recyclerView.scrollToPosition(position);
-        });
+        holder.itemView.setOnClickListener(v -> scrollToPosition(position));
         holder.bindTo(items.get(position), position);
+    }
+
+    private void scrollToPosition(int position) {
+        Log.i(HistoryChartAdapter.class.getName(), "Scroll to: " + position);
+        recyclerView.scrollToPosition(position);
     }
 
     @Override
@@ -111,7 +130,7 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
         public void bindTo(HistoryItem item, int position) {
             String text = position == HistoryChartAdapter.this.position
-                    ? "^"
+                    ? ""
                     : String.valueOf(item.date.getDayOfMonth());
             chartBarLabel.setText(text);
 
@@ -140,7 +159,9 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
 
         private HistoryItem(LocalDate date, List<Event> events) {
             this.date = date;
-            this.events = events == null ? Collections.emptyList() : events;
+            this.events = events == null ? Collections.emptyList() : new ArrayList<>(events);
+
+            Collections.sort(this.events, new EventDateComparator());
         }
     }
 }
