@@ -15,22 +15,20 @@ import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.EventDateComparator;
 import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
 import com.ewind.hl.ui.EventItemViewHolder;
-import com.ewind.hl.ui.view.area.AreaSelector;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 
-public class ListHistoryFragment extends Fragment {
+public class HistoryListFragment extends Fragment {
 
     private EventAdapter adapter;
     private EventActionListener listener;
     private EventType<?> type;
     private Area area;
 
-    public ListHistoryFragment() {
+    public HistoryListFragment() {
         // Required empty public constructor
     }
 
@@ -40,17 +38,10 @@ public class ListHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history_list, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.eventsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        AreaSelector areaSelector = view.findViewById(R.id.areaSelector);
 
         recyclerView.setAdapter(adapter);
 
         initTouchHelper(recyclerView, listener);
-
-        if (EventTypeFactory.getAreas(type).size() < 2) {
-            areaSelector.setVisibility(View.GONE);
-        } else {
-            areaSelector.init(type, area);
-        }
 
         return view;
     }

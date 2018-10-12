@@ -20,14 +20,19 @@ import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
 import com.ewind.hl.ui.EventItemViewHolder;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
-public class ChartHistoryFragment extends Fragment implements SnappingRecyclerView.SnappingRecyclerViewListener {
+public class HistoryChartFragment extends Fragment implements SnappingRecyclerView.SnappingRecyclerViewListener {
+
+    private static final String THIS_YEAR_PATTERN = "d MMMM";
+    private static final String ANOTHER_YEAR_PATTERN = "d MMMM 'yy";
 
     private HistoryChartAdapter chartAdapter;
     private EventAdapter eventAdapter;
 
-    public ChartHistoryFragment() {
+    public HistoryChartFragment() {
         // Required empty public constructor
     }
 
@@ -69,10 +74,12 @@ public class ChartHistoryFragment extends Fragment implements SnappingRecyclerVi
 
     @Override
     public void onPositionChange(int position) {
-        Log.i(ChartHistoryFragment.class.getName(), "Position: " + position);
+        Log.i(HistoryChartFragment.class.getName(), "Position: " + position);
         TextView eventTitle = getActivity().findViewById(R.id.event_title);
         chartAdapter.setPosition(position);
-        eventTitle.setText(chartAdapter.getDate(position).toString());
+        LocalDate date = chartAdapter.getDate(position);
+        String pattern = date.getYear() == LocalDate.now().getYear() ? THIS_YEAR_PATTERN : ANOTHER_YEAR_PATTERN;
+        eventTitle.setText(date.toString(pattern));
 
         List<Event> events = chartAdapter.getEvents(position);
         eventAdapter.setEvents(events);

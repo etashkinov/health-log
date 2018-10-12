@@ -34,11 +34,10 @@
 
         <TextView
             android:id="@+id/eventText"
-            style="@style/TextAppearance.AppCompat.Large"
+            style="@style/TextAppearance.AppCompat.Large.Inverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty"
-            android:textColor="@android:color/white" />
+            android:text="@string/empty"/>
 
         <View
             android:layout_width="0dp"

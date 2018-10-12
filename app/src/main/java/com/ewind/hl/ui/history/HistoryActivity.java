@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
@@ -18,6 +19,7 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventChangedListener;
 import com.ewind.hl.ui.LocalizationService;
+import com.ewind.hl.ui.view.area.AreaSelector;
 
 import java.util.Collections;
 import java.util.List;
@@ -95,11 +97,14 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
 
     protected void initHeader(EventType<?> type, Area area) {
         String title = LocalizationService.getEventTypeName(this, type);
-        if (type.getAreas().size() > 1) {
-            title = LocalizationService.getAreaName(area) + " " + title;
-        }
-
         getSupportActionBar().setTitle(title);
+
+        AreaSelector areaSelector = findViewById(R.id.areaSelector);
+        if (EventTypeFactory.getAreas(type).size() < 2) {
+            areaSelector.setVisibility(View.GONE);
+        } else {
+            areaSelector.init(type, area);
+        }
     }
 
     @Override
@@ -114,7 +119,7 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
 
     private void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment fragment = chartFragment ? new ChartHistoryFragment() : new ListHistoryFragment();
+        Fragment fragment = chartFragment ? new HistoryChartFragment() : new HistoryListFragment();
         ft.replace(R.id.history_fragment, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
