@@ -208,9 +208,9 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private void doExport() {
         ExportTask task = new ExportTask(this);
-        task.execute(path ->
+        task.execute(exportedNumber ->
                 runOnUiThread(() ->
-                        Toast.makeText(this, path, Toast.LENGTH_LONG).show()));
+                        Toast.makeText(this, "Exported: " + exportedNumber, Toast.LENGTH_LONG).show()));
     }
 
     @Override

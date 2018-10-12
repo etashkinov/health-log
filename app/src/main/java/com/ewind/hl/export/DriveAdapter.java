@@ -42,11 +42,11 @@ public class DriveAdapter {
         driveResourceClient = Drive.getDriveResourceClient(context, account);
     }
 
-    public String export(List<Event> events) {
+    public void export(List<Event> events) {
         Log.i(TAG, "Export " + events.size() + " events");
 
         try {
-            return createFileInAppFolder(events).getDriveId().encodeToString();
+            createFileInAppFolder(events);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -82,7 +82,7 @@ public class DriveAdapter {
         return driveContentsTask.getResult();
     }
 
-    private DriveFile createFileInAppFolder(List<Event> events) throws ExecutionException, InterruptedException {
+    private void createFileInAppFolder(List<Event> events) throws ExecutionException, InterruptedException {
         Task<DriveFolder> appFolderTask = driveResourceClient.getAppFolder();
         Task<DriveContents> contentsTask = driveResourceClient.createContents();
         Task<DriveFile> resultTask = Tasks.whenAll(appFolderTask, contentsTask).continueWithTask(t -> {
@@ -102,7 +102,6 @@ public class DriveAdapter {
                 }
         );
         Tasks.await(resultTask);
-        return resultTask.getResult();
     }
 
 }

@@ -9,7 +9,7 @@ import com.ewind.hl.persist.EventsDao;
 
 import java.util.List;
 
-public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, String> {
+public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Integer> {
 
     private static final String TAG = ExportTask.class.getSimpleName();
 
@@ -18,7 +18,7 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Strin
     private ExportListener[] listeners;
 
     public interface ExportListener {
-        void onExportFinished(String exportPath);
+        void onExportFinished(int exportPath);
     }
 
     public ExportTask(Context context) {
@@ -27,12 +27,13 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Strin
     }
 
     @Override
-    protected String doInBackground(ExportListener... listeners) {
+    protected Integer doInBackground(ExportListener... listeners) {
         this.listeners = listeners;
         Log.i(TAG, "Start exporting");
         List<Event> events = dao.getAll();
         Log.i(TAG, "" + events.size() + " events found for export");
-        return adapter.export(events);
+        adapter.export(events);
+        return events.size();
     }
 
     @Override
@@ -41,10 +42,10 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Strin
     }
 
     @Override
-    protected void onPostExecute(String exportPath) {
-        Log.i(TAG, "Export finished: " + exportPath);
+    protected void onPostExecute(Integer exportNumber) {
+        Log.i(TAG, "Export finished: " + exportNumber);
         for (ExportListener listener : listeners) {
-            listener.onExportFinished(exportPath);
+            listener.onExportFinished(exportNumber);
         }
     }
 }

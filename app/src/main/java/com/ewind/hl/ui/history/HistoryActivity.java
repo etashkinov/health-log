@@ -88,6 +88,11 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     protected void initHeader(EventType<?> type, Area area) {
         String title = LocalizationService.getEventTypeName(this, type);
         if (type.getAreas().size() > 1) {
