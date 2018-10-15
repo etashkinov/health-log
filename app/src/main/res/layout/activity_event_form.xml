@@ -1,79 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.EventFormActivity">
 
-    <LinearLayout
-        android:id="@+id/eventHeader"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
-        <ImageView
-            android:id="@+id/cancelButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="5dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_return"
-            android:tint="@android:color/white" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
-        <ImageView
-            android:id="@+id/eventImage"
-            android:layout_width="45sp"
-            android:layout_height="45sp"
-            android:padding="5dp"
-            android:src="@drawable/ic_event"
-            android:tint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/eventText"
-            style="@style/TextAppearance.AppCompat.Large.Inverse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
-
-        <TextView
-            android:id="@+id/okButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onCancel"
-            android:padding="10dp"
-            android:text="DONE"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-
-    <com.ewind.hl.ui.view.area.AreaSelector
-        android:id="@+id/areaSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp" />
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.ewind.hl.ui.view.area.AreaSelector
+            android:id="@+id/areaSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
 
         <com.ewind.hl.ui.view.EventDatePicker
             android:id="@+id/eventDatePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
 
         <FrameLayout
             android:id="@+id/eventDetailContainer"
@@ -94,14 +60,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:orientation="horizontal">
+
             <ImageView
                 style="@style/AppTheme.IconButton"
-                android:src="@drawable/ic_camera"
-                android:padding="5dp"/>
+                android:padding="5dp"
+                android:src="@drawable/ic_camera" />
+
             <ImageView
                 style="@style/AppTheme.IconButton"
-                android:src="@drawable/ic_attachment"
-                android:padding="5dp"/>
+                android:padding="5dp"
+                android:src="@drawable/ic_attachment" />
         </LinearLayout>
 
 
@@ -121,13 +89,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:paddingEnd="10dp"
                 android:paddingStart="15dp"
+                android:paddingEnd="10dp"
                 android:text="Delete" />
 
         </android.support.v7.widget.Toolbar>
 
     </LinearLayout>
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

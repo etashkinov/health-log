@@ -2,14 +2,13 @@ package com.ewind.hl.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.AreaFactory;
@@ -38,18 +37,21 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
     private EditText noteText;
 
     private EventDetailForm<D> detailForm;
+    private View deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_form);
 
-        findViewById(R.id.cancelButton).setOnClickListener(this::onCancel);
-        findViewById(R.id.okButton).setOnClickListener(this::onOk);
-        findViewById(R.id.deleteButton).setOnClickListener(this::onDelete);
+        setSupportActionBar(findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        deleteButton = findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(this::onDelete);
 
         eventDatePicker = findViewById(R.id.eventDatePicker);
-        eventDatePicker.setListener(d -> {});
 
         areaSelector = findViewById(R.id.areaSelector);
         noteText = findViewById(R.id.noteText);
@@ -64,20 +66,21 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
             event = new EventsDao(this).getEvent(id);
         } else {
             event = (Event<D>) getIntent().getSerializableExtra(EVENT);
-            findViewById(R.id.deleteButton).setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+            eventDatePicker.setListener(d -> {});
         }
 
         setEvent(event);
     }
 
     private void setEvent(Event<D> event) {
-        initHeader(event.getType());
+        EventType<D> type = event.getType();
+        getSupportActionBar().setTitle(LocalizationService.getEventTypeName(this, type));
 
         eventDatePicker.setDate(event.getDate());
+        areaSelector.init(type, event.getArea());
 
-        areaSelector.init(event.getType(), event.getArea());
-
-        Set<String> areas = EventTypeFactory.getAreas(event.getType());
+        Set<String> areas = EventTypeFactory.getAreas(type);
         if (areas.size() < 2) {
             areaSelector.setVisibility(View.GONE);
         }
@@ -98,9 +101,22 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         }
     }
 
-    private void onOk(View view) {
-        updateEvent();
-        finishOk();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_event_form_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                updateEvent();
+                finishOk();
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void finishOk() {
@@ -125,20 +141,6 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
                 event.getType().getScore(detailForm.getDetail())));
     }
 
-    private void onCancel(View view) {
-        setResult(Activity.RESULT_CANCELED);
-        finish();
-    }
-
-    private void initHeader(EventType<D> type) {
-        ImageView eventImage = findViewById(R.id.eventImage);
-        Drawable drawable = EventUIFactory.getUI(type).getEventTypeDrawable(this);
-        eventImage.setImageDrawable(drawable);
-
-        TextView eventText = findViewById(R.id.eventText);
-        eventText.setText(LocalizationService.getEventTypeName(this, type));
-    }
-
     private void initDetailForm(Event<D> event) {
         ViewGroup eventDetailContainer = findViewById(R.id.eventDetailContainer);
         detailForm = EventUIFactory.getUI(event.getType()).getEventDetailForm(eventDetailContainer);
@@ -147,6 +149,18 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
         if (event.getDetail() != null) {
             detailForm.setDetail(event.getDetail());
         }
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override

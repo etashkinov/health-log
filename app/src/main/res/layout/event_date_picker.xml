@@ -6,15 +6,6 @@
     android:layout_height="wrap_content"
     tools:parentTag="android.support.constraint.ConstraintLayout">
 
-    <ImageView
-        android:id="@+id/eventDateBackButton"
-        android:layout_width="24sp"
-        android:layout_height="24sp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_back"
-        android:tint="@color/colorPrimary"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/eventDatePickerButton"
         android:layout_width="wrap_content"
@@ -25,15 +16,6 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/eventDateForwardButton"
-        android:layout_width="24sp"
-        android:layout_height="24sp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_forward"
-        android:tint="@color/colorPrimary"
-        android:visibility="gone" />
 
     <Spinner
         android:id="@+id/eventDayPartSpinner"

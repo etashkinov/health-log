@@ -28,19 +28,6 @@ public class EventDatePicker extends ConstraintLayout {
     private DayPart dayPart;
 
     private Spinner eventDayPartSpinner;
-
-    public EventDate getDate() {
-        return new EventDate(localDate, dayPart);
-    }
-
-    public int getDayPartSpinnerIndex() {
-        return dayPart.ordinal();
-    }
-
-    public interface OnChangeListener {
-        void onDateChanged(EventDate date);
-    }
-
     private OnChangeListener listener;
 
     public EventDatePicker(Context context, @Nullable AttributeSet attrs) {
@@ -48,13 +35,24 @@ public class EventDatePicker extends ConstraintLayout {
         inflate(context, R.layout.event_date_picker, this);
     }
 
+    public EventDate getDate() {
+        return new EventDate(localDate, dayPart);
+    }
+
+    public void setDate(EventDate date) {
+        localDate = date.getLocalDate();
+        dayPart = date.getDayPart();
+
+        refreshDate();
+    }
+
+    private int getDayPartSpinnerIndex() {
+        return dayPart.ordinal();
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
-        findViewById(R.id.eventDateBackButton).setOnClickListener(this::eventDateBack);
-        findViewById(R.id.eventDateForwardButton).setOnClickListener(this::eventDateForward);
-        findViewById(R.id.eventDatePickerButton).setOnClickListener(this::showTimePickerDialog);
 
         eventDayPartSpinner = findViewById(R.id.eventDayPartSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -62,9 +60,13 @@ public class EventDatePicker extends ConstraintLayout {
                 getLocalizedDayParts());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventDayPartSpinner.setAdapter(adapter);
+        eventDayPartSpinner.setEnabled(false);
         eventDayPartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                onDayPartChanged(DayPart.values()[position]);
+                DayPart dayPart = DayPart.values()[position];
+                if (dayPart != EventDatePicker.this.dayPart) {
+                    onDayPartChanged(dayPart);
+                }
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -89,6 +91,9 @@ public class EventDatePicker extends ConstraintLayout {
 
     public void setListener(OnChangeListener listener) {
         this.listener = listener;
+
+        eventDayPartSpinner.setEnabled(true);
+        findViewById(R.id.eventDatePickerButton).setOnClickListener(this::showTimePickerDialog);
     }
 
     private void showTimePickerDialog(View view) {
@@ -116,35 +121,20 @@ public class EventDatePicker extends ConstraintLayout {
         listener.onDateChanged(getDate());
     }
 
-    private void eventDateBack(View view) {
-        localDate = localDate.minusDays(1);
-        notifyDateChanged();
-    }
-
-    private void eventDateForward(View view) {
-        localDate = localDate.plusDays(1);
-        notifyDateChanged();  }
-
-    public void setDate(EventDate date) {
-        localDate = date.getLocalDate();
-        dayPart = date.getDayPart();
-
-        refreshDate();
-    }
-
     private void refreshDate() {
-        View eventDateForwardButton = findViewById(R.id.eventDateForwardButton);
-        eventDateForwardButton.setEnabled(true);
         TextView datePicker = findViewById(R.id.eventDatePickerButton);
         datePicker.setText(LocalizationService.getLocalDate(localDate));
         LocalDate today = LocalDate.now();
         if (localDate.equals(today)) {
             datePicker.setText(R.string.event_date_today);
-            eventDateForwardButton.setEnabled(false);
         } else if (localDate.equals(today.minusDays(1))) {
             datePicker.setText(R.string.event_date_yesterday);
         }
 
         eventDayPartSpinner.setSelection(getDayPartSpinnerIndex());
+    }
+
+    public interface OnChangeListener {
+        void onDateChanged(EventDate date);
     }
 }
