@@ -1,23 +1,24 @@
 package com.ewind.hl.ui.history;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.dant.centersnapreyclerview.SnappingRecyclerView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDateComparator;
-import com.ewind.hl.model.event.EventScoreComparator;
+import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.ui.event.EventUI;
-import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.history.period.HistoryPeriod;
+import com.ewind.hl.ui.history.period.HistoryPeriodFactory;
+import com.ewind.hl.ui.history.period.HistoryPeriodFactory.HistoryPeriodType;
 
 import org.joda.time.LocalDate;
 
@@ -28,43 +29,61 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapter.HistoryChartViewHolder> {
+public class HistoryChartAdapter<D extends EventDetail>
+        extends RecyclerView.Adapter<HistoryChartAdapter.HistoryChartViewHolder> {
 
-    private final List<HistoryItem> items;
-    private int position;
+    public static final String TAG = HistoryChartAdapter.class.getSimpleName();
+
+    private List<HistoryItem<D>> items;
+    private final EventUI<D> ui;
+
     private SnappingRecyclerView recyclerView;
 
-    public HistoryChartAdapter(List<Event> events) {
-        LocalDate today = LocalDate.now();
-        LocalDate from = today;
-        Map<LocalDate, List<Event>> grouping = new HashMap<>();
-        for (Event event : events) {
-            LocalDate day = event.getDate().getLocalDate();
-            if (day.isBefore(from)) {
-                from = day;
-            }
+    private int position;
 
-            List<Event> dayEvents = grouping.get(day);
-            if (dayEvents == null) {
-                dayEvents = new LinkedList<>();
-                grouping.put(day, dayEvents);
-            }
+    public HistoryChartAdapter(EventUI<D> ui, List<Event<D>> events, HistoryPeriodType periodType) {
+        this.ui = ui;
+        updateItems(events, periodType);
+    }
 
-            dayEvents.add(event);
-        }
+    private void updateItems(List<Event<D>> events, HistoryPeriodType periodType) {
+        Map<HistoryPeriod, List<Event<D>>> grouping = groupByPeriod(events, periodType);
+        HistoryPeriod from = Collections.min(grouping.keySet()).add(-10);
+        HistoryPeriod now = HistoryPeriodFactory.toPeriod(LocalDate.now(), periodType);
+        HistoryPeriod till = now.add(10);
 
-        items = new LinkedList<>();
-        int i = 0;
-        LocalDate current = from.minusDays(10);
-        while (!current.isAfter(today.plusDays(10))) {
-            items.add(new HistoryItem(current, grouping.get(current)));
-            current = current.plusDays(1);
-
-            i++;
-            if (current.equals(today)) {
-                position = i;
+        int steps = till.minus(from);
+        this.items = new ArrayList<>(steps);
+        for (int i = 0; i <= steps; i++) {
+            HistoryPeriod period = from.add(i);
+            this.items.add(new HistoryItem<>(period, grouping.get(period)));
+            if (period.equals(now)) {
+                this.position = i;
             }
         }
+        Log.i(TAG, "History from " + from + " till " + till + ": " + steps);
+    }
+
+    public void setItems(List<Event<D>> events, HistoryPeriodType periodType) {
+        updateItems(events, periodType);
+        notifyDataSetChanged();
+        scrollToPosition(position);
+    }
+
+    @NonNull
+    private Map<HistoryPeriod, List<Event<D>>> groupByPeriod(List<Event<D>> events, HistoryPeriodType periodType) {
+        Map<HistoryPeriod, List<Event<D>>> grouping = new HashMap<>();
+        for (Event<D> event : events) {
+            HistoryPeriod period = HistoryPeriodFactory.toPeriod(event.getDate().getLocalDate(), periodType);
+            List<Event<D>> periodEvents = grouping.get(period);
+            if (periodEvents == null) {
+                periodEvents = new LinkedList<>();
+                grouping.put(period, periodEvents);
+            }
+
+            periodEvents.add(event);
+        }
+        return grouping;
     }
 
     @Override
@@ -79,15 +98,21 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
     @NonNull
     @Override
     public HistoryChartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.view_chart_bar, parent, false);
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.view_history_item, parent, false);
+
+        FrameLayout detailLayout = view.findViewById(R.id.history_item_detail);
+        HistoryItemDetailView detailView = ui.createHistoryItemDetail(context);
+        detailLayout.addView(detailView);
+
         return new HistoryChartViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HistoryChartViewHolder holder, int position) {
         holder.itemView.setOnClickListener(v -> scrollToPosition(position));
-        holder.bindTo(items.get(position), position);
+        holder.bindTo((List)items, position, position == this.position);
     }
 
     private void scrollToPosition(int position) {
@@ -100,11 +125,11 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
         return items.size();
     }
 
-    public LocalDate getDate(int position) {
-        return items.get(position).date;
+    public HistoryPeriod getPeriod(int position) {
+        return items.get(position).period;
     }
 
-    public List<Event> getEvents(int position) {
+    public List<Event<D>> getEvents(int position) {
         return items.get(position).events;
     }
 
@@ -116,49 +141,34 @@ public class HistoryChartAdapter extends RecyclerView.Adapter<HistoryChartAdapte
         notifyItemChanged(newPosition);
     }
 
-    public final class HistoryChartViewHolder extends RecyclerView.ViewHolder {
+    public static final class HistoryChartViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView chartBarLabel;
-        private ImageView chartBar;
+        private TextView labelView;
+        private HistoryItemDetailView detailView;
 
         public HistoryChartViewHolder(View itemView) {
             super(itemView);
 
-            chartBarLabel = itemView.findViewById(R.id.chart_bar_label);
-            chartBar = itemView.findViewById(R.id.chart_bar);
+            labelView = itemView.findViewById(R.id.history_item_label);
+            FrameLayout detailLayout = itemView.findViewById(R.id.history_item_detail);
+            detailView = (HistoryItemDetailView) detailLayout.getChildAt(0);
         }
 
-        public void bindTo(HistoryItem item, int position) {
-            String text = position == HistoryChartAdapter.this.position
-                    ? ""
-                    : String.valueOf(item.date.getDayOfMonth());
-            chartBarLabel.setText(text);
+        public void bindTo(List<HistoryItem<?>> items, int position, boolean isSelected) {
+            HistoryItem<?> item = items.get(position);
+            String text = isSelected ? "" : item.period.getShortLabel();
+            labelView.setText(text);
 
-            if (item.events.isEmpty()) {
-                chartBar.setVisibility(View.INVISIBLE);
-            } else {
-                chartBar.setVisibility(View.VISIBLE);
-                Event<?> maxEvent = Collections.min(item.events, new EventScoreComparator());
-
-                float scale = chartBar.getContext().getResources().getDisplayMetrics().density;
-                int heightInPx  = (int) ((maxEvent.getScore().getValue() + 20) * scale);
-
-                LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, heightInPx);
-                params.gravity = Gravity.CENTER;
-                chartBar.setLayoutParams(params);
-
-                EventUI<?> ui = EventUIFactory.getUI(maxEvent.getType());
-                ui.setEventTint(chartBar, maxEvent);
-            }
+            detailView.setItem(items, position, isSelected);
         }
     }
 
-    private final class HistoryItem {
-        private final LocalDate date;
-        private final List<Event> events;
+    public static final class HistoryItem<D extends EventDetail> {
+        private final HistoryPeriod period;
+        protected final List<Event<D>> events;
 
-        private HistoryItem(LocalDate date, List<Event> events) {
-            this.date = date;
+        private HistoryItem(HistoryPeriod period, List<Event<D>> events) {
+            this.period = period;
             this.events = events == null ? Collections.emptyList() : new ArrayList<>(events);
 
             Collections.sort(this.events, new EventDateComparator());

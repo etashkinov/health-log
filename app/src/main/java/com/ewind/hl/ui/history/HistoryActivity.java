@@ -13,6 +13,7 @@ import android.view.View;
 import com.ewind.hl.R;
 import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.Event;
+import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
@@ -24,14 +25,14 @@ import com.ewind.hl.ui.view.area.AreaSelector;
 import java.util.Collections;
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity implements EventChangedListener {
+public class HistoryActivity<D extends EventDetail> extends AppCompatActivity implements EventChangedListener {
     public static final String EVENT_TYPE = "EVENT_TYPE";
     public static final String EVENT_AREA = "EVENT_AREA";
 
-    protected EventType<?> type;
+    protected EventType<D> type;
     protected Area area;
 
-    private List<Event> events;
+    private List<Event<D>> events;
     private MenuItem actionChart;
     private MenuItem actionList;
     private boolean chartFragment = true;
@@ -80,7 +81,7 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
         new EventActionListener(this).onAddLike(lastEvent);
     }
 
-    protected List<Event> findEvents() {
+    protected List<Event<D>> findEvents() {
         return new EventsDao(this).getEvents(type, area);
     }
 
@@ -149,7 +150,7 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
         actionList.setVisible(!chartFragment);
     }
 
-    public List<Event> getEvents() {
+    public List<Event<D>> getEvents() {
         return Collections.unmodifiableList(events);
     }
 
@@ -166,5 +167,9 @@ public class HistoryActivity extends AppCompatActivity implements EventChangedLi
     @Override
     public void onEventDeleted(Event event) {
         refreshEvents();
+    }
+
+    public EventType<D> getType() {
+        return type;
     }
 }

@@ -1,11 +1,8 @@
 package com.ewind.hl.ui.event;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +12,13 @@ import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.Score;
-import com.ewind.hl.model.event.ScoreBand;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
+import com.ewind.hl.ui.TintHelper;
+import com.ewind.hl.ui.history.HistoryBarItemDetailView;
+import com.ewind.hl.ui.history.HistoryItemDetailView;
 import com.ewind.hl.ui.view.EventDetailForm;
 import com.ewind.hl.ui.view.detail.GenericDetailForm;
 
@@ -120,23 +118,11 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
 
     @Override
     public void setEventTint(ImageView image, Event event) {
-        Context context = image.getContext();
-        int eventTint = getEventTint(event, context);
-        if (eventTint != 0) {
-            int color = ContextCompat.getColor(context, eventTint);
-            image.setImageTintList(ColorStateList.valueOf(color));
-            image.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
-        }
+        TintHelper.setScoreTint(image, event.getScore());
     }
 
-    private int getEventTint(Event event, Context context) {
-        int band = getBand(event);
-        int result = context.getResources().getIdentifier("severity" + band, "color", context.getPackageName());
-        return result == 0 ? R.color.colorAccent : result;
-    }
-
-    private int getBand(Event event) {
-        Score score = event.getScore();
-        return new ScoreBand(score).getBand();
+    @Override
+    public HistoryItemDetailView createHistoryItemDetail(Context context) {
+        return new HistoryBarItemDetailView(context);
     }
 }

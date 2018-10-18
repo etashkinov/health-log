@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="24dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="32dp"
     android:layout_height="175dp"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="100"/>
-
-    <ImageView
-        android:id="@+id/chart_bar"
+    <FrameLayout
+        android:id="@+id/history_item_detail"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_chart_bar"/>
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        />
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
@@ -23,11 +20,13 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
     <TextView
-        android:id="@+id/chart_bar_label"
+        android:id="@+id/history_item_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="31"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        tools:text="31"
         android:textAlignment="center"/>
 
 </LinearLayout>

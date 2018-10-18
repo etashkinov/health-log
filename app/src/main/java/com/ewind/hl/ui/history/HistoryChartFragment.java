@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dant.centersnapreyclerview.CenterLayoutManager;
@@ -16,21 +19,24 @@ import com.dant.centersnapreyclerview.SnappingRecyclerView;
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDateComparator;
+import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
 import com.ewind.hl.ui.EventItemViewHolder;
-
-import org.joda.time.LocalDate;
+import com.ewind.hl.ui.event.EventUI;
+import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.history.period.HistoryPeriod;
+import com.ewind.hl.ui.history.period.HistoryPeriodFactory.HistoryPeriodType;
 
 import java.util.List;
 
-public class HistoryChartFragment extends Fragment implements SnappingRecyclerView.SnappingRecyclerViewListener {
+public class HistoryChartFragment<D extends EventDetail> extends Fragment implements SnappingRecyclerView.SnappingRecyclerViewListener {
 
-    private static final String THIS_YEAR_PATTERN = "d MMMM";
-    private static final String ANOTHER_YEAR_PATTERN = "d MMMM 'yy";
-
-    private HistoryChartAdapter chartAdapter;
+    private HistoryChartAdapter<D> chartAdapter;
     private EventAdapter eventAdapter;
+    private TextView highLabel;
+    private TextView lowLabel;
+    private Spinner historyPeriodSpinner;
 
     public HistoryChartFragment() {
         // Required empty public constructor
@@ -49,14 +55,38 @@ public class HistoryChartFragment extends Fragment implements SnappingRecyclerVi
         RecyclerView eventsList = view.findViewById(R.id.events_list);
         eventsList.setAdapter(eventAdapter);
 
+        highLabel = view.findViewById(R.id.chart_high_label);
+        lowLabel = view.findViewById(R.id.chart_low_label);
+
+        historyPeriodSpinner = view.findViewById(R.id.history_period_spinner);
+        ArrayAdapter<HistoryPeriodType> adapter = new ArrayAdapter<>(
+                container.getContext(), android.R.layout.simple_spinner_item,
+                HistoryPeriodType.values());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        historyPeriodSpinner.setAdapter(adapter);
+        historyPeriodSpinner.setEnabled(true);
+        historyPeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                HistoryPeriodType periodType = HistoryPeriodType.values()[position];
+                chartAdapter.setItems(getHistoryActivity().getEvents(), periodType);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         return view;
+    }
+
+    public HistoryActivity<D> getHistoryActivity() {
+        return (HistoryActivity<D>)getActivity();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof HistoryActivity) {
-            HistoryActivity activity = (HistoryActivity) context;
+            HistoryActivity<D> activity = getHistoryActivity();
 
             eventAdapter = new EventAdapter(new EventDateComparator()) {
                 @NonNull
@@ -66,7 +96,8 @@ public class HistoryChartFragment extends Fragment implements SnappingRecyclerVi
                 }
             };
 
-            chartAdapter = new HistoryChartAdapter(activity.getEvents());
+            EventUI<D> ui = EventUIFactory.getUI(activity.getType());
+            chartAdapter = new HistoryChartAdapter<>(ui, activity.getEvents(), HistoryPeriodType.DAY);
         } else {
             throw new IllegalArgumentException(HistoryActivity.class + " expected. Given: " + context.getClass());
         }
@@ -75,13 +106,14 @@ public class HistoryChartFragment extends Fragment implements SnappingRecyclerVi
     @Override
     public void onPositionChange(int position) {
         Log.i(HistoryChartFragment.class.getName(), "Position: " + position);
-        TextView eventTitle = getActivity().findViewById(R.id.event_title);
-        chartAdapter.setPosition(position);
-        LocalDate date = chartAdapter.getDate(position);
-        String pattern = date.getYear() == LocalDate.now().getYear() ? THIS_YEAR_PATTERN : ANOTHER_YEAR_PATTERN;
-        eventTitle.setText(date.toString(pattern));
 
-        List<Event> events = chartAdapter.getEvents(position);
+        chartAdapter.setPosition(position);
+
+        TextView eventTitle = getActivity().findViewById(R.id.event_title);
+        HistoryPeriod period = chartAdapter.getPeriod(position);
+        eventTitle.setText(period.getLabel());
+
+        List<Event> events = (List) chartAdapter.getEvents(position);
         eventAdapter.setEvents(events);
     }
 

@@ -37,9 +37,9 @@ public class EventsDao {
         entityDao = db.eventEntityDao();
     }
 
-    public List<Event> getEvents(EventType type, Area area) {
+    public <D extends EventDetail> List<Event<D>> getEvents(EventType<D> type, Area area) {
         List<EventEntity> eventEntities = entityDao.findByAreaAndType(area.getName(), type.getName());
-        return toEvents(eventEntities);
+        return (List) toEvents(eventEntities);
     }
 
     @NonNull
