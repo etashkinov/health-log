@@ -1,4 +1,4 @@
-package com.ewind.hl.ui.history.period;
+package com.ewind.hl.ui.history.chart.period;
 
 import org.joda.time.LocalDate;
 

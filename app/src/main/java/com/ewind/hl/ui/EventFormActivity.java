@@ -143,7 +143,7 @@ public class EventFormActivity<D extends EventDetail> extends AppCompatActivity 
 
     private void initDetailForm(Event<D> event) {
         ViewGroup eventDetailContainer = findViewById(R.id.eventDetailContainer);
-        detailForm = EventUIFactory.getUI(event.getType()).getEventDetailForm(eventDetailContainer);
+        detailForm = EventUIFactory.getUI(event.getType(), this).getEventDetailForm(eventDetailContainer);
         eventDetailContainer.addView((View) detailForm);
 
         if (event.getDetail() != null) {

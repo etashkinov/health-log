@@ -20,7 +20,7 @@ public abstract class EventAdapter extends RecyclerView.Adapter<EventItemViewHol
     }
 
     public void setEvents(List<Event> events) {
-        this.events = new LinkedList<>(events);
+        this.events = events == null ? Collections.emptyList() : new LinkedList<>(events);
         refreshEvents();
     }
 

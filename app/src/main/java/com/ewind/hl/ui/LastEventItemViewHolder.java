@@ -45,7 +45,7 @@ public class LastEventItemViewHolder extends EventItemViewHolder {
         Context context = itemView.getContext();
 
         EventType type = event.getType();
-        EventUI ui = EventUIFactory.getUI(type);
+        EventUI ui = EventUIFactory.getUI(type, context);
         ImageView eventIcon = itemView.findViewById(R.id.eventIcon);
         Drawable drawable = ui.getEventTypeDrawable(context);
         eventIcon.setImageDrawable(drawable);

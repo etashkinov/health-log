@@ -112,7 +112,8 @@ public class EventTypesAdapter extends RecyclerView.Adapter<EventTypesAdapter.Vi
         eventText.setText(eventLabel);
 
         ImageView eventImage = view.findViewById(R.id.eventImage);
-        Drawable eventDrawable = EventUIFactory.getUI(type).getEventTypeDrawable(view.getContext());
+        Drawable eventDrawable = EventUIFactory.getUI(type, view.getContext())
+                .getEventTypeDrawable(view.getContext());
         eventImage.setImageDrawable(eventDrawable);
     }
 

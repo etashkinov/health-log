@@ -1,5 +1,6 @@
 package com.ewind.hl.ui.event;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.event.detail.EventDetail;
@@ -19,14 +20,14 @@ public class EventUIFactory {
     }
 
     @NonNull
-    public static <D extends EventDetail> EventUI<D> getUI(EventType<D> type) {
+    public static <D extends EventDetail> EventUI<D> getUI(EventType<D> type, Context context) {
         try {
             Class<? extends EventType> typeClass = type.getClass();
             Class<? extends EventUI> uiClass = getUIClass(typeClass);
             if (uiClass == null) {
                 uiClass = DefaultEventUI.class;
             }
-            return (EventUI<D>) uiClass.getConstructor(EventType.class).newInstance(type);
+            return (EventUI<D>) uiClass.getConstructor(EventType.class, Context.class).newInstance(type, context);
         } catch (Exception e) {
             throw new IllegalStateException("Cannot get ui for " + type, e);
         }

@@ -42,7 +42,7 @@ public class HistoryEventItemViewHolder extends EventItemViewHolder {
         eventIcon.setImageDrawable(context.getDrawable(drawable));
 
         EventType type = event.getType();
-        EventUI ui = EventUIFactory.getUI(type);
+        EventUI ui = EventUIFactory.getUI(type, context);
         ViewGroup eventDetailContainer = itemView.findViewById(R.id.eventDetailContainer);
         eventDetailContainer.removeAllViews();
         View view = ui.getHistoryEventDetailView(event, eventDetailContainer);

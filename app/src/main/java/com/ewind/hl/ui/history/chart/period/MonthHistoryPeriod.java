@@ -1,4 +1,4 @@
-package com.ewind.hl.ui.history.period;
+package com.ewind.hl.ui.history.chart.period;
 
 import android.support.annotation.NonNull;
 
@@ -11,7 +11,7 @@ import org.joda.time.Months;
 public class MonthHistoryPeriod extends YearHistoryPeriod {
 
     private static final String THIS_YEAR_PATTERN = "MMMM";
-    private static final String ANOTHER_YEAR_PATTERN = "MMMM 'yy";
+    private static final String ANOTHER_YEAR_PATTERN = "MMMM ''YY";
 
     private final int month;
 

@@ -20,6 +20,7 @@ import com.ewind.hl.persist.EventsDao;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventChangedListener;
 import com.ewind.hl.ui.LocalizationService;
+import com.ewind.hl.ui.history.chart.HistoryChartFragment;
 import com.ewind.hl.ui.view.area.AreaSelector;
 
 import java.util.Collections;

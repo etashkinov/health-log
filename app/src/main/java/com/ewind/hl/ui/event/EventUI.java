@@ -9,7 +9,12 @@ import android.widget.ImageView;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
+import com.ewind.hl.ui.history.chart.ChartData;
+import com.ewind.hl.ui.history.chart.period.HistoryPeriod;
 import com.ewind.hl.ui.view.EventDetailForm;
+
+import java.util.List;
+import java.util.Map;
 
 public interface EventUI<D extends EventDetail> {
     EventDetailForm<D> getEventDetailForm(ViewGroup parent);
@@ -29,4 +34,7 @@ public interface EventUI<D extends EventDetail> {
     void setEventTint(ImageView image, Event event);
 
     HistoryItemDetailView createHistoryItemDetail(Context context);
+
+    ChartData toChartData(Map<HistoryPeriod, List<Event<D>>> historyItems,
+                          HistoryPeriod from, HistoryPeriod till);
 }
