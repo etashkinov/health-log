@@ -85,8 +85,12 @@ public class HistoryChartAdapter<D extends EventDetail>
     }
 
     private void scrollToPosition(int newPosition) {
-        notifyItemChanged(newPosition);
         recyclerView.scrollToPosition(newPosition);
+        onPositionChanged(newPosition);
+    }
+
+    public void onPositionChanged(int newPosition) {
+        notifyItemChanged(newPosition);
         notifyItemChanged(position);
         position = newPosition;
     }

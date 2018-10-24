@@ -16,7 +16,9 @@ import com.ewind.hl.ui.history.chart.period.HistoryPeriod;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +41,6 @@ public class MeasurementEventUI<D extends ValueDetail, T extends MeasurementEven
     @Override
     public ChartData toChartData(Map<HistoryPeriod, List<Event<D>>> historyItems, HistoryPeriod from, HistoryPeriod till) {
         int steps = till.minus(from);
-        ArrayList<ChartItem> items = new ArrayList<>(steps);
 
         BigDecimal low = null;
         BigDecimal high = null;
@@ -63,23 +64,43 @@ public class MeasurementEventUI<D extends ValueDetail, T extends MeasurementEven
         high = high.add(padding);
         range = range.add(padding).add(padding);
 
+        List<ChartItem> recordedItems = new ArrayList<>(values.size());
+        for (Map.Entry<HistoryPeriod, Event<D>> entry : values.entrySet()) {
+            Event<D> latestEvent = entry.getValue();
+            String description = latestEvent.getType().getDescription(latestEvent, context.get());
+
+            int value = getValue(latestEvent).subtract(low)
+                    .divide(range, 1, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100))
+                    .intValue();
+
+            recordedItems.add(new ChartItem(entry.getKey(), value, description, latestEvent));
+        }
+
+        Collections.sort(recordedItems, (i1, i2) -> i1.getPeriod().compareTo(i2.getPeriod()));
+        Iterator<ChartItem> iterator = recordedItems.iterator();
+        ChartItem prev = null;
+        ChartItem next = iterator.next();
+        List<ChartItem> items = new ArrayList<>(steps);
         for (int i = 0; i <= steps; i++) {
             HistoryPeriod period = from.add(i);
-            Event<D> latestEvent = values.get(period);
 
-            if (latestEvent == null) {
-                items.add(new ChartItem(period, 0, "", latestEvent));
+            if (next != null && next.getPeriod().compareTo(period) == 0) {
+                items.add(next);
+                prev = next;
+                next = iterator.hasNext() ? iterator.next() : null;
+            } else if (prev != null && next != null) {
+                int gap = next.getPeriod().minus(prev.getPeriod());
+                int position = period.minus(prev.getPeriod());
+                double step = (next.getValue() - prev.getValue()) / (double) gap;
+                int projection = (int)(step * position);
+                int value = prev.getValue() + projection;
+                items.add(new ChartItem(period, value, "", null));
             } else {
-                String description = latestEvent.getType().getDescription(latestEvent, context.get());
-
-                int value = getValue(latestEvent).subtract(low)
-                        .divide(range, 1, RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(100))
-                        .intValue();
-
-                items.add(new ChartItem(period, value, description, latestEvent));
+                items.add(new ChartItem(period, 0, "", null));
             }
         }
+
         String lowLabel = type.getDescription(type.createDetail(low), context.get());
         String highLabel = type.getDescription(type.createDetail(high), context.get());
         return new ChartData(items, highLabel, lowLabel);

@@ -145,6 +145,7 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
 
     @Override
     public void onPositionChange(int position) {
+        chartAdapter.onPositionChanged(position);
         HistoryPeriod period = chartAdapter.getPeriod(position);
 
         TextView eventTitle = getActivity().findViewById(R.id.event_title);

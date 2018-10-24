@@ -16,9 +16,13 @@ public class TintHelper {
         int eventTint = getScoreTint(score, context);
         if (eventTint != 0) {
             int color = ContextCompat.getColor(context, eventTint);
-            image.setImageTintList(ColorStateList.valueOf(color));
-            image.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
+            setTint(image, color);
         }
+    }
+
+    public static void setTint(ImageView image, int color) {
+        image.setImageTintList(ColorStateList.valueOf(color));
+        image.setImageTintMode(PorterDuff.Mode.SRC_ATOP);
     }
 
     public static int getScoreTint(Score score, Context context) {
