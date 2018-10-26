@@ -17,7 +17,7 @@ import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
-import com.ewind.hl.ui.TintHelper;
+import com.ewind.hl.ui.UiHelper;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
 import com.ewind.hl.ui.history.chart.ChartData;
 import com.ewind.hl.ui.history.chart.ChartItem;
@@ -131,7 +131,7 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
 
     @Override
     public void setEventTint(ImageView image, Event event) {
-        TintHelper.setScoreTint(image, event.getScore());
+        UiHelper.setScoreTint(image, event.getScore());
     }
 
     @Override

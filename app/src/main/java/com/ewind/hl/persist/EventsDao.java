@@ -1,6 +1,5 @@
 package com.ewind.hl.persist;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -8,10 +7,11 @@ import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.area.AreaFactory;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventDate;
-import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.model.event.Score;
 import com.ewind.hl.model.event.detail.EventDetail;
+import com.ewind.hl.model.event.type.EventType;
+import com.ewind.hl.model.event.type.EventTypeFactory;
+import com.ewind.hl.service.PersonService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,23 +22,17 @@ import java.util.List;
 public class EventsDao {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String DB_NAME = "health-log-db";
 
-    private static AppDatabase db;
-    private EventEntityDao entityDao;
+    private final EventEntityDao entityDao;
+    private final PersonService personService;
 
     public EventsDao(Context context) {
-        if (db == null) {
-            db = Room.databaseBuilder(context, AppDatabase.class, DB_NAME)
-                    .allowMainThreadQueries()
-                    .build();
-        }
-
-        entityDao = db.eventEntityDao();
+        this.personService = new PersonService(context);
+        this.entityDao = AppDatabase.getInstance(context).eventEntityDao();
     }
 
     public <D extends EventDetail> List<Event<D>> getEvents(EventType<D> type, Area area) {
-        List<EventEntity> eventEntities = entityDao.findByAreaAndType(area.getName(), type.getName());
+        List<EventEntity> eventEntities = entityDao.findByAreaAndType(area.getName(), type.getName(), getOwner());
         return (List) toEvents(eventEntities);
     }
 
@@ -92,6 +86,8 @@ public class EventsDao {
             result.setType(event.getType().getName());
             result.setScore(event.getScore().getValue());
             result.setNote(event.getNote());
+            result.setOwner(getOwner());
+            result.setReporter(personService.getCurrentAccountEmail());
             result.setValue(MAPPER.writeValueAsString(event.getDetail()));
             return result;
         } catch (JsonProcessingException e) {
@@ -103,7 +99,7 @@ public class EventsDao {
         String areaName = area.getName();
         String fromDate = EventDateConverter.serialize(from);
         String tillDate = EventDateConverter.serialize(till);
-        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(areaName, fromDate, tillDate, name);
+        List<EventEntity> eventEntities = entityDao.findByAreaAndDateRangeAndType(areaName, fromDate, tillDate, name, getOwner());
         return toEvents(eventEntities);
     }
 
@@ -112,14 +108,28 @@ public class EventsDao {
     }
 
     public List<Event> getLatestEvents() {
-        return toEvents(entityDao.findLatest());
+        return toEvents(entityDao.findLatest(getOwner()));
     }
 
     public Event getLatestEvent(EventType type) {
-        return toEvent(entityDao.findLatest(type.getName()));
+        String current = getOwner();
+        return toEvent(entityDao.findLatest(type.getName(), current));
+    }
+
+    private String getOwner() {
+        return personService.getCurrentId();
     }
 
     public List<Event> getAll() {
         return toEvents(entityDao.findAll());
+    }
+
+    public void refreshEventsWithEmptyOwner() {
+        entityDao.updateEmptyOwner(getOwner());
+    }
+
+    public void refreshEventsWithEmptyReporter() {
+        String currentAccountEmail = personService.getCurrentAccountEmail();
+        entityDao.updateEmptyReporter(currentAccountEmail);
     }
 }

@@ -3,7 +3,9 @@ package com.ewind.hl.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +36,9 @@ import com.ewind.hl.model.event.EventRelevancyComparator;
 import com.ewind.hl.model.event.EventScoreComparator;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.service.Person;
+import com.ewind.hl.service.PersonService;
+import com.ewind.hl.ui.navigator.PersonsAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -45,10 +50,11 @@ import com.google.android.gms.tasks.Task;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements EventChangedListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements EventChangedListener, NavigationView.OnNavigationItemSelectedListener, PersonsAdapter.OnPersonSelectedListener {
 
     private static final String TAG = MainActivity.class.getName();
     private static final int RC_SIGN_IN = 1543;
+    private static final int RQS_PICK_CONTACT = 3254;
     private EventAdapter adapter;
     private boolean showAll = false;
 
@@ -57,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private MenuItem showAllButton;
     private MenuItem showRelevantButton;
+    private TextView personName;
+    private TextView personEmail;
+    private ImageView personPhoto;
+    private PersonsAdapter personsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +78,37 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
         setContentView(R.layout.activity_main);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(Drive.SCOPE_FILE)
-                .requestScopes(Drive.SCOPE_APPFOLDER)
-                .build();
-        signInClient = GoogleSignIn.getClient(this, gso);
+        initSignInClient();
 
+        initToolbar();
 
+        initNavigator();
+
+        findViewById(R.id.addButton).setOnClickListener(v -> onEventAdd());
+
+        refreshAccountUi();
+
+        refreshCurrentPersonUi();
+
+        this.adapter = createEventsAdapter();
+        refreshEvents();
+    }
+
+    private void initNavigator() {
+        navigator = findViewById(R.id.nav_view);
+        navigator.setNavigationItemSelectedListener(this);
+
+        View navigatorHeader = navigator.getHeaderView(0);
+        personName = navigatorHeader.findViewById(R.id.person_name);
+        personEmail = navigatorHeader.findViewById(R.id.person_email);
+        personPhoto = navigatorHeader.findViewById(R.id.person_photo);
+        RecyclerView personsList = navigatorHeader.findViewById(R.id.persons_list);
+        personsAdapter = new PersonsAdapter();
+        personsAdapter.setListener(this);
+        personsList.setAdapter(personsAdapter);
+    }
+
+    private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.eventTitleText);
@@ -85,16 +118,15 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        navigator = findViewById(R.id.nav_view);
-        navigator.setNavigationItemSelectedListener(this);
-
-        findViewById(R.id.addButton).setOnClickListener(v -> onEventAdd());
-
-        refreshAccountUi();
-
-        this.adapter = createEventsAdapter();
-        refreshEvents();
+    private void initSignInClient() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(Drive.SCOPE_FILE)
+                .requestScopes(Drive.SCOPE_APPFOLDER)
+                .build();
+        signInClient = GoogleSignIn.getClient(this, gso);
     }
 
     @NonNull
@@ -216,27 +248,75 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            String eventType = data.getStringExtra(EventTypeSearchActivity.SELECTED_EVENT_TYPE);
-            if (eventType != null) {
-                new EventActionListener(this).onAddNew(eventType);
-            } else {
-                refreshEvents();
-            }
+
+        switch (requestCode) {
+            case RQS_PICK_CONTACT:
+                if(resultCode == RESULT_OK){
+                    Uri contactData = data.getData();
+                    onNewUserSelected(contactData);
+                }
+                break;
+            case RC_SIGN_IN:
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+                break;
+            case EventActionListener.ADD_REQUEST_CODE:
+            case EventActionListener.UPDATE_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    refreshEvents();
+                }
+                break;
+            case EventActionListener.SEARCH_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String eventType = data.getStringExtra(EventTypeSearchActivity.SELECTED_EVENT_TYPE);
+                    new EventActionListener(this).onAddNew(eventType);
+                }
+                break;
+        }
+    }
+
+    private void onNewUserSelected(Uri contactData) {
+        Person person = new PersonService(this).addContactPerson(contactData);
+
+        onPersonSelected(person);
+    }
+
+    @Override
+    public void onPersonSelected(Person selectedPerson) {
+        PersonService personService = new PersonService(this);
+        personService.setCurrentId(selectedPerson.getId());
+
+        refreshCurrentPersonUi();
+
+        refreshEvents();
+
+        closeDrawer();
+    }
+
+    private void refreshCurrentPersonUi() {
+        PersonService service = new PersonService(this);
+        Person current = service.getCurrentPerson();
+
+        if (current != null) {
+            UiHelper.setPersonPhoto(personPhoto, current.getPhoto(), this);
+
+            personName.setText(current.getName());
         }
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
+
+        personsAdapter.setPersons(service.getInactivePersons());
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            completedTask.getResult(ApiException.class);
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            EventsDao dao = new EventsDao(this);
+            PersonService personService = new PersonService(this);
+            if (personService.getCurrentId() == null) {
+                personService.setCurrentId(account.getEmail());
+                dao.refreshEventsWithEmptyOwner();
+            }
+            dao.refreshEventsWithEmptyReporter();
             refreshAccountUi();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -248,23 +328,19 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
 
     private void refreshAccountUi() {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        View navigatorHeader = navigator.getHeaderView(0);
-        TextView userName = navigatorHeader.findViewById(R.id.user_name);
-        TextView userEmail = navigatorHeader.findViewById(R.id.user_email);
-        ImageView userPhoto = navigatorHeader.findViewById(R.id.user_photo);
 
         boolean signedIn = account != null;
         if (signedIn) {
-            userName.setText(account.getGivenName() + " " + account.getFamilyName());
-            userEmail.setText(account.getEmail());
+            personName.setText(account.getGivenName() + " " + account.getFamilyName());
+            personEmail.setText(account.getEmail());
             String personPhotoUrl = account.getPhotoUrl().toString();
             Glide.with(getApplicationContext()).load(personPhotoUrl)
                     .apply(RequestOptions.circleCropTransform())
-                    .into(userPhoto);
+                    .into(personPhoto);
         } else {
-            userName.setText(R.string.nav_header_title);
-            userEmail.setText("");
-            userPhoto.setImageResource(R.drawable.ic_user);
+            personName.setText(R.string.nav_header_title);
+            personEmail.setText("");
+            personPhoto.setImageResource(R.drawable.ic_user);
         }
 
         navigator.getMenu().findItem(R.id.nav_import).setEnabled(signedIn);
@@ -310,13 +386,22 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         switch (id) {
             case R.id.nav_export: onExport(); break;
             case R.id.nav_import: onImport(); break;
+            case R.id.nav_new_person: onSelectNewPerson(); break;
             case R.id.nav_sign_in: signIn(); break;
             case R.id.nav_sign_out: signOut(); break;
         }
 
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-
         return true;
+    }
+
+    private void closeDrawer() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    private void onSelectNewPerson() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+        startActivityForResult(intent, RQS_PICK_CONTACT);
     }
 }

@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
-    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    >
 
     <ImageView
-        android:id="@+id/user_photo"
+        android:id="@+id/person_photo"
         android:layout_width="@dimen/nav_header_icon_size"
         android:layout_height="@dimen/nav_header_icon_size"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        app:layout_constraintBottom_toTopOf="@id/person_name"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_user" />
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/person_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
+        app:layout_constraintBottom_toTopOf="@id/person_email"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorPrimaryNegative"
         style="@style/TextAppearance.AppCompat.Medium.Inverse" />
 
     <TextView
-        android:id="@+id/user_email"
+        android:id="@+id/person_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         style="@style/TextAppearance.AppCompat.Small.Inverse"/>
 
-</LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/persons_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/person_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="horizontal"
+        tools:itemCount="3"
+        tools:listitem="@layout/view_person_item">
+    </android.support.v7.widget.RecyclerView>
+
+</android.support.constraint.ConstraintLayout>

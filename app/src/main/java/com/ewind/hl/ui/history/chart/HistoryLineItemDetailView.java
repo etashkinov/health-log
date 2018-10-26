@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
-import com.ewind.hl.ui.TintHelper;
+import com.ewind.hl.ui.UiHelper;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
 
 public class HistoryLineItemDetailView extends HistoryItemDetailView {
@@ -46,11 +46,11 @@ public class HistoryLineItemDetailView extends HistoryItemDetailView {
             if (event != null) {
                 dotView.setImageDrawable(context.getDrawable(R.drawable.ic_event_dot));
                 params.bottomMargin = getValueInPx(value, context);
-                TintHelper.setScoreTint(dotView, event.getScore());
+                UiHelper.setScoreTint(dotView, event.getScore());
             } else {
                 dotView.setImageDrawable(context.getDrawable(R.drawable.ic_dot));
                 params.bottomMargin = getValueInPx(value + 9, context);
-                TintHelper.setTint(dotView, ContextCompat.getColor(context, android.R.color.darker_gray));
+                UiHelper.setTint(dotView, ContextCompat.getColor(context, android.R.color.darker_gray));
             }
 
             dotView.setLayoutParams(params);

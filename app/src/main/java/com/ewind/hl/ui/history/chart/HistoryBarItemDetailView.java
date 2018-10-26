@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ewind.hl.R;
-import com.ewind.hl.ui.TintHelper;
+import com.ewind.hl.ui.UiHelper;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
 
 public class HistoryBarItemDetailView extends HistoryItemDetailView {
@@ -35,7 +35,7 @@ public class HistoryBarItemDetailView extends HistoryItemDetailView {
             params.gravity = Gravity.CENTER;
             barView.setLayoutParams(params);
 
-            TintHelper.setScoreTint(barView, item.getEvent().getScore());
+            UiHelper.setScoreTint(barView, item.getEvent().getScore());
         }
     }
 }

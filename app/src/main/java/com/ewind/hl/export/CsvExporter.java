@@ -27,7 +27,7 @@ public class CsvExporter {
 
     private static final String TAG = CsvExporter.class.getSimpleName();
 
-    private static final String[] CSV_HEADER = { "id", "date", "type", "area", "score", "detail", "note" };
+    private static final String[] CSV_HEADER = { "id", "date", "type", "area", "score", "detail", "note", "owner", "reporter" };
     private static final CSVFormat WRITE_FORMAT = CSVFormat.DEFAULT.withHeader(CSV_HEADER);
     private static final CSVFormat READ_FORMAT = WRITE_FORMAT.withSkipHeaderRecord();
     private static final ObjectMapper MAPPER = new ObjectMapper();

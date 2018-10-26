@@ -16,6 +16,11 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Settings" />
+
+        <item
+            android:id="@+id/nav_new_person"
+            android:icon="@drawable/ic_add"
+            android:title="Add new person" />
     </group>
 
     <item android:title="Cloud">

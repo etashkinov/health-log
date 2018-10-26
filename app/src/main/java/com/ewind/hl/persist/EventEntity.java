@@ -15,6 +15,9 @@ public class EventEntity {
     private int score;
     private String area;
 
+    private String owner;
+    private String reporter;
+
     public long getId() {
         return id;
     }
@@ -71,6 +74,22 @@ public class EventEntity {
         this.score = score;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+
     @Override
     public String toString() {
         return "EventEntity{" +
@@ -80,6 +99,8 @@ public class EventEntity {
                 ", value='" + value + '\'' +
                 ", type='" + type + '\'' +
                 ", score='" + score + '\'' +
+                ", owner='" + owner + '\'' +
+                ", reporter='" + reporter + '\'' +
                 ", area=" + area +
                 '}';
     }
