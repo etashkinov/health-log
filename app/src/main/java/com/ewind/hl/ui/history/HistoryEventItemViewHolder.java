@@ -1,51 +1,45 @@
 package com.ewind.hl.ui.history;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventItemViewHolder;
-import com.ewind.hl.ui.event.EventUI;
-import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.UiHelper;
 
 public class HistoryEventItemViewHolder extends EventItemViewHolder {
 
+    private ImageView eventIcon;
+    private ViewGroup eventDetailContainer;
+
     public HistoryEventItemViewHolder(ViewGroup parent, EventActionListener listener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.event_history_item, parent, false), listener);
+
         itemView.setOnClickListener(this::onUpdate);
+        eventIcon = itemView.findViewById(R.id.eventIcon);
+        eventDetailContainer = itemView.findViewById(R.id.eventDetailContainer);
     }
 
     @Override
-    public void setEvent(Event event) {
-       super.setEvent(event);
+    public void setEvent(EventItem eventItem) {
+       super.setEvent(eventItem);
 
-        addDetailView(event);
+        addDetailView(eventItem);
     }
 
     private boolean onUpdate(View view) {
-        listener.onUpdate(event);
+        listener.onUpdate(eventItem.event);
         return true;
     }
 
-    private void addDetailView(Event event) {
-        Context context = itemView.getContext();
+    private void addDetailView(EventItem eventItem) {
+        eventIcon.setImageDrawable(eventItem.icon);
+        UiHelper.setTint(eventIcon, eventItem.tint);
 
-        ImageView eventIcon = itemView.findViewById(R.id.eventIcon);
-        int band = getBand(event);
-        int drawable = context.getResources().getIdentifier("ic_severity_" + band, "drawable", context.getPackageName());
-        eventIcon.setImageDrawable(context.getDrawable(drawable));
-
-        EventType type = event.getType();
-        EventUI ui = EventUIFactory.getUI(type, context);
-        ViewGroup eventDetailContainer = itemView.findViewById(R.id.eventDetailContainer);
         eventDetailContainer.removeAllViews();
-        View view = ui.getHistoryEventDetailView(event, eventDetailContainer);
-        eventDetailContainer.addView(view);
+        eventDetailContainer.addView(eventItem.detailsView);
     }
 }

@@ -3,7 +3,7 @@ package com.ewind.hl.export;
 import android.content.Context;
 import android.util.Log;
 
-import com.ewind.hl.model.event.Event;
+import com.ewind.hl.persist.EventEntity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.drive.Drive;
@@ -42,7 +42,7 @@ public class DriveAdapter {
         driveResourceClient = Drive.getDriveResourceClient(context, account);
     }
 
-    public void export(List<Event> events) {
+    public void export(List<EventEntity> events) {
         Log.i(TAG, "Export " + events.size() + " events");
 
         try {
@@ -52,7 +52,7 @@ public class DriveAdapter {
         }
     }
 
-    public List<Event> read() {
+    public List<EventEntity> read() {
         try {
             DriveContents contents = getExportFileContents();
 

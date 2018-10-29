@@ -3,21 +3,21 @@ package com.ewind.hl.ui.event;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ewind.hl.R;
 import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.EventScoreComparator;
+import com.ewind.hl.model.event.ScoreBand;
 import com.ewind.hl.model.event.detail.EventDetail;
 import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.model.event.type.EventTypeFactory;
 import com.ewind.hl.ui.LocalizationService;
-import com.ewind.hl.ui.UiHelper;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
 import com.ewind.hl.ui.history.chart.ChartData;
 import com.ewind.hl.ui.history.chart.ChartItem;
@@ -65,15 +65,15 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
     }
 
     @Override
-    public Drawable getEventTypeDrawable(Context context) {
-        int id = getEventDrawableId(context);
-        return context.getDrawable(id);
+    public Drawable getEventTypeDrawable() {
+        int id = getEventDrawableId();
+        return getContext().getDrawable(id);
     }
 
     @Override
-    public int getEventDrawableId(Context context) {
+    public int getEventDrawableId() {
         String name = "ic_" + type.getName().toLowerCase();
-        int result = getDrawableByName(name, context);
+        int result = getDrawableByName(name);
         if (result == 0) {
             Log.w(TAG, "Icon for " + type.getName() + " not found");
             result = DEFAULT_ICON;
@@ -82,23 +82,22 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
     }
 
     @Override
-    public int getDrawableByName(String name, Context context) {
-        return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
+    public int getDrawableByName(String name) {
+        return getContext().getResources().getIdentifier(name, "drawable", getContext().getPackageName());
     }
 
     @Override
-    public String getEventDescription(Event<D> event, Context context) {
-        return event.getType().getDescription(event, context);
+    public String getEventDescription(Event<D> event) {
+        return event.getType().getDescription(event, getContext());
     }
 
     @Override
-    public View getLastEventDetailView(Event<D> event, ViewGroup parent) {
-        Context context = parent.getContext();
+    public View getLastEventDetailView(Event<D> event) {
         int viewLayoutId = getDefaultLastEventDetailLayoutId();
 
-        View view = LayoutInflater.from(context).inflate(viewLayoutId, parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(viewLayoutId, null);
 
-        String text = LocalizationService.getEventTypeName(context, event.getType());
+        String text = LocalizationService.getEventTypeName(getContext(), event.getType());
         if (EventTypeFactory.getAreas(event.getType()).size() > 1) {
             text = LocalizationService.getAreaName(event.getArea()) + " " + text;
         }
@@ -111,7 +110,7 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
         TextView eventDetailText = view.findViewById(R.id.eventDetailText);
 
         if (eventDetailText != null) {
-            eventDetailText.setText(getEventDescription(event, context));
+            eventDetailText.setText(getEventDescription(event));
         }
 
         return view;
@@ -120,7 +119,7 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
     @Override
     public View getHistoryEventDetailView(Event event, ViewGroup parent) {
         TextView result = new TextView(parent.getContext());
-        String eventDescription = getEventDescription(event, parent.getContext());
+        String eventDescription = getEventDescription(event);
         result.setText(eventDescription);
         return result;
     }
@@ -130,13 +129,20 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
     }
 
     @Override
-    public void setEventTint(ImageView image, Event event) {
-        UiHelper.setScoreTint(image, event.getScore());
+    public int getEventTint(Event event) {
+        int band = new ScoreBand(event.getScore()).getBand();
+        int result = getContext().getResources()
+                .getIdentifier("severity" + band, "color", getContext().getPackageName());
+        return ContextCompat.getColor(getContext(), result == 0 ? R.color.colorAccent : result);
+    }
+
+    protected Context getContext() {
+        return context.get();
     }
 
     @Override
-    public HistoryItemDetailView createHistoryItemDetail(Context context) {
-        return new HistoryBarItemDetailView(context);
+    public HistoryItemDetailView createHistoryItemDetail() {
+        return new HistoryBarItemDetailView(getContext());
     }
 
     @Override
@@ -152,7 +158,7 @@ public class DefaultEventUI<D extends EventDetail, T extends EventType<D>> imple
                 items.add(new ChartItem(period, 0, "", null));
             } else {
                 Event<D> maxEvent = Collections.min(events, new EventScoreComparator());
-                String description = type.getDescription(maxEvent, context.get());
+                String description = type.getDescription(maxEvent, getContext());
                 items.add(new ChartItem(period, maxEvent.getScore().getValue(), description, maxEvent));
             }
         }

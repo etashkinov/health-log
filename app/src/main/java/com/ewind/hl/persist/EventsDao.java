@@ -1,6 +1,8 @@
 package com.ewind.hl.persist;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.ewind.hl.model.area.Area;
@@ -109,6 +111,13 @@ public class EventsDao {
 
     public List<Event> getLatestEvents() {
         return toEvents(entityDao.findLatest(getOwner()));
+    }
+
+    public void getLatestEvents(Observer<List<Event>> observer) {
+        AsyncTask.execute(() -> {
+            List<Event> events = getLatestEvents();
+            observer.onChanged(events);
+        });
     }
 
     public Event getLatestEvent(EventType type) {

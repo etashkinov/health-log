@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ewind.hl.R;
+import com.ewind.hl.model.event.Event;
 import com.ewind.hl.ui.UiHelper;
+import com.ewind.hl.ui.event.EventUI;
+import com.ewind.hl.ui.event.EventUIFactory;
 import com.ewind.hl.ui.history.HistoryItemDetailView;
 
 public class HistoryBarItemDetailView extends HistoryItemDetailView {
@@ -23,19 +26,22 @@ public class HistoryBarItemDetailView extends HistoryItemDetailView {
     }
 
     public void setItem(ChartItem item, boolean isSelected) {
-        if (item.getEvent() == null) {
+        Event event = item.getEvent();
+        if (event == null) {
             barView.setVisibility(View.INVISIBLE);
         } else {
             barView.setVisibility(View.VISIBLE);
 
-            float scale = barView.getContext().getResources().getDisplayMetrics().density;
+            Context context = barView.getContext();
+            float scale = context.getResources().getDisplayMetrics().density;
             int heightInPx = (int) ((item.getValue() + 20) * scale);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, heightInPx);
             params.gravity = Gravity.CENTER;
             barView.setLayoutParams(params);
 
-            UiHelper.setScoreTint(barView, item.getEvent().getScore());
+            EventUI ui = EventUIFactory.getUI(event.getType(), context);
+            UiHelper.setTint(barView, ui.getEventTint(event));
         }
     }
 }

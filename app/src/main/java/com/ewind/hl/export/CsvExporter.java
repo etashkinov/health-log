@@ -3,14 +3,7 @@ package com.ewind.hl.export;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ewind.hl.model.area.AreaFactory;
-import com.ewind.hl.model.event.Event;
-import com.ewind.hl.model.event.Score;
-import com.ewind.hl.model.event.detail.EventDetail;
-import com.ewind.hl.model.event.type.EventType;
-import com.ewind.hl.model.event.type.EventTypeFactory;
-import com.ewind.hl.persist.EventDateConverter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ewind.hl.persist.EventEntity;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -30,13 +23,12 @@ public class CsvExporter {
     private static final String[] CSV_HEADER = { "id", "date", "type", "area", "score", "detail", "note", "owner", "reporter" };
     private static final CSVFormat WRITE_FORMAT = CSVFormat.DEFAULT.withHeader(CSV_HEADER);
     private static final CSVFormat READ_FORMAT = WRITE_FORMAT.withSkipHeaderRecord();
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public void export(Appendable out, List<Event> events) throws IOException {
+    public void export(Appendable out, List<EventEntity> events) throws IOException {
         Log.i(TAG, "Export " + events.size() + " events");
 
         try (CSVPrinter printer = new CSVPrinter(out, WRITE_FORMAT)) {
-            for (Event event : events) {
+            for (EventEntity event : events) {
                 printer.printRecord(toColumns(event));
             }
             printer.flush();
@@ -44,16 +36,18 @@ public class CsvExporter {
     }
 
     @NonNull
-    private Object[] toColumns(Event event) {
+    private Object[] toColumns(EventEntity event) {
         try {
             return new Object[]{
                     event.getId(),
-                    EventDateConverter.serialize(event.getDate()),
-                    event.getType().getName(),
-                    event.getArea().getName(),
-                    event.getScore().getValue(),
-                    MAPPER.writeValueAsString(event.getDetail()),
-                    event.getNote()
+                    event.getDate(),
+                    event.getType(),
+                    event.getArea(),
+                    event.getScore(),
+                    event.getValue(),
+                    event.getNote(),
+                    event.getOwner(),
+                    event.getReporter()
             };
         } catch (Exception e) {
             Log.e(TAG, "Failed to export event '" + event.getId() + "'", e);
@@ -62,22 +56,26 @@ public class CsvExporter {
     }
 
     @NonNull
-    private <D extends EventDetail> Event<D> toEvent(CSVRecord record) throws IOException {
-        EventType<D> type = EventTypeFactory.get(record.get(2));
-        return new Event<>(Long.parseLong(record.get(0)),
-                EventDateConverter.deserialize(record.get(1)),
-                type,
-                MAPPER.readValue(record.get(5), type.getDetailClass()),
-                AreaFactory.getArea(record.get(3)),
-                record.get(6),
-                new Score(Integer.parseInt(record.get(4)))
-        );
+    private EventEntity toEvent(CSVRecord record) {
+        EventEntity result = new EventEntity();
+        result.setId(Long.parseLong(record.get(0)));
+        result.setDate(record.get(1));
+        result.setType(record.get(2));
+        result.setValue(record.get(5));
+        result.setArea(record.get(3));
+        result.setNote(record.get(6));
+        result.setScore(Integer.parseInt(record.get(4)));
+        result.setOwner(record.get(7));
+        result.setReporter(record.get(8));
+        return result;
     }
 
     @NonNull
-    private String[] toFailedColumns(Event event) {
+    private String[] toFailedColumns(EventEntity event) {
         return new String[]{
                 String.valueOf(event.getId()),
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -87,8 +85,8 @@ public class CsvExporter {
         };
     }
 
-    public List<Event> read(InputStream in) throws IOException {
-        List<Event> result = new LinkedList<>();
+    public List<EventEntity> read(InputStream in) throws IOException {
+        List<EventEntity> result = new LinkedList<>();
         try (CSVParser parser = new CSVParser(new InputStreamReader(in), READ_FORMAT)) {
             for (CSVRecord record : parser) {
                 result.add(toEvent(record));

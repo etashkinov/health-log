@@ -24,6 +24,7 @@ import com.ewind.hl.ui.EventAdapter;
 import com.ewind.hl.ui.EventItemViewHolder;
 import com.ewind.hl.ui.event.EventUI;
 import com.ewind.hl.ui.event.EventUIFactory;
+import com.ewind.hl.ui.history.EventDeleteTouchCallback;
 import com.ewind.hl.ui.history.HistoryActivity;
 import com.ewind.hl.ui.history.HistoryEventItemViewHolder;
 import com.ewind.hl.ui.history.chart.period.HistoryPeriod;
@@ -45,6 +46,8 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
     private TextView highLabel;
     private TextView lowLabel;
     private Map<HistoryPeriod, List<Event<D>>> grouping;
+    private TextView eventTitle;
+    private View addButton;
 
     public HistoryChartFragment() {
         // Required empty public constructor
@@ -66,6 +69,9 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
             }
         };
 
+        RecyclerView eventsList = view.findViewById(R.id.events_list);
+        eventsList.setAdapter(eventAdapter);
+        EventDeleteTouchCallback.attach(eventsList, activity);
 
         EventUI<D> ui = EventUIFactory.getUI(activity.getType(), getActivity());
 
@@ -75,11 +81,10 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
         recyclerView.setListener(this);
         recyclerView.setAdapter(chartAdapter);
 
-        RecyclerView eventsList = view.findViewById(R.id.events_list);
-        eventsList.setAdapter(eventAdapter);
-
         highLabel = view.findViewById(R.id.chart_high_label);
         lowLabel = view.findViewById(R.id.chart_low_label);
+        eventTitle = view.findViewById(R.id.event_title);
+        addButton = activity.findViewById(R.id.addButton);
 
         Spinner historyPeriodSpinner = view.findViewById(R.id.history_period_spinner);
         Context context = container.getContext();
@@ -148,11 +153,10 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
         chartAdapter.onPositionChanged(position);
         HistoryPeriod period = chartAdapter.getPeriod(position);
 
-        TextView eventTitle = getActivity().findViewById(R.id.event_title);
         eventTitle.setText(period.getLabel());
 
         List events = grouping.get(period);
-        eventAdapter.setEvents(events);
+        eventAdapter.setEventItems(events, getActivity());
     }
 
     @Override

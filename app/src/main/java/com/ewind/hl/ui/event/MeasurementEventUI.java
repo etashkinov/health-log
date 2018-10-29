@@ -34,8 +34,8 @@ public class MeasurementEventUI<D extends ValueDetail, T extends MeasurementEven
     }
 
     @Override
-    public HistoryItemDetailView createHistoryItemDetail(Context context) {
-        return new HistoryLineItemDetailView(context);
+    public HistoryItemDetailView createHistoryItemDetail() {
+        return new HistoryLineItemDetailView(getContext());
     }
 
     @Override

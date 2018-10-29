@@ -37,6 +37,7 @@ public class HistoryActivity<D extends EventDetail> extends AppCompatActivity im
     private MenuItem actionChart;
     private MenuItem actionList;
     private boolean chartFragment = true;
+    private View addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class HistoryActivity<D extends EventDetail> extends AppCompatActivity im
 
         initHeader(type, area);
 
+        addButton = findViewById(R.id.addButton);
+
         refreshEvents();
     }
 
@@ -60,7 +63,7 @@ public class HistoryActivity<D extends EventDetail> extends AppCompatActivity im
         events = findEvents();
         if (!events.isEmpty()) {
             Event<?> lastEvent = events.get(0);
-            findViewById(R.id.addButton).setOnClickListener(v -> onAdd(lastEvent));
+            addButton.setOnClickListener(v -> onAdd(lastEvent));
         } else {
             new EventActionListener(this).onAddNew(type.getName());
         }

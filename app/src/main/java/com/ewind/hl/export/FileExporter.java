@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ewind.hl.model.event.Event;
+import com.ewind.hl.persist.EventEntity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ public class FileExporter {
         this.exporter = new CsvExporter();
     }
 
-    public String export(List<Event> events) {
+    public String export(List<EventEntity> events) {
         Log.i(TAG, "Export " + events.size() + " events");
 
         try {

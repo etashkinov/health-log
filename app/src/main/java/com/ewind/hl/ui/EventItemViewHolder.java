@@ -1,5 +1,6 @@
 package com.ewind.hl.ui;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -9,13 +10,12 @@ import com.ewind.hl.model.event.Event;
 import com.ewind.hl.model.event.Score;
 import com.ewind.hl.model.event.ScoreBand;
 
-import org.joda.time.LocalDateTime;
-
 public abstract class EventItemViewHolder extends RecyclerView.ViewHolder {
     protected static final String TAG = LastEventItemViewHolder.class.getName();
     protected final EventActionListener listener;
     protected final TextView eventDateTextView;
-    protected Event event;
+
+    protected EventItem eventItem;
 
     public EventItemViewHolder(View itemView, EventActionListener listener) {
         super(itemView);
@@ -23,10 +23,10 @@ public abstract class EventItemViewHolder extends RecyclerView.ViewHolder {
         this.eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEvent(EventItem eventItem) {
+        this.eventItem = eventItem;
 
-        eventDateTextView.setText(LocalizationService.getEventDateFrom(event.getDate(), LocalDateTime.now()));
+        eventDateTextView.setText(eventItem.dateLabel);
     }
 
     protected int getBand(Event event) {
@@ -35,6 +35,22 @@ public abstract class EventItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public Event getEvent() {
-        return event;
+        return eventItem.event;
+    }
+
+    public static final class EventItem {
+        public final String dateLabel;
+        public final Drawable icon;
+        public final int tint;
+        public final View detailsView;
+        public final Event event;
+
+        public EventItem(String dateLabel, Drawable icon, int tint, View detailsView, Event event) {
+            this.dateLabel = dateLabel;
+            this.icon = icon;
+            this.tint = tint;
+            this.detailsView = detailsView;
+            this.event = event;
+        }
     }
 }

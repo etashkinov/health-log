@@ -56,7 +56,7 @@ public class HistoryChartAdapter<D extends EventDetail>
         View view = inflater.inflate(R.layout.view_history_item, parent, false);
 
         FrameLayout detailLayout = view.findViewById(R.id.history_item_detail);
-        HistoryItemDetailView detailView = ui.createHistoryItemDetail(context);
+        HistoryItemDetailView detailView = ui.createHistoryItemDetail();
         detailLayout.addView(detailView);
 
         return new HistoryChartViewHolder(view);

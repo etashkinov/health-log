@@ -1,32 +1,21 @@
 package com.ewind.hl.ui.history;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ewind.hl.R;
-import com.ewind.hl.model.area.Area;
 import com.ewind.hl.model.event.EventDateComparator;
-import com.ewind.hl.model.event.type.EventType;
 import com.ewind.hl.ui.EventActionListener;
 import com.ewind.hl.ui.EventAdapter;
 import com.ewind.hl.ui.EventItemViewHolder;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
-
 public class HistoryListFragment extends Fragment {
-
-    private EventAdapter adapter;
-    private EventActionListener listener;
-    private EventType<?> type;
-    private Area area;
 
     public HistoryListFragment() {
         // Required empty public constructor
@@ -39,53 +28,20 @@ public class HistoryListFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.eventsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        recyclerView.setAdapter(adapter);
-
-        initTouchHelper(recyclerView, listener);
-
-        return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof HistoryActivity) {
-            HistoryActivity activity = (HistoryActivity) context;
-
-            listener = new EventActionListener(activity);
-            adapter = new EventAdapter(new EventDateComparator()) {
-                @NonNull
-                @Override
-                public EventItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                    return new HistoryEventItemViewHolder(parent, listener);
-                }
-            };
-            adapter.setEvents(activity.getEvents());
-
-            type = activity.type;
-            area = activity.area;
-        } else {
-            throw new IllegalArgumentException(HistoryActivity.class + " expected. Given: " + context.getClass());
-        }
-    }
-
-    private void initTouchHelper(RecyclerView eventsList, EventActionListener listener) {
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, LEFT) {
-
+        HistoryActivity activity = (HistoryActivity) getActivity();
+        EventAdapter adapter = new EventAdapter(new EventDateComparator()) {
+            @NonNull
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                if (swipeDir == LEFT) {
-                    listener.onDelete(((EventItemViewHolder)viewHolder).getEvent());
-                }
+            public EventItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new HistoryEventItemViewHolder(parent, new EventActionListener(activity));
             }
         };
+        adapter.setEventItems(activity.getEvents(), activity);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(eventsList);
+        recyclerView.setAdapter(adapter);
+
+        EventDeleteTouchCallback.attach(recyclerView, activity);
+
+        return view;
     }
 }

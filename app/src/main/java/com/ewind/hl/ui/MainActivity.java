@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     private TextView personEmail;
     private ImageView personPhoto;
     private PersonsAdapter personsAdapter;
+    private ProgressBar loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
         refreshAccountUi();
 
         refreshCurrentPersonUi();
+
+        this.loader = findViewById(R.id.progress_loader);
 
         this.adapter = createEventsAdapter();
         refreshEvents();
@@ -146,7 +150,10 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
                 return new LastEventItemViewHolder(parent, listener);
             }
         };
+
         eventsList.setAdapter(adapter);
+
+
         return adapter;
     }
 
@@ -167,25 +174,28 @@ public class MainActivity extends AppCompatActivity implements EventChangedListe
     }
 
     private void refreshEvents() {
-        List<Event> events = getEvents();
-        adapter.setEvents(events);
-
-        boolean importAvailable = events.isEmpty();
-        navigator.getMenu().findItem(R.id.nav_export).setVisible(!importAvailable);
-        navigator.getMenu().findItem(R.id.nav_import).setVisible(importAvailable);
+        loader.setVisibility(View.VISIBLE);
+        new EventsDao(this).getLatestEvents(this::refreshEvents);
     }
 
-    private List<Event> getEvents() {
-        List<Event> latestEvents = new EventsDao(this).getLatestEvents();
+    private void refreshEvents(List<Event> events) {
         List<Event> eventsToShow = new LinkedList<>();
-        for (Event latestEvent : latestEvents) {
+        for (Event latestEvent : events) {
             if (showAll || latestEvent.isRelevant()) {
                 eventsToShow.add(latestEvent);
             }
         }
-        return eventsToShow;
-    }
 
+        adapter.setEventItems(eventsToShow, this);
+
+        runOnUiThread(() -> {
+            boolean importAvailable = events.isEmpty();
+            navigator.getMenu().findItem(R.id.nav_export).setVisible(!importAvailable);
+            navigator.getMenu().findItem(R.id.nav_import).setVisible(importAvailable);
+            adapter.notifyDataSetChanged();
+            loader.setVisibility(View.GONE);
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ewind.hl.model.event.Event;
-import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.persist.AppDatabase;
+import com.ewind.hl.persist.EventEntity;
+import com.ewind.hl.persist.EventEntityDao;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Integ
     private static final String TAG = ExportTask.class.getSimpleName();
 
     private final DriveAdapter adapter;
-    private final EventsDao dao;
+    private final EventEntityDao dao;
     private ExportListener[] listeners;
 
     public interface ExportListener {
@@ -22,7 +23,7 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Integ
     }
 
     public ExportTask(Context context) {
-        this.dao = new EventsDao(context);
+        this.dao = AppDatabase.getInstance(context).eventEntityDao();
         this.adapter = new DriveAdapter(context);
     }
 
@@ -30,7 +31,7 @@ public class ExportTask extends AsyncTask<ExportTask.ExportListener, Void, Integ
     protected Integer doInBackground(ExportListener... listeners) {
         this.listeners = listeners;
         Log.i(TAG, "Start exporting");
-        List<Event> events = dao.getAll();
+        List<EventEntity> events = dao.getAll();
         Log.i(TAG, "" + events.size() + " events found for export");
         adapter.export(events);
         return events.size();

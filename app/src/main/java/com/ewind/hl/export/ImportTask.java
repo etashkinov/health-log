@@ -4,18 +4,20 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ewind.hl.model.event.Event;
-import com.ewind.hl.persist.EventsDao;
+import com.ewind.hl.persist.AppDatabase;
+import com.ewind.hl.persist.EventEntity;
+import com.ewind.hl.persist.EventEntityDao;
 
 import java.util.List;
 
 public class ImportTask extends AsyncTask<ImportTask.ImportListener, Void, String> {
 
     private static final String TAG = ImportTask.class.getSimpleName();
-    public static final String IMPORT_NOT_ALLOWED = "Cannot import when local events exist";
+
+    private static final String IMPORT_NOT_ALLOWED = "Cannot import when local events exist";
 
     private final DriveAdapter adapter;
-    private final EventsDao dao;
+    private final EventEntityDao dao;
     private ImportListener[] listeners;
 
     public interface ImportListener {
@@ -23,7 +25,7 @@ public class ImportTask extends AsyncTask<ImportTask.ImportListener, Void, Strin
     }
 
     public ImportTask(Context context) {
-        this.dao = new EventsDao(context);
+        this.dao = AppDatabase.getInstance(context).eventEntityDao();
         this.adapter = new DriveAdapter(context);
     }
 
@@ -31,18 +33,18 @@ public class ImportTask extends AsyncTask<ImportTask.ImportListener, Void, Strin
     protected String doInBackground(ImportListener... listeners) {
         this.listeners = listeners;
         Log.i(TAG, "Start importing");
-        List<Event> events = adapter.read();
+        List<EventEntity> events = adapter.read();
         int size = events.size();
         Log.i(TAG, "" + size + " events found for import");
 
-        List<Event> existingEvents = dao.getAll();
+        List<EventEntity> existingEvents = dao.getAll();
         if (!existingEvents.isEmpty()) {
             String warnMessage = IMPORT_NOT_ALLOWED + ": " + existingEvents.size();
             Log.w(TAG, warnMessage);
             return warnMessage;
         } else {
-            for (Event event : events) {
-                dao.store(event);
+            for (EventEntity event : events) {
+                dao.insert(event);
                 Log.i(TAG, "Event imported: " + event);
             }
         }
