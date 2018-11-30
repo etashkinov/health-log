@@ -36,7 +36,7 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
         if (config.getExpiration() != null) {
             this.expiration = Period.parse(config.getExpiration());
         } else {
-            this.expiration = Period.hours(accuracy.toHours());
+            this.expiration = Period.hours(accuracy.toHours() / 2);
         }
 
         this.areas = getAreas(config);
@@ -62,7 +62,7 @@ public abstract class EventType<D extends EventDetail> implements Serializable {
     }
 
     public boolean isExpired(Event event) {
-        LocalDateTime expirationTime = event.getDate().getStart().plus(expiration);
+        LocalDateTime expirationTime = event.getDate().getEnd().plus(expiration);
         return expirationTime.isBefore(LocalDateTime.now());
     }
 

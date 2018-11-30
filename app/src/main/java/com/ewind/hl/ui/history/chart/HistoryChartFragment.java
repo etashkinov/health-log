@@ -123,8 +123,10 @@ public class HistoryChartFragment<D extends EventDetail> extends Fragment implem
 
     protected ChartData groupEvents(EventUI<D> ui, HistoryPeriodType periodType, List<Event<D>> events) {
         grouping = groupByPeriod(events, periodType);
-        HistoryPeriod from = Collections.min(grouping.keySet()).add(-10);
-        HistoryPeriod till = HistoryPeriodFactory.toPeriod(LocalDate.now(), periodType).add(10);
+
+        HistoryPeriod today = HistoryPeriodFactory.toPeriod(LocalDate.now(), periodType);
+        HistoryPeriod from = grouping.isEmpty() ? today : Collections.min(grouping.keySet()).add(-10);
+        HistoryPeriod till = today.add(10);
         return ui.toChartData(grouping, from, till);
     }
 

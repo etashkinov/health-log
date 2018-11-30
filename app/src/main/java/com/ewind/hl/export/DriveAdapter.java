@@ -20,6 +20,7 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -82,26 +83,34 @@ public class DriveAdapter {
         return driveContentsTask.getResult();
     }
 
-    private void createFileInAppFolder(List<Event> events) throws ExecutionException, InterruptedException {
-        Task<DriveFolder> appFolderTask = driveResourceClient.getAppFolder();
+    private void createFileInAppFolder(List<EventEntity> events) throws ExecutionException, InterruptedException {
+        export(driveResourceClient.getAppFolder(), events);
+        export(driveResourceClient.getRootFolder(), events);
+    }
+
+    private void export(Task<DriveFolder> rootFolder, List<EventEntity> events) throws ExecutionException, InterruptedException {
         Task<DriveContents> contentsTask = driveResourceClient.createContents();
-        Task<DriveFile> resultTask = Tasks.whenAll(appFolderTask, contentsTask).continueWithTask(t -> {
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(EXPORT_FILE_NAME)
-                            .setMimeType("text/csv")
-                            .setStarred(true)
-                            .build();
-
-                    DriveContents contents = contentsTask.getResult();
-                    OutputStream outputStream = contents.getOutputStream();
-                    try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        exporter.export(writer, events);
-                    }
-
-                    return driveResourceClient.createFile(appFolderTask.getResult(), changeSet, contents);
-                }
-        );
+        Task<DriveFile> resultTask = Tasks.whenAll(rootFolder, contentsTask)
+                .continueWithTask(t -> export(events, rootFolder.getResult(), contentsTask.getResult()))
+                .addOnSuccessListener(driveFile -> Log.i(TAG, "File created: " + driveFile.getDriveId().encodeToString()))
+                .addOnFailureListener(e -> Log.e(TAG, "Export failed", e));
         Tasks.await(resultTask);
+    }
+
+    private Task<DriveFile> export(List<EventEntity> events, DriveFolder parentFolder, DriveContents contents) throws IOException {
+        Log.i(TAG, "Parent folder: " + parentFolder.getDriveId().encodeToString());
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle(EXPORT_FILE_NAME)
+                .setMimeType("text/csv")
+                .setStarred(true)
+                .build();
+
+        OutputStream outputStream = contents.getOutputStream();
+        try (Writer writer = new OutputStreamWriter(outputStream)) {
+            exporter.export(writer, events);
+        }
+
+        return driveResourceClient.createFile(parentFolder, changeSet, contents);
     }
 
 }

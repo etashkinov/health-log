@@ -223,6 +223,10 @@ symptoms:
   peripheral_neuropathy:
   photophobia:
   pink_eye:
+    areas:
+      - eyes
+      - left_eye
+      - right_eye
   pleurisy:
   poor_hygiene:
   proteinuria_protein_in_the_urine:
